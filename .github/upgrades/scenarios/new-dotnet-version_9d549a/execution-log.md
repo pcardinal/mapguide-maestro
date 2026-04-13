@@ -101,3 +101,17 @@ Status: Complete.
 
 Success - Tier 4 viewer components upgraded to net10.0/net10.0-windows.
 
+
+## [2026-04-13 09:25] TASK-008: Replace TreeViewAdv in Maestro.Editors
+
+Status: Complete.
+
+- **Verified**: TreeViewAdv 1.7.0 removed from Maestro.Editors.csproj; TFM updated to net10.0-windows; System.Data.Odbc updated 6.0.0 → 10.0.5
+- **Code Changes**: MapTreeModels.cs — removed ITreeModel, added PopulateTree(TreeView) to DrawOrderLayerModel, GroupedLayerModel, TiledLayerModel with TreeModelBase.GetAllNodes helper; MenuModel.cs — removed ITreeModel from MenuTreeModel, added PopulateTree(TreeView)/Refresh(); UnmanagedFileBrowser.cs — replaced FolderTreeModel:ITreeModel with lazy BeforeExpand pattern; MenuEditorCtrl.cs — removed ITreeModel Model property, replaced TreeNodeAdv→TreeNode, updated drag-drop and selection events; MapLayersSectionCtrl.cs and LayerStructureCtrl.cs — replaced model bindings with PopulateTree(), TreeNodeAdv→TreeNode, SelectedNodes→SelectedNode, added GetAllNodes() helper; all 7 Designer.cs files — TreeViewAdv→TreeView, removed NodeIcon/NodeTextBox, updated event wires to AfterSelect
+- **Verified**: Maestro.Editors builds with 0 errors
+- **Commits**: 59806021: "TASK-008: Replace TreeViewAdv with standard TreeView in Maestro.Editors"
+- **Files Modified**: 17 files
+- **Build Status**: Successful — 0 errors
+
+Success - TreeViewAdv fully replaced with standard WinForms TreeView across all 13 affected files.
+

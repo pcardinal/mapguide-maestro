@@ -4,7 +4,7 @@
 
 This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 to .NET 10 using a bottom-up (dependency-first) strategy. Foundation libraries will be upgraded first, progressing through 8 dependency tiers to the main application.
 
-**Progress**: 7/13 tasks complete (54%) ![0%](https://progress-bar.xyz/54)
+**Progress**: 8/13 tasks complete (62%) ![0%](https://progress-bar.xyz/62)
 
 ---
 
@@ -104,30 +104,30 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 
 ---
 
-### [▶] TASK-008: Replace TreeViewAdv in Maestro.Editors
+### [✓] TASK-008: Replace TreeViewAdv in Maestro.Editors *(Completed: 2026-04-13 13:25)*
 **References**: Plan §Tier 5, Plan §Package Update Reference, Plan §Breaking Changes Catalog
 
-- [▶] (1) Search Maestro.Editors project for all usages of `Aga.Controls.Tree` namespace and `TreeViewAdv` type
-- [ ] (2) Replace all `TreeViewAdv` control instantiations with standard WinForms `TreeView` controls per Plan §Tier 5 (Option A)
-- [ ] (3) Update affected `.Designer.cs` files in Maestro.Editors
-- [ ] (4) Remove `TreeViewAdv` package reference from Maestro.Editors.csproj
-- [ ] (5) Package reference removed (**Verify**)
-- [ ] (6) Build Maestro.Editors project
-- [ ] (7) Maestro.Editors builds with 0 errors (**Verify**)
-- [ ] (8) Commit changes with message: "TASK-008: Replace TreeViewAdv with standard TreeView in Maestro.Editors"
+- [✓] (1) Search Maestro.Editors project for all usages of `Aga.Controls.Tree` namespace and `TreeViewAdv` type
+- [✓] (2) Replace all `TreeViewAdv` control instantiations with standard WinForms `TreeView` controls per Plan §Tier 5 (Option A)
+- [✓] (3) Update affected `.Designer.cs` files in Maestro.Editors
+- [✓] (4) Remove `TreeViewAdv` package reference from Maestro.Editors.csproj
+- [✓] (5) Package reference removed (**Verify**)
+- [✓] (6) Build Maestro.Editors project
+- [✓] (7) Maestro.Editors builds with 0 errors (**Verify**)
+- [✓] (8) Commit changes with message: "TASK-008: Replace TreeViewAdv with standard TreeView in Maestro.Editors"
 
 ---
 
-### [ ] TASK-009: Upgrade Tier 5 Maestro.Editors framework
+### [▶] TASK-009: Upgrade Tier 5 Maestro.Editors framework
 **References**: Plan §Tier 5, Plan §Package Update Reference
 
-- [ ] (1) Update target framework to `net10.0-windows` in Maestro.Editors per Plan §Tier 5
-- [ ] (2) Framework updated (**Verify**)
-- [ ] (3) Update `System.Data.Odbc` from 6.0.0 to 10.0.5 in Maestro.Editors per Plan §Tier 5
-- [ ] (4) Package updated (**Verify**)
-- [ ] (5) Build Maestro.Editors project and fix any compilation errors per Plan §Breaking Changes Catalog
-- [ ] (6) Maestro.Editors builds with 0 errors (**Verify**)
-- [ ] (7) Run OSGeo.MapGuide.MaestroAPI.Tests to verify no regressions
+- [✓] (1) Update target framework to `net10.0-windows` in Maestro.Editors per Plan §Tier 5
+- [✓] (2) Framework updated (**Verify**)
+- [✓] (3) Update `System.Data.Odbc` from 6.0.0 to 10.0.5 in Maestro.Editors per Plan §Tier 5
+- [✓] (4) Package updated (**Verify**)
+- [✓] (5) Build Maestro.Editors project and fix any compilation errors per Plan §Breaking Changes Catalog
+- [✓] (6) Maestro.Editors builds with 0 errors (**Verify**)
+- [▶] (7) Run OSGeo.MapGuide.MaestroAPI.Tests to verify no regressions
 - [ ] (8) All tests pass with 0 failures (**Verify**)
 - [ ] (9) Commit changes with message: "TASK-009: Upgrade Maestro.Editors to net10.0-windows"
 
@@ -183,6 +183,8 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 - [ ] (7) Commit final validation with message: "TASK-013: Complete .NET 10 upgrade - all tests passing"
 
 ---
+
+
 
 
 

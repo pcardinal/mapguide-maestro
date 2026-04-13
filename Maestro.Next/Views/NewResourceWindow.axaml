@@ -1,0 +1,121 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        x:Class="Maestro.Next.Views.NewResourceWindow"
+        x:DataType="vm:NewResourceViewModel"
+        Title="New Resource"
+        Width="480" Height="400"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False">
+
+  <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+
+    <!-- Title -->
+    <TextBlock Grid.Row="0"
+               Text="Create New Resource"
+               FontSize="18" FontWeight="SemiBold"
+               Margin="0,0,0,16" />
+
+    <ScrollViewer Grid.Row="1">
+      <StackPanel Spacing="12">
+
+        <!-- Resource type -->
+        <StackPanel Spacing="6">
+          <TextBlock Text="Resource Type" FontWeight="Medium" />
+          <ComboBox SelectedItem="{Binding Kind}"
+                    HorizontalAlignment="Stretch">
+            <vm:NewResourceKind>Folder</vm:NewResourceKind>
+            <vm:NewResourceKind>FeatureSource</vm:NewResourceKind>
+            <vm:NewResourceKind>LayerDefinition</vm:NewResourceKind>
+            <vm:NewResourceKind>MapDefinition</vm:NewResourceKind>
+            <vm:NewResourceKind>WebLayout</vm:NewResourceKind>
+          </ComboBox>
+        </StackPanel>
+
+        <!-- Name (all types) -->
+        <StackPanel Spacing="4">
+          <TextBlock Text="Name" FontWeight="Medium" />
+          <TextBox Text="{Binding ResourceName}"
+                   PlaceholderText="Enter resource name…" />
+        </StackPanel>
+
+        <!-- FeatureSource: FDO Provider -->
+        <StackPanel Spacing="4" IsVisible="{Binding IsFeatureSource}">
+          <TextBlock Text="FDO Provider" FontWeight="Medium" />
+          <ComboBox SelectedItem="{Binding FdoProvider}"
+                    HorizontalAlignment="Stretch">
+            <x:String>OSGeo.SDF</x:String>
+            <x:String>OSGeo.SHP</x:String>
+            <x:String>OSGeo.SQLite</x:String>
+            <x:String>OSGeo.GDAL</x:String>
+            <x:String>OSGeo.WFS</x:String>
+            <x:String>OSGeo.WMS</x:String>
+            <x:String>OSGeo.OGR</x:String>
+            <x:String>OSGeo.SQLServerSpatial</x:String>
+            <x:String>OSGeo.MySQL</x:String>
+            <x:String>OSGeo.PostgreSQL</x:String>
+          </ComboBox>
+        </StackPanel>
+
+        <!-- LayerDefinition: Feature Source + Class + Geometry -->
+        <StackPanel Spacing="4" IsVisible="{Binding IsLayerDefinition}">
+          <TextBlock Text="Feature Source ID" FontWeight="Medium" />
+          <TextBox Text="{Binding FeatureSourceId}"
+                   PlaceholderText="Library://…FeatureSource"
+                   FontFamily="Consolas,Monospace" FontSize="11" />
+
+          <TextBlock Text="Feature Class" FontWeight="Medium" Margin="0,4,0,0" />
+          <TextBox Text="{Binding FeatureClass}"
+                   PlaceholderText="SchemaName:ClassName" />
+
+          <TextBlock Text="Geometry Property" FontWeight="Medium" Margin="0,4,0,0" />
+          <TextBox Text="{Binding GeometryProperty}"
+                   PlaceholderText="Geometry" />
+        </StackPanel>
+
+        <!-- WebLayout: linked MapDefinition -->
+        <StackPanel Spacing="4" IsVisible="{Binding IsWebLayout}">
+          <TextBlock Text="Map Definition ID" FontWeight="Medium" />
+          <TextBox Text="{Binding LinkedMapDefinitionId}"
+                   PlaceholderText="Library://…MapDefinition"
+                   FontFamily="Consolas,Monospace" FontSize="11" />
+        </StackPanel>
+
+        <!-- Target folder (read-only info) -->
+        <StackPanel Spacing="4">
+          <TextBlock Text="Target Folder" FontWeight="Medium" />
+          <TextBlock Text="{Binding TargetFolderId}"
+                     FontFamily="Consolas,Monospace" FontSize="11"
+                     Foreground="Gray" />
+        </StackPanel>
+
+        <!-- Validation error -->
+        <TextBlock Text="{Binding ValidationError}"
+                   Foreground="Red"
+                   IsVisible="{Binding ValidationError,
+                               Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                   TextWrapping="Wrap" />
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Buttons -->
+    <StackPanel Grid.Row="2"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Spacing="8" Margin="0,16,0,0">
+      <ProgressBar IsIndeterminate="True"
+                   IsVisible="{Binding IsBusy}"
+                   Width="80" Height="8"
+                   VerticalAlignment="Center" />
+      <Button Content="Cancel"
+              Click="OnCancelClick"
+              Width="90" />
+      <Button Content="Create"
+              Command="{Binding CreateCommand}"
+              Classes="accent"
+              Width="90" />
+    </StackPanel>
+
+  </Grid>
+</Window>

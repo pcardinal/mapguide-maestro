@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Maestro.Next.Services;
+using Microsoft.Extensions.DependencyInjection;
 using OSGeo.MapGuide.ObjectModels;
 
 namespace Maestro.Next.ViewModels;
@@ -18,13 +19,25 @@ public partial class SiteExplorerViewModel : ViewModelBase
 {
     private readonly IResourceService _resourceService;
     private readonly DocumentManagerViewModel _documentManager;
+    private readonly INewResourceService _newResourceService;
+    private readonly INotificationService _notifications;
+
+    /// <summary>Raised when UI must show the NewResource dialog for the given folder</summary>
+    public Func<string, Task<string?>>? NewResourceRequested { get; set; }
+
+    /// <summary>Raised when UI must confirm deletion of a resource</summary>
+    public Func<string, Task<bool>>? DeleteConfirmRequested { get; set; }
 
     public SiteExplorerViewModel(
         IResourceService resourceService,
-        DocumentManagerViewModel documentManager)
+        DocumentManagerViewModel documentManager,
+        INewResourceService newResourceService,
+        INotificationService notifications)
     {
-        _resourceService = resourceService;
-        _documentManager = documentManager;
+        _resourceService    = resourceService;
+        _documentManager    = documentManager;
+        _newResourceService = newResourceService;
+        _notifications      = notifications;
     }
 
     [ObservableProperty]
@@ -113,10 +126,43 @@ public partial class SiteExplorerViewModel : ViewModelBase
             await LoadRootAsync();
     }
 
-    [RelayCommand(CanExecute = nameof(CanDeleteSelected))]
-    private void DeleteSelected()
+    [RelayCommand]
+    private async Task NewResourceAsync()
     {
-        // TODO: implement delete resource
+        var folderId = SelectedNode?.IsFolder == true
+            ? SelectedNode.ResourceId
+            : "Library://";
+
+        if (NewResourceRequested is null) return;
+
+        var createdId = await NewResourceRequested.Invoke(folderId);
+        if (createdId != null)
+            await RefreshAsync();
+    }
+
+    [RelayCommand(CanExecute = nameof(CanDeleteSelected))]
+    private async Task DeleteSelectedAsync()
+    {
+        if (SelectedNode is null) return;
+
+        if (DeleteConfirmRequested != null)
+        {
+            var confirmed = await DeleteConfirmRequested.Invoke(SelectedNode.ResourceId);
+            if (!confirmed) return;
+        }
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+            await Task.Run(() => conn.ResourceService.DeleteResource(SelectedNode.ResourceId));
+            _notifications.Success($"Deleted: {SelectedNode.Name}");
+            await RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Delete failed: {ex.Message}");
+        }
     }
 
     private bool CanDeleteSelected() =>
@@ -136,7 +182,7 @@ public static class ResourceEditorFactory
             nameof(ResourceTypes.LayerDefinition)       => new LayerDefinitionEditorViewModel(resourceId),
             nameof(ResourceTypes.MapDefinition)         => new MapDefinitionEditorViewModel(resourceId),
             nameof(ResourceTypes.WebLayout)             => new WebLayoutEditorViewModel(resourceId),
-            nameof(ResourceTypes.ApplicationDefinition) => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.ApplicationDefinition) => new ApplicationDefinitionEditorViewModel(resourceId),
             nameof(ResourceTypes.SymbolDefinition)      => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.PrintLayout)           => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.LoadProcedure)         => new GenericResourceEditorViewModel(resourceId, resourceType),

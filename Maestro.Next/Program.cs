@@ -33,6 +33,7 @@ internal static class Program
         services.AddSingleton<IConnectionService, ConnectionService>();
         services.AddSingleton<IResourceService, ResourceService>();
         services.AddSingleton<INotificationService, NotificationService>();
+        services.AddSingleton<INewResourceService, NewResourceService>();
 
         // Workbench-level singletons
         services.AddSingleton<ViewModels.DocumentManagerViewModel>();

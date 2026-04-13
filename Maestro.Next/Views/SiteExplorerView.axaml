@@ -13,10 +13,18 @@
                  FontWeight="SemiBold"
                  VerticalAlignment="Center"
                  Margin="4,0,8,0" />
+      <Button Content="＋"
+              Command="{Binding NewResourceCommand}"
+              ToolTip.Tip="New resource…"
+              Padding="4,2" FontSize="14" />
       <Button Content="↻"
               Command="{Binding RefreshCommand}"
               ToolTip.Tip="Refresh"
               Padding="4,2" FontSize="14" />
+      <Button Content="🗑"
+              Command="{Binding DeleteSelectedCommand}"
+              ToolTip.Tip="Delete selected resource"
+              Padding="4,2" FontSize="13" />
     </StackPanel>
 
     <!-- Search bar -->
@@ -101,8 +109,10 @@
                     Command="{Binding OpenResourceCommand}"
                     CommandParameter="{Binding SelectedNode}" />
           <Separator />
-          <MenuItem Header="Refresh"
-                    Command="{Binding RefreshCommand}" />
+          <MenuItem Header="New Resource…"
+                    Command="{Binding NewResourceCommand}" />
+          <Separator />
+          <MenuItem Header="Refresh" Command="{Binding RefreshCommand}" />
           <Separator />
           <MenuItem Header="Delete"
                     Command="{Binding DeleteSelectedCommand}"

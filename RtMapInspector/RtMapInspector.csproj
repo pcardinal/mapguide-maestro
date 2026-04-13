@@ -8,6 +8,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<ProduceReferenceAssemblies>false</ProduceReferenceAssemblies>
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -72,3 +73,5 @@
   </ItemGroup>
 
 </Project>
+
+

@@ -8,6 +8,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 	<ProduceReferenceAssemblies>false</ProduceReferenceAssemblies>
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
 	<ApplicationIcon>MapGuide Maestro.ico</ApplicationIcon>
   </PropertyGroup>
 
@@ -38,3 +39,5 @@
   </ItemGroup>
 
 </Project>
+
+

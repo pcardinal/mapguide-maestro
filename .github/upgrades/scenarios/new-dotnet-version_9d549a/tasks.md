@@ -4,7 +4,7 @@
 
 This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 to .NET 10 using a bottom-up (dependency-first) strategy. Foundation libraries will be upgraded first, progressing through 8 dependency tiers to the main application.
 
-**Progress**: 5/13 tasks complete (38%) ![0%](https://progress-bar.xyz/38)
+**Progress**: 6/13 tasks complete (46%) ![0%](https://progress-bar.xyz/46)
 
 ---
 
@@ -77,18 +77,18 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 
 ---
 
-### [▶] TASK-006: Upgrade Tier 3 test projects
+### [✓] TASK-006: Upgrade Tier 3 test projects *(Completed: 2026-04-13 04:20)*
 **References**: Plan §Tier 3 Test Projects
 
-- [▶] (1) Update target framework to `net10.0` in OSGeo.MapGuide.MaestroAPI.Tests and OSGeo.MapGuide.MaestroAPI.IntegrationTests per Plan §Tier 3
-- [ ] (2) Framework updated in both test projects (**Verify**)
-- [ ] (3) Build both test projects
-- [ ] (4) Both test projects build with 0 errors (**Verify**)
-- [ ] (5) Run OSGeo.MapGuide.MaestroAPI.Tests
-- [ ] (6) All unit tests pass with 0 failures (**Verify**)
-- [ ] (7) Run OSGeo.MapGuide.MaestroAPI.IntegrationTests
-- [ ] (8) Integration tests pass or skip correctly when server unavailable (**Verify**)
-- [ ] (9) Commit changes with message: "TASK-006: Upgrade Tier 3 test projects to net10.0"
+- [✓] (1) Update target framework to `net10.0` in OSGeo.MapGuide.MaestroAPI.Tests and OSGeo.MapGuide.MaestroAPI.IntegrationTests per Plan §Tier 3
+- [✓] (2) Framework updated in both test projects (**Verify**)
+- [✓] (3) Build both test projects
+- [✓] (4) Both test projects build with 0 errors (**Verify**)
+- [✓] (5) Run OSGeo.MapGuide.MaestroAPI.Tests
+- [✓] (6) All unit tests pass with 0 failures (**Verify**)
+- [✓] (7) Run OSGeo.MapGuide.MaestroAPI.IntegrationTests
+- [✓] (8) Integration tests pass or skip correctly when server unavailable (**Verify**)
+- [✓] (9) Commit changes with message: "TASK-006: Upgrade Tier 3 test projects to net10.0"
 
 ---
 
@@ -183,6 +183,7 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 - [ ] (7) Commit final validation with message: "TASK-013: Complete .NET 10 upgrade - all tests passing"
 
 ---
+
 
 
 

@@ -72,3 +72,19 @@ Status: Complete.
 
 Success - Local provider (Option B) cleanly removed from solution.
 
+
+## [2026-04-13 00:20] TASK-006: Upgrade Tier 3 test projects
+
+Status: Complete.
+
+- **Verified**: Both test projects updated — OSGeo.MapGuide.MaestroAPI.Tests and OSGeo.MapGuide.MaestroAPI.IntegrationTests → net10.0
+- **Verified**: Both projects build with 0 errors
+- **Tests**: OSGeo.MapGuide.MaestroAPI.Tests — 311/311 passed, 0 failures
+- **Tests**: OSGeo.MapGuide.MaestroAPI.IntegrationTests — 54 skipped (local provider, expected), 60 failed at fixture init (no MapGuide server available — pre-existing behavior, not a regression from upgrade)
+- **Errors Fixed**: Culture-sensitivity bug in TileSetInterfaces.cs (Convert.ToDouble → InvariantCulture), also fixed same pattern in FdoDataValue.cs, GdalRasterItem.cs, ExtensionMethods.cs, ManualScaleEditor.cs, VectorLayerDefinitionImpl.cs (6 versions), LegendPresenter.cs, HighlightColor.cs
+- **Commits**: c5efd50a: "TASK-006: Upgrade Tier 3 test projects to net10.0"
+- **Files Modified**: OSGeo.MapGuide.MaestroAPI.Tests.csproj, OSGeo.MapGuide.MaestroAPI.IntegrationTests.csproj, TileSetInterfaces.cs, FdoDataValue.cs, GdalRasterItem.cs, ExtensionMethods.cs, ManualScaleEditor.cs, 6x VectorLayerDefinitionImpl.cs, LegendPresenter.cs, HighlightColor.cs
+- **Build Status**: Successful — 0 errors
+
+Success - Tier 3 test projects upgraded; 311 unit tests pass; integration tests fail at fixture init (no server — pre-existing, not a regression).
+

@@ -1,4 +1,4 @@
-﻿#region Disclaimer / License
+#region Disclaimer / License
 
 // Copyright (C) 2010, Jackie Ng
 // https://github.com/jumpinjackie/mapguide-maestro
@@ -20,7 +20,6 @@
 
 #endregion Disclaimer / License
 
-using Aga.Controls.Tree;
 using Maestro.Base.Services;
 using OSGeo.MapGuide.MaestroAPI;
 using OSGeo.MapGuide.MaestroAPI.Commands;
@@ -227,19 +226,8 @@ namespace Maestro.Base.UI
 
         private void NotifyStructureChanged(RepositoryItem repositoryItem)
         {
-            if (!_notify)
-                return;
-
-            var model = FindModel();
-            if (model != null && this.Parent != null)
-            {
-                TreePath path = model.GetPath(repositoryItem);
-                if (path != null)
-                {
-                    var args = new TreePathEventArgs(path);
-                    model.RaiseStructureChanged(args);
-                }
-            }
+            if (!_notify) return;
+            FindModel()?.InvalidateSubTree(repositoryItem);
         }
 
         /// <summary>
@@ -310,19 +298,8 @@ namespace Maestro.Base.UI
 
         private void NotifyNodesChanged()
         {
-            if (!_notify)
-                return;
-
-            var model = FindModel();
-            if (model != null)
-            {
-                TreePath path = model.GetPath(this);
-                if (path != null)
-                {
-                    var args = new TreeModelEventArgs(path, new object[] { this });
-                    model.RaiseNodesChanged(args);
-                }
-            }
+            if (!_notify) return;
+            FindModel()?.InvalidateItem(this);
         }
 
         /// <summary>
@@ -463,25 +440,22 @@ namespace Maestro.Base.UI
     /// <summary>
     /// Provides tooltips for resources in the Site Explorer
     /// </summary>
-    public class RepositoryItemToolTipProvider : IToolTipProvider
+    public class RepositoryItemToolTipProvider
     {
         /// <summary>
-        /// Gets the tooltip
+        /// Gets the tooltip for the given node tag
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="nodeControl"></param>
-        /// <returns></returns>
-        public string GetToolTip(TreeNodeAdv node, Aga.Controls.Tree.NodeControls.NodeControl nodeControl)
+        public string GetToolTip(object tag)
         {
-            if (node.Tag is RepositoryItem item && !item.IsRoot)
+            if (tag is RepositoryItem item && !item.IsRoot)
             {
                 return string.Format(Strings.SITE_EXPLORER_TOOLTIP_TEMPLATE, Environment.NewLine, item.Name, item.ResourceType, item.CreatedDate, item.ModifiedDate, item.Owner);
             }
-            else if (node.Tag is WfsLayerRepositoryItem wfsl)
+            else if (tag is WfsLayerRepositoryItem wfsl)
             {
                 return String.Format(Strings.WfsLayerTooltip, Environment.NewLine, wfsl.LayerName, wfsl.Name, wfsl.Abstract, wfsl.Crs);
             }
-            else if (node.Tag is WmsLayerRepositoryItem wmsl)
+            else if (tag is WmsLayerRepositoryItem wmsl)
             {
                 return String.Format(Strings.WmsLayerTooltip, Environment.NewLine, wmsl.LayerName, wmsl.Name, wmsl.Abstract, wmsl.Crs, wmsl.BBOX);
             }
@@ -492,15 +466,18 @@ namespace Maestro.Base.UI
     /// <summary>
     /// Defines the repository model for the treeview
     /// </summary>
-    public class RepositoryTreeModel : TreeModelBase
+    public class RepositoryTreeModel
     {
-        private TreeViewAdv _tree;
+        private System.Windows.Forms.TreeView _tree;
 
         private ServerConnectionManager _connManager;
         private OpenResourceManager _openResMgr;
         private ClipboardService _clip;
 
-        internal RepositoryTreeModel(ServerConnectionManager connManager, TreeViewAdv tree, OpenResourceManager openResMgr, ClipboardService clip)
+        // Lazy-load placeholder
+        internal const string LoadingTag = "__loading__";
+
+        internal RepositoryTreeModel(ServerConnectionManager connManager, System.Windows.Forms.TreeView tree, OpenResourceManager openResMgr, ClipboardService clip)
         {
             _connManager = connManager;
             _tree = tree;
@@ -553,101 +530,102 @@ namespace Maestro.Base.UI
 
         /// <summary>
         /// Gets the child nodes in the given tree path
-        /// </summary>
-        /// <param name="treePath"></param>
-        /// <returns></returns>
-        public override System.Collections.IEnumerable GetChildren(TreePath treePath)
+        private bool IsLeafItem(object item)
         {
-            if (treePath.IsEmpty())
+            if (item is RepositoryItem ri) return !ri.IsFolder;
+            if (item is WfsLayerRepositoryItem) return true;
+            if (item is WmsLayerRepositoryItem) return true;
+            return false;
+        }
+
+        private System.Windows.Forms.TreeNode MakeNode(object item)
+        {
+            string text = item is RepositoryItem ri ? ri.Name
+                        : item is WfsRootRepositoryItem wfsr ? wfsr.Name
+                        : item is WmsRootRepositoryItem wmsr ? wmsr.Name
+                        : item is WfsLayerRepositoryItem wfsl ? wfsl.LayerName
+                        : item is WmsLayerRepositoryItem wmsl ? wmsl.LayerName
+                        : item.ToString();
+            var node = new System.Windows.Forms.TreeNode(text) { Tag = item };
+            if (!IsLeafItem(item))
+                node.Nodes.Add(new System.Windows.Forms.TreeNode(LoadingTag)); // lazy placeholder
+            return node;
+        }
+
+        /// <summary>
+        /// Populates the tree with root connection nodes.
+        /// </summary>
+        internal void PopulateTree(System.Windows.Forms.TreeView tree)
+        {
+            _tree = tree;
+            tree.BeginUpdate();
+            tree.Nodes.Clear();
+            _rootNodes.Clear();
+            foreach (var connName in _connManager.GetConnectionNames())
             {
-                _rootNodes.Clear();
-                var roots = new List<RepositoryItem>();
-                foreach (var connName in _connManager.GetConnectionNames())
+                var conn = _connManager.GetConnection(connName);
+                var list = conn.ResourceService.GetRepositoryResources(StringConstants.RootIdentifier, 0); //NOXLATE
+                if (list.Items.Count != 1) throw new InvalidOperationException();
+                var connNode = new RepositoryItem(connName, (IRepositoryItem)list.Items[0]);
+                connNode.Name = connName;
+                connNode.Model = this;
+                _rootNodes[connName] = connNode;
+                tree.Nodes.Add(MakeNode(connNode));
+            }
+            tree.EndUpdate();
+        }
+
+        /// <summary>
+        /// Called from BeforeExpand to lazily load children of a node.
+        /// </summary>
+        internal void LoadChildren(System.Windows.Forms.TreeNode treeNode)
+        {
+            // Only load if placeholder is present
+            if (treeNode.Nodes.Count != 1 || treeNode.Nodes[0].Text != LoadingTag)
+                return;
+            treeNode.Nodes.Clear();
+            var item = treeNode.Tag;
+            if (item is RepositoryItem node && node.IsFolder)
+            {
+                string connName = GetParentConnectionName(node);
+                var conn = _connManager.GetConnection(connName);
+                node.ClearChildrenWithoutNotification();
+                var list = conn.ResourceService.GetRepositoryResources(node.ResourceId, string.Empty, 1, false); //NOXLATE
+                foreach (RepositoryItem child in GetSorted(connName, list))
                 {
-                    if (_rootNodes.ContainsKey(connName))
-                        continue;
-
-                    var conn = _connManager.GetConnection(connName);
-
-                    var list = conn.ResourceService.GetRepositoryResources(StringConstants.RootIdentifier, 0); //NOXLATE
-                    if (list.Items.Count != 1)
-                    {
-                        throw new InvalidOperationException(); //Huh?
-                    }
-                    var connNode = new RepositoryItem(connName, (IRepositoryItem)list.Items[0]);
-                    Debug.Assert(connNode.Parent == null);
-                    Debug.Assert(connNode.IsRoot);
-                    connNode.Name = connName;
-                    connNode.Model = this;
-
-                    if (!_rootNodes.ContainsKey(connName))
-                    {
-                        _rootNodes[connName] = connNode;
-                        roots.Add(connNode);
-                    }
+                    node.AddChildWithoutNotification(child);
+                    ApplyCurrentItemState(child);
+                    treeNode.Nodes.Add(MakeNode(child));
                 }
-
-                foreach (var r in roots)
+                if (node.ResourceId == StringConstants.RootIdentifier)
                 {
-                    yield return r;
+                    if (conn.Capabilities.SupportedCommands.Contains((int)CommandType.GetWfsCapabilities))
+                        treeNode.Nodes.Add(MakeNode(new WfsRootRepositoryItem(connName)));
+                    if (conn.Capabilities.SupportedCommands.Contains((int)CommandType.GetWmsCapabilities))
+                        treeNode.Nodes.Add(MakeNode(new WmsRootRepositoryItem(connName)));
                 }
             }
-            else
+            else if (item is WfsRootRepositoryItem wfsr)
             {
-                if (treePath.LastNode is RepositoryItem node && node.IsFolder) //Can't enumerate children of documents
+                if (!wfsr.IsLoaded)
                 {
-                    string connName = GetParentConnectionName(node);
-                    var conn = _connManager.GetConnection(connName);
-                    node.ClearChildrenWithoutNotification();
-                    var list = conn.ResourceService.GetRepositoryResources(node.ResourceId, string.Empty, 1, false); //NOXLATE
-                    foreach (RepositoryItem item in GetSorted(connName, list))
-                    {
-                        node.AddChildWithoutNotification(item);
-                        ApplyCurrentItemState(item);
-                        Debug.Assert(item.Parent != null);
-                        Debug.Assert(!item.IsRoot);
-                        yield return item;
-                    }
-
-                    // If we're looping the root, tack on some extra special nodes if capable
-                    if (node.ResourceId == StringConstants.RootIdentifier)
-                    {
-                        if (conn.Capabilities.SupportedCommands.Contains((int)CommandType.GetWfsCapabilities))
-                            yield return new WfsRootRepositoryItem(connName);
-                        if (conn.Capabilities.SupportedCommands.Contains((int)CommandType.GetWmsCapabilities))
-                            yield return new WmsRootRepositoryItem(connName);
-                    }
+                    var conn = _connManager.GetConnection(wfsr.ConnectionName);
+                    var cmd = conn.CreateCommand((int)CommandType.GetWfsCapabilities) as IGetWfsCapabilities;
+                    wfsr.Load(cmd);
                 }
-                else if (treePath.LastNode is WfsRootRepositoryItem wfsr)
+                foreach (var layer in wfsr.Layers)
+                    treeNode.Nodes.Add(MakeNode(layer));
+            }
+            else if (item is WmsRootRepositoryItem wmsr)
+            {
+                if (!wmsr.IsLoaded)
                 {
-                    if (!wfsr.IsLoaded)
-                    {
-                        var conn = _connManager.GetConnection(wfsr.ConnectionName);
-                        var cmd = conn.CreateCommand((int)CommandType.GetWfsCapabilities) as IGetWfsCapabilities;
-                        wfsr.Load(cmd);
-                    }
-                    foreach (var layer in wfsr.Layers)
-                    {
-                        yield return layer;
-                    }
+                    var conn = _connManager.GetConnection(wmsr.ConnectionName);
+                    var cmd = conn.CreateCommand((int)CommandType.GetWmsCapabilities) as IGetWmsCapabilities;
+                    wmsr.Load(cmd);
                 }
-                else if (treePath.LastNode is WmsRootRepositoryItem wmsr)
-                {
-                    if (!wmsr.IsLoaded)
-                    {
-                        var conn = _connManager.GetConnection(wmsr.ConnectionName);
-                        var cmd = conn.CreateCommand((int)CommandType.GetWmsCapabilities) as IGetWmsCapabilities;
-                        wmsr.Load(cmd);
-                    }
-                    foreach (var layer in wmsr.Layers)
-                    {
-                        yield return layer;
-                    }
-                }
-                else
-                {
-                    yield break;
-                }
+                foreach (var layer in wmsr.Layers)
+                    treeNode.Nodes.Add(MakeNode(layer));
             }
         }
 
@@ -655,114 +633,112 @@ namespace Maestro.Base.UI
         {
             if (!string.IsNullOrEmpty(item.ConnectionName))
                 return item.ConnectionName;
-
             var current = item.Parent;
             if (current != null)
             {
-                current = item.Parent;
-                while (current != null)
-                {
+                while (current.Parent != null)
                     current = current.Parent;
-                }
                 Debug.Assert(!string.IsNullOrEmpty(current.ConnectionName));
                 return current.ConnectionName;
             }
-            else
-            {
-                Debug.Assert(!string.IsNullOrEmpty(item.ConnectionName));
-                return item.ConnectionName;
-            }
+            Debug.Assert(!string.IsNullOrEmpty(item.ConnectionName));
+            return item.ConnectionName;
         }
 
         /// <summary>
-        /// Refreshes this model
+        /// Refreshes the currently selected node's subtree.
         /// </summary>
-        public override void Refresh()
+        public void Refresh()
         {
-            //We have to override this because the base impl does not
-            //preserve the tree path of the selected node (and thus expand
-            //all the nodes from the root to this node)
-            //
-            //Which is also why we need to pass a reference to
-            //the TreeViewAdv in the ctor
-            var selected = _tree.GetPath(_tree.SelectedNode);
-            OnStructureChanged(new TreePathEventArgs(selected));
+            if (_tree == null) return;
+            var sel = _tree.SelectedNode;
+            if (sel != null)
+                InvalidateSubTree(sel.Tag as RepositoryItem);
+            else
+                PopulateTree(_tree);
         }
 
         internal void FullRefresh()
         {
-            OnStructureChanged(new TreePathEventArgs());
+            if (_tree != null)
+                PopulateTree(_tree);
         }
 
         /// <summary>
-        /// Gets whether the specified tree path is a path to a leaf node
+        /// Updates the text of the tree node for the given item.
         /// </summary>
-        /// <param name="treePath"></param>
-        /// <returns></returns>
-        public override bool IsLeaf(TreePath treePath)
+        internal void InvalidateItem(RepositoryItem item)
         {
-            if (treePath.LastNode is RepositoryItem item)
-                return !item.IsFolder;
-
-            if (treePath.LastNode is WfsLayerRepositoryItem _)
-                return true;
-
-            if (treePath.LastNode is WmsLayerRepositoryItem _)
-                return true;
-
-            return false;
-        }
-
-        internal void RaiseNodesChanged(TreeModelEventArgs args)
-        {
-            base.OnNodesChanged(args);
-        }
-
-        internal TreePath GetPath(RepositoryItem node)
-        {
-            if (node.IsRoot)
+            if (_tree == null || item == null) return;
+            var node = FindTreeNodeByItem(_tree.Nodes, item);
+            if (node != null)
             {
-                return new TreePath(node);
-            }
-            else
-            {
-                Stack<object> stack = new Stack<object>();
-                while (!node.IsRoot)
-                {
-                    stack.Push(node);
-                    node = node.Parent;
-                }
-                stack.Push(node);
-                return new TreePath(stack.ToArray());
+                node.Text = item.Name;
+                _tree.Invalidate();
             }
         }
 
-        internal void RaiseStructureChanged(TreePathEventArgs args)
+        /// <summary>
+        /// Reloads children of the tree node for the given item.
+        /// </summary>
+        internal void InvalidateSubTree(RepositoryItem item)
         {
-            base.OnStructureChanged(args);
+            if (_tree == null) return;
+            if (item == null) { PopulateTree(_tree); return; }
+            var node = FindTreeNodeByItem(_tree.Nodes, item);
+            if (node != null)
+            {
+                node.Nodes.Clear();
+                if (!IsLeafItem(item))
+                    node.Nodes.Add(new System.Windows.Forms.TreeNode(LoadingTag));
+            }
         }
 
-        internal TreePath GetPathFromResourceId(string connectionName, string resId)
+        private static System.Windows.Forms.TreeNode FindTreeNodeByItem(System.Windows.Forms.TreeNodeCollection nodes, object item)
         {
-            var rootNode = _rootNodes[connectionName];
-            if (StringConstants.RootIdentifier.Equals(resId))
-                return GetPath(rootNode);
-
-            string[] components = ResourceIdentifier.GetPath(resId).Split('/'); //NOXLATE
-            if (!ResourceIdentifier.IsFolderResource(resId))
+            foreach (System.Windows.Forms.TreeNode node in nodes)
             {
-                //Fix extension to last component
-                components[components.Length - 1] = components[components.Length - 1] + "." + ResourceIdentifier.GetResourceTypeAsString(resId);
+                if (node.Tag == item) return node;
+                var found = FindTreeNodeByItem(node.Nodes, item);
+                if (found != null) return found;
             }
-            RepositoryItem current = rootNode;
-            for (int i = 0; i < components.Length; i++)
-            {
-                if (current.Contains(components[i]))
-                    current = current[components[i]];
-                else
-                    return null;
-            }
-            return GetPath(current);
+            return null;
         }
+
+        /// <summary>
+        /// Finds a TreeNode by connection name and resource ID.
+        /// </summary>
+        internal System.Windows.Forms.TreeNode FindTreeNode(string connectionName, string resourceId)
+        {
+            if (_tree == null) return null;
+            if (!_rootNodes.ContainsKey(connectionName)) return null;
+            var rootItem = _rootNodes[connectionName];
+            var rootNode = FindTreeNodeByItem(_tree.Nodes, rootItem);
+            if (rootNode == null) return null;
+            if (StringConstants.RootIdentifier.Equals(resourceId)) return rootNode;
+            return FindTreeNodeByResourceId(rootNode.Nodes, resourceId);
+        }
+
+        private static System.Windows.Forms.TreeNode FindTreeNodeByResourceId(System.Windows.Forms.TreeNodeCollection nodes, string resourceId)
+        {
+            foreach (System.Windows.Forms.TreeNode node in nodes)
+            {
+                if (node.Tag is RepositoryItem ri && ri.ResourceId == resourceId)
+                    return node;
+                var found = FindTreeNodeByResourceId(node.Nodes, resourceId);
+                if (found != null) return found;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets whether the specified tree path is a path to a leaf node (kept for compatibility)
+        /// </summary>
+        [System.Obsolete("Use IsLeafItem instead")]
+        public bool IsLeaf(object item) => IsLeafItem(item);
+
+        internal void RaiseNodesChanged(RepositoryItem item) => InvalidateItem(item);
+
+        internal void RaiseStructureChanged(RepositoryItem item) => InvalidateSubTree(item);
     }
 }

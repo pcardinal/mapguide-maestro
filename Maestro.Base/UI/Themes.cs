@@ -1,4 +1,4 @@
-﻿#region Disclaimer / License
+#region Disclaimer / License
 
 // Copyright (C) 2016, Jackie Ng
 // https://github.com/jumpinjackie/mapguide-maestro
@@ -22,7 +22,6 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Aga.Controls.Tree;
 using ICSharpCode.TextEditor;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -144,18 +143,6 @@ namespace Maestro.Base.UI
             }
         }
 
-        internal static void Apply(TreeViewAdv tree)
-        {
-            switch (CurrentTheme)
-            {
-                case VS2012Dark:
-                case VS2013Dark:
-                case VS2015Dark:
-                    {
-                        tree.BackColor = Color.DarkGray;
-                    }
-                    break;
             }
         }
-    }
-}
+

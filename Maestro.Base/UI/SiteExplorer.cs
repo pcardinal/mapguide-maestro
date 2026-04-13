@@ -1,4 +1,4 @@
-﻿#region Disclaimer / License
+#region Disclaimer / License
 
 // Copyright (C) 2010, Jackie Ng
 // https://github.com/jumpinjackie/mapguide-maestro
@@ -20,7 +20,6 @@
 
 #endregion Disclaimer / License
 
-using Aga.Controls.Tree;
 using ICSharpCode.Core;
 using ICSharpCode.Core.WinForms;
 using Maestro.Base.Commands;
@@ -53,8 +52,7 @@ namespace Maestro.Base.UI
         {
             InitializeComponent();
             Application.Idle += new EventHandler(OnIdle);
-            ndResource.ToolTipProvider = new RepositoryItemToolTipProvider();
-            ndResource.DrawText += WeakEventHandler.Wrap<EventHandler<Aga.Controls.Tree.NodeControls.DrawEventArgs>>(OnNodeDrawText, (eh) => ndResource.DrawText -= eh);
+            trvResources.ShowNodeToolTips = true;
 
             var ts = ToolbarService.CreateToolStripItems("/Maestro/Shell/SiteExplorer/Toolbar", this, true); //NOXLATE
             tsSiteExplorer.Items.AddRange(ts);
@@ -64,7 +62,7 @@ namespace Maestro.Base.UI
             var omgr = ServiceRegistry.GetService<OpenResourceManager>();
             var clip = ServiceRegistry.GetService<ClipboardService>();
             _model = new RepositoryTreeModel(_connManager, trvResources, omgr, clip);
-            trvResources.Model = _model;
+            _model.PopulateTree(trvResources);
 
             Workbench wb = Workbench.Instance;
             wb.ActiveDocumentChanged += WeakEventHandler.Wrap(OnActiveDocumentChanged, (eh) => wb.ActiveDocumentChanged -= eh);
@@ -106,7 +104,7 @@ namespace Maestro.Base.UI
 
         private string _currentConnectionName;
 
-        private void trvResources_SelectionChanged(object sender, EventArgs e)
+        private void trvResources_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
             var connName = this.ConnectionName;
             if (_currentConnectionName == null)
@@ -130,17 +128,9 @@ namespace Maestro.Base.UI
             get
             {
                 if (trvResources.SelectedNode != null && trvResources.SelectedNode.Tag is ISiteExplorerNode ri)
-                {
                     return ri.ConnectionName;
-                }
-                else if (trvResources.SelectedNodes != null && trvResources.SelectedNodes.Count > 0 && trvResources.SelectedNodes[0].Tag is ISiteExplorerNode ri2)
-                {
-                    return ri2.ConnectionName;
-                }
-                else if (trvResources.Root.Children.Count == 1 && trvResources.Root.Children[0].Tag is ISiteExplorerNode ri3)
-                {
+                else if (trvResources.Nodes.Count == 1 && trvResources.Nodes[0].Tag is ISiteExplorerNode ri3)
                     return ri3.ConnectionName;
-                }
                 return null;
             }
         }
@@ -172,10 +162,8 @@ namespace Maestro.Base.UI
         public void FullRefresh()
         {
             _model.FullRefresh();
-            foreach (var node in trvResources.Root.Children)
-            {
+            foreach (System.Windows.Forms.TreeNode node in trvResources.Nodes)
                 node.Expand();
-            }
         }
 
         public void RefreshModel(string connectionName)
@@ -190,41 +178,16 @@ namespace Maestro.Base.UI
                 var rid = new ResourceIdentifier(resId);
                 if (!rid.IsFolder)
                     resId = rid.ParentFolder;
-
-                //If this node is not initially expanded, we get NRE on refresh
                 ExpandNode(connectionName, resId);
-
-                var path = _model.GetPathFromResourceId(connectionName, resId);
-                while (path == null)
-                {
-                    resId = ResourceIdentifier.GetParentFolder(resId);
-                    path = _model.GetPathFromResourceId(connectionName, resId);
-                }
-
-                var node = trvResources.FindNode(path, true);
-                if (node != null)
-                {
-                    //Walk back up until node has children. We want to refresh from this node down
-                    while (node.Children.Count == 0 && node != trvResources.Root)
-                        node = node.Parent;
-                }
-                try
-                {
-                    trvResources.SelectedNode = node;
-                }
-                catch { }
             }
             _model.Refresh();
             if (!string.IsNullOrEmpty(resId))
-            {
                 SelectNode(connectionName, resId);
-            }
-            //trvResources.Root.Children[0].Expand();
         }
 
         private void trvResources_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            TreeNodeAdv node = trvResources.GetNodeAt(new Point(e.X, e.Y));
+            var node = trvResources.GetNodeAt(e.X, e.Y);
             if (node != null)
             {
                 var item = node.Tag as RepositoryItem;
@@ -308,169 +271,75 @@ namespace Maestro.Base.UI
             get
             {
                 var items = new List<ISiteExplorerNode>();
-                if (trvResources.SelectedNodes.Count > 0)
-                {
-                    foreach (var node in trvResources.SelectedNodes)
-                    {
-                        if (node.Tag is ISiteExplorerNode item)
-                            items.Add(item);
-                    }
-                }
+                if (trvResources.SelectedNode != null && trvResources.SelectedNode.Tag is ISiteExplorerNode item)
+                    items.Add(item);
                 return items.ToArray();
             }
         }
 
-        private void trvResources_Expanding(object sender, TreeViewAdvEventArgs e)
+        private void trvResources_BeforeExpand(object sender, System.Windows.Forms.TreeViewCancelEventArgs e)
         {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new MethodInvoker(() =>
-                {
-                    this.Cursor = Cursors.WaitCursor;
-                }));
-            }
-            else
-            {
-                this.Cursor = Cursors.WaitCursor;
-            }
-        }
-
-        private void trvResources_Expanded(object sender, TreeViewAdvEventArgs e)
-        {
-            if (this.InvokeRequired)
-            {
-                this.Invoke(new MethodInvoker(() =>
-                {
-                    this.Cursor = Cursors.Default;
-                }));
-            }
-            else
-            {
-                this.Cursor = Cursors.Default;
-            }
+            this.Cursor = Cursors.WaitCursor;
+            try { _model.LoadChildren(e.Node); }
+            finally { this.Cursor = Cursors.Default; }
         }
 
         public void ExpandNode(string connectionName, string folderId)
         {
             if (StringConstants.RootIdentifier.Equals(folderId))
                 return;
-
-            var path = _model.GetPathFromResourceId(connectionName, folderId);
-            if (path != null)
-            {
-                var node = trvResources.FindNode(path, true);
-                if (node != null)
-                {
-                    node.IsExpanded = true;
-                }
-            }
+            var node = _model.FindTreeNode(connectionName, folderId);
+            if (node != null)
+                node.Expand();
         }
 
         public void SelectNode(string connectionName, string resourceId)
         {
-            var path = _model.GetPathFromResourceId(connectionName, resourceId);
-            if (path != null)
-            {
-                var node = trvResources.FindNode(path, true);
-                if (node != null)
-                {
-                    trvResources.SelectedNode = node;
-                }
-            }
+            var node = _model.FindTreeNode(connectionName, resourceId);
+            if (node != null)
+                trvResources.SelectedNode = node;
         }
 
         public void FocusOnNode(string connectionName, string resourceId)
         {
-            var path = _model.GetPathFromResourceId(connectionName, resourceId);
-            if (path != null)
+            var node = _model.FindTreeNode(connectionName, resourceId);
+            if (node != null)
             {
-                var node = trvResources.FindNode(path, true);
-                if (node != null)
-                {
-                    trvResources.ScrollTo(node);
-                }
+                trvResources.SelectedNode = node;
+                node.EnsureVisible();
             }
         }
 
         public void FlagNode(string connectionName, string resourceId, NodeFlagAction action)
         {
-            var path = _model.GetPathFromResourceId(connectionName, resourceId);
-            if (path != null)
+            var node = _model.FindTreeNode(connectionName, resourceId);
+            if (node != null)
             {
-                var node = trvResources.FindNode(path, true);
-                if (node != null)
+                var item = (RepositoryItem)node.Tag;
+                switch (action)
                 {
-                    var item = (RepositoryItem)node.Tag;
-                    switch (action)
-                    {
-                        //case NodeFlagAction.IndicateCopy:
-                        //case NodeFlagAction.IndicateCut:
-                        //    item.IsClipboarded = true;
-                        //    break;
-                        case NodeFlagAction.HighlightDirty:
-                            item.IsDirty = true;
-                            break;
-
-                        case NodeFlagAction.HighlightOpen:
-                            item.IsOpen = true;
-                            break;
-
-                        case NodeFlagAction.None:
-                            item.Reset();
-                            break;
-                    }
-                    trvResources.Invalidate();
+                    case NodeFlagAction.HighlightDirty:
+                        item.IsDirty = true;
+                        break;
+                    case NodeFlagAction.HighlightOpen:
+                        item.IsOpen = true;
+                        break;
+                    case NodeFlagAction.None:
+                        item.Reset();
+                        break;
                 }
+                trvResources.Refresh();
             }
-        }
-
-        private void OnNodeDrawText(object sender, Aga.Controls.Tree.NodeControls.DrawEventArgs e)
-        {
-            if (e.Node.Tag == null)
-                return;
-
-            var ocolor = PropertyService.Get(ConfigProperties.OpenColor, Color.LightGreen);
-            var dcolor = PropertyService.Get(ConfigProperties.DirtyColor, Color.Pink);
-
-            if (e.Node.Tag is RepositoryItem item)
-            {
-                var ctx = e.Context;
-                if (item.ClipboardState != RepositoryItem.ClipboardAction.None)
-                {
-                    var oldFont = e.Font;
-                    e.Font = new Font(oldFont.FontFamily, oldFont.Size, oldFont.Style | FontStyle.Italic);
-                }
-                if (item.IsDirty)
-                    e.BackgroundBrush = new SolidBrush(dcolor);
-                else if (item.IsOpen)
-                    e.BackgroundBrush = new SolidBrush(ocolor);
-            }/*
-            else if (e.Node.Tag is WfsRootRepositoryItem wfsr)
-            {
-
-            }
-            else if (e.Node.Tag is WmsRootRepositoryItem wmsr)
-            {
-
-            }*/
         }
 
         private void trvResources_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            var nodes = e.Item as TreeNodeAdv[];
-            if (nodes != null && nodes.Length > 0)
+            var node = e.Item as System.Windows.Forms.TreeNode;
+            if (node != null && node.Tag is RepositoryItem ri)
             {
-                IServerConnection conn = null;
-                List<RepositoryHandle> rids = new List<RepositoryHandle>();
-                foreach (var n in nodes)
-                {
-                    if (n.Tag is RepositoryItem ri)
-                    {
-                        conn = _connManager.GetConnection(ri.ConnectionName);
-                        rids.Add(new RepositoryHandle(new ResourceIdentifier(ri.ResourceId), conn));
-                    }
-                }
-                trvResources.DoDragDrop(rids.ToArray(), DragDropEffects.All);
+                var conn = _connManager.GetConnection(ri.ConnectionName);
+                var rids = new[] { new RepositoryHandle(new ResourceIdentifier(ri.ResourceId), conn) };
+                trvResources.DoDragDrop(rids, DragDropEffects.All);
             }
         }
 
@@ -480,13 +349,13 @@ namespace Maestro.Base.UI
             if (data == null)
             {
                 //See if the mouse is currently over a node
-                var node = trvResources.GetNodeAt(trvResources.PointToClient(new Point(e.X, e.Y)));
+                var node = trvResources.GetNodeAt(trvResources.PointToClient(new System.Drawing.Point(e.X, e.Y)));
                 SiteExplorerDragDropHandler.OnDragDrop(this, e, node);
             }
             else
             {
                 //See if the mouse is currently over a node
-                var node = trvResources.GetNodeAt(trvResources.PointToClient(new Point(e.X, e.Y)));
+                var node = trvResources.GetNodeAt(trvResources.PointToClient(new System.Drawing.Point(e.X, e.Y)));
                 if (node == null)
                     return;
 
@@ -791,7 +660,7 @@ namespace Maestro.Base.UI
             else
             {
                 //See if the mouse is currently over a node
-                var node = trvResources.GetNodeAt(trvResources.PointToClient(new Point(e.X, e.Y)));
+                var node = trvResources.GetNodeAt(trvResources.PointToClient(new System.Drawing.Point(e.X, e.Y)));
                 if (node == null)
                 {
                     e.Effect = DragDropEffects.None;
@@ -938,3 +807,4 @@ namespace Maestro.Base.UI
         }
     }
 }
+

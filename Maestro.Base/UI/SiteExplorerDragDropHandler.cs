@@ -1,4 +1,4 @@
-﻿#region Disclaimer / License
+#region Disclaimer / License
 
 // Copyright (C) 2010, Jackie Ng
 // https://github.com/jumpinjackie/mapguide-maestro
@@ -20,7 +20,6 @@
 
 #endregion Disclaimer / License
 
-using Aga.Controls.Tree;
 using Maestro.Base.Services;
 using Maestro.Editors.Common;
 using Maestro.Shared.UI;
@@ -50,7 +49,7 @@ namespace Maestro.Base.UI
                 e.Effect = DragDropEffects.None;
         }
 
-        internal static void OnDragDrop(ISiteExplorer sender, DragEventArgs e, TreeNodeAdv droppedNode)
+        internal static void OnDragDrop(ISiteExplorer sender, DragEventArgs e, System.Windows.Forms.TreeNode droppedNode)
         {
             //If drop node specified, extract relevant folder, otherwise default to root (Library://)
             string folderId = StringConstants.RootIdentifier;

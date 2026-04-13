@@ -4,7 +4,7 @@
 
 This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 to .NET 10 using a bottom-up (dependency-first) strategy. Foundation libraries will be upgraded first, progressing through 8 dependency tiers to the main application.
 
-**Progress**: 1/13 tasks complete (8%) ![0%](https://progress-bar.xyz/8)
+**Progress**: 2/13 tasks complete (15%) ![0%](https://progress-bar.xyz/15)
 
 ---
 
@@ -18,30 +18,30 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 
 ---
 
-### [▶] TASK-002: Upgrade Tier 1 foundation libraries
+### [✓] TASK-002: Upgrade Tier 1 foundation libraries *(Completed: 2026-04-13 04:04)*
 **References**: Plan §Tier 1, Plan §Package Update Reference
 
-- [▶] (1) Remove `Microsoft.Win32.Registry` package reference from ICSharpCode.Core per Plan §Tier 1
-- [ ] (2) Package reference removed (**Verify**)
-- [ ] (3) Update `Newtonsoft.Json` from 13.0.3 to 13.0.4 in OSGeo.MapGuide.ObjectModels per Plan §Tier 1
-- [ ] (4) Package updated (**Verify**)
-- [ ] (5) Update target framework to `net10.0-windows` in ICSharpCode.TextEditor, Maestro.Shared.UI, SignMapGuideApi per Plan §Tier 1
-- [ ] (6) Framework updated in all 3 projects (**Verify**)
-- [ ] (7) Remove `TreeViewAdv` package reference from MpuCalc per Plan §Tier 1
-- [ ] (8) Replace all `TreeViewAdv` control usages in MpuCalc with standard WinForms `TreeView` per Plan §Tier 1 (Option A - standard TreeView replacement)
-- [ ] (9) All `TreeViewAdv` usages replaced (**Verify**)
-- [ ] (10) Update target framework to `net10.0-windows` in MpuCalc
-- [ ] (11) Framework updated (**Verify**)
-- [ ] (12) Build all Tier 1 projects
-- [ ] (13) All Tier 1 projects build with 0 errors (**Verify**)
-- [ ] (14) Commit changes with message: "TASK-002: Upgrade Tier 1 foundation libraries to net10.0"
+- [✓] (1) Remove `Microsoft.Win32.Registry` package reference from ICSharpCode.Core per Plan §Tier 1
+- [✓] (2) Package reference removed (**Verify**)
+- [✓] (3) Update `Newtonsoft.Json` from 13.0.3 to 13.0.4 in OSGeo.MapGuide.ObjectModels per Plan §Tier 1
+- [✓] (4) Package updated (**Verify**)
+- [✓] (5) Update target framework to `net10.0-windows` in ICSharpCode.TextEditor, Maestro.Shared.UI, SignMapGuideApi per Plan §Tier 1
+- [✓] (6) Framework updated in all 3 projects (**Verify**)
+- [✓] (7) Remove `TreeViewAdv` package reference from MpuCalc per Plan §Tier 1
+- [✓] (8) Replace all `TreeViewAdv` control usages in MpuCalc with standard WinForms `TreeView` per Plan §Tier 1 (Option A - standard TreeView replacement)
+- [✓] (9) All `TreeViewAdv` usages replaced (**Verify**)
+- [✓] (10) Update target framework to `net10.0-windows` in MpuCalc
+- [✓] (11) Framework updated (**Verify**)
+- [✓] (12) Build all Tier 1 projects
+- [✓] (13) All Tier 1 projects build with 0 errors (**Verify**)
+- [✓] (14) Commit changes with message: "TASK-002: Upgrade Tier 1 foundation libraries to net10.0"
 
 ---
 
-### [ ] TASK-003: Upgrade Tier 2 core API layer
+### [▶] TASK-003: Upgrade Tier 2 core API layer
 **References**: Plan §Tier 2
 
-- [ ] (1) Update target framework to `net10.0-windows` in ICSharpCode.Core.WinForms and LocalConfigure per Plan §Tier 2
+- [▶] (1) Update target framework to `net10.0-windows` in ICSharpCode.Core.WinForms and LocalConfigure per Plan §Tier 2
 - [ ] (2) Framework updated in both projects (**Verify**)
 - [ ] (3) Build all Tier 2 projects
 - [ ] (4) All Tier 2 projects build with 0 errors (**Verify**)
@@ -183,5 +183,7 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 - [ ] (7) Commit final validation with message: "TASK-013: Complete .NET 10 upgrade - all tests passing"
 
 ---
+
+
 
 

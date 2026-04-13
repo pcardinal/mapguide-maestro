@@ -167,6 +167,78 @@ public partial class SiteExplorerViewModel : ViewModelBase
 
     private bool CanDeleteSelected() =>
         SelectedNode is { IsFolder: false, IsPlaceholder: false };
+
+    /// <summary>Raised when UI must prompt for a new name</summary>
+    public Func<string, Task<string?>>? RenameRequested { get; set; }
+
+    [RelayCommand(CanExecute = nameof(CanRename))]
+    private async Task RenameSelectedAsync()
+    {
+        if (SelectedNode is null || RenameRequested is null) return;
+
+        var newName = await RenameRequested.Invoke(SelectedNode.Name);
+        if (string.IsNullOrWhiteSpace(newName) || newName == SelectedNode.Name) return;
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+
+            // Build new resource ID with new name
+            var parts = SelectedNode.ResourceId.TrimEnd('/').Split('/');
+            parts[^1] = SelectedNode.IsFolder
+                ? newName
+                : newName + "." + SelectedNode.ResourceType;
+
+            var newId = string.Join("/", parts) + (SelectedNode.IsFolder ? "/" : "");
+
+            await Task.Run(() =>
+                conn.ResourceService.MoveResource(SelectedNode.ResourceId, newId, false));
+
+            _notifications.Success($"Renamed to \"{newName}\"");
+            await RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Rename failed: {ex.Message}");
+        }
+    }
+
+    private bool CanRename() => SelectedNode is { IsPlaceholder: false };
+
+    [RelayCommand(CanExecute = nameof(CanCopy))]
+    private async Task CopySelectedAsync()
+    {
+        if (SelectedNode is null || RenameRequested is null) return;
+
+        var copyName = await RenameRequested.Invoke(SelectedNode.Name + "_copy");
+        if (string.IsNullOrWhiteSpace(copyName)) return;
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+
+            var parts = SelectedNode.ResourceId.TrimEnd('/').Split('/');
+            parts[^1] = SelectedNode.IsFolder
+                ? copyName
+                : copyName + "." + SelectedNode.ResourceType;
+
+            var newId = string.Join("/", parts) + (SelectedNode.IsFolder ? "/" : "");
+
+            await Task.Run(() =>
+                conn.ResourceService.CopyResource(SelectedNode.ResourceId, newId, false));
+
+            _notifications.Success($"Copied to \"{copyName}\"");
+            await RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Copy failed: {ex.Message}");
+        }
+    }
+
+    private bool CanCopy() => SelectedNode is { IsPlaceholder: false };
 }
 
 /// <summary>

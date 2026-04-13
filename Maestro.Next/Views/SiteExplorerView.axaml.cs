@@ -35,6 +35,7 @@ public partial class SiteExplorerView : UserControl
         {
             vm.NewResourceRequested    = ShowNewResourceDialogAsync;
             vm.DeleteConfirmRequested  = ShowDeleteConfirmAsync;
+            vm.RenameRequested         = ShowRenameDialogAsync;
         }
     }
 
@@ -80,6 +81,48 @@ public partial class SiteExplorerView : UserControl
 
         await box.ShowDialog(window);
         return confirmed;
+    }
+
+    private async Task<string?> ShowRenameDialogAsync(string currentName)
+    {
+        var window = VisualRoot as Window;
+        if (window is null) return null;
+
+        var tb = new TextBox { Text = currentName, Margin = new Avalonia.Thickness(20, 10, 20, 0) };
+        var lbl = new TextBlock
+        {
+            Text   = "Enter new name:",
+            Margin = new Avalonia.Thickness(20, 20, 20, 0)
+        };
+
+        Button okBtn, cancelBtn;
+        okBtn     = new Button { Content = "OK",     Width = 80 };
+        cancelBtn = new Button { Content = "Cancel", Width = 80 };
+        okBtn.Classes.Add("accent");
+
+        var btnRow = new StackPanel
+        {
+            Orientation        = Avalonia.Layout.Orientation.Horizontal,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right,
+            Spacing  = 8,
+            Margin   = new Avalonia.Thickness(0, 12, 20, 20),
+            Children = { cancelBtn, okBtn }
+        };
+
+        var box = new Window
+        {
+            Title     = "Rename", Width = 380, Height = 170,
+            CanResize = false, ShowInTaskbar = false,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            Content = new StackPanel { Children = { lbl, tb, btnRow } }
+        };
+
+        string? result = null;
+        okBtn.Click     += (_, _) => { result = tb.Text; box.Close(); };
+        cancelBtn.Click += (_, _) => box.Close();
+
+        await box.ShowDialog(window);
+        return result;
     }
 
     private static Panel BuildConfirmContent(string name,

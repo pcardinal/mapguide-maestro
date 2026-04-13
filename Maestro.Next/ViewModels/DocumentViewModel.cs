@@ -9,6 +9,10 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Maestro.Next.Services;
+using Microsoft.Extensions.DependencyInjection;
+using OSGeo.MapGuide.MaestroAPI.Resource;
+using OSGeo.MapGuide.MaestroAPI.Resource.Validation;
 
 namespace Maestro.Next.ViewModels;
 
@@ -49,6 +53,63 @@ public abstract partial class DocumentViewModel : ViewModelBase
     /// Called when the document is closed
     /// </summary>
     public virtual void OnClose() { }
+
+    // ── Validation ──────────────────────────────────────────────
+    public ObservableCollection<ValidationIssueViewModel> ValidationIssues { get; } = new();
+
+    [ObservableProperty]
+    private bool _hasValidationIssues;
+
+    [RelayCommand]
+    protected virtual async Task ValidateAsync()
+    {
+        if (ResourceId is null) return;
+        try
+        {
+            IsBusy = true;
+            BusyMessage = "Validating...";
+            ValidationIssues.Clear();
+
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+            var resource = await Task.Run(
+                () => conn.ResourceService.GetResource(ResourceId));
+            var context = new ResourceValidationContext(conn);
+            var issues = await Task.Run(
+                () => ResourceValidatorSet.Validate(context, resource, true));
+
+            foreach (var issue in issues)
+            {
+                ValidationIssues.Add(new ValidationIssueViewModel(
+                    issue.Status.ToString(),
+                    issue.Message,
+                    issue.StatusCode.ToString()));
+            }
+
+            HasValidationIssues = ValidationIssues.Count > 0;
+
+            if (!HasValidationIssues)
+                Program.Services!.GetRequiredService<INotificationService>()
+                       .Success("Validation passed — no issues found.");
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"Validation error: {ex.Message}");
+        }
+        finally { IsBusy = false; BusyMessage = null; }
+    }
+}
+
+public record ValidationIssueViewModel(string Status, string Message, string Code)
+{
+    public string Icon => Status switch
+    {
+        "Error"       => "❌",
+        "Warning"     => "⚠️",
+        "Information" => "ℹ️",
+        _             => "❔"
+    };
 }
 
 /// <summary>

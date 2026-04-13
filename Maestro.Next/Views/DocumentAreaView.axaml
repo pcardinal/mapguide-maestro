@@ -19,8 +19,11 @@
                  Foreground="Gray" FontSize="11" />
     </StackPanel>
 
-    <!-- Tab control with open documents -->
-    <TabControl IsVisible="{Binding HasOpenDocuments}"
+    <!-- Tab + Validation area when documents are open -->
+    <Grid IsVisible="{Binding HasOpenDocuments}"
+          RowDefinitions="*,Auto">
+
+    <TabControl Grid.Row="0"
                 ItemsSource="{Binding OpenDocuments}"
                 SelectedItem="{Binding ActiveDocument}">
 
@@ -76,5 +79,36 @@
       </TabControl.ContentTemplate>
 
     </TabControl>
+
+    <!-- Validation results panel -->
+    <Border Grid.Row="1"
+            IsVisible="{Binding ActiveDocument.HasValidationIssues}"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+            BorderThickness="0,1,0,0"
+            MaxHeight="180">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="8,6" Spacing="8">
+          <TextBlock Text="Validation Issues" FontWeight="SemiBold" VerticalAlignment="Center" />
+          <TextBlock Text="{Binding ActiveDocument.ValidationIssues.Count, StringFormat='({0})'}"
+                     Foreground="Gray" VerticalAlignment="Center" />
+        </StackPanel>
+        <ScrollViewer>
+          <ItemsControl ItemsSource="{Binding ActiveDocument.ValidationIssues}" Margin="8,0,8,8">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="vm:ValidationIssueViewModel">
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,2">
+                  <TextBlock Text="{Binding Icon}" FontSize="14" VerticalAlignment="Center" />
+                  <TextBlock Text="{Binding Message}" TextWrapping="Wrap"
+                             FontSize="12" MaxWidth="700" />
+                </StackPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </DockPanel>
+    </Border>
+
+    </Grid>
   </Panel>
 </UserControl>

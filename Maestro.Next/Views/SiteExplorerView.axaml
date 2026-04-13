@@ -109,15 +109,17 @@
                     Command="{Binding OpenResourceCommand}"
                     CommandParameter="{Binding SelectedNode}" />
           <Separator />
-          <MenuItem Header="New Resource…"
+          <MenuItem Header="New Resource..."
                     Command="{Binding NewResourceCommand}" />
+          <MenuItem Header="Rename..."
+                    Command="{Binding RenameSelectedCommand}" />
+          <MenuItem Header="Copy..."
+                    Command="{Binding CopySelectedCommand}" />
           <Separator />
           <MenuItem Header="Refresh" Command="{Binding RefreshCommand}" />
           <Separator />
           <MenuItem Header="Delete"
-                    Command="{Binding DeleteSelectedCommand}"
-                    IsEnabled="{Binding SelectedNode.IsFolder,
-                                Converter={x:Static BoolConverters.Not}}" />
+                    Command="{Binding DeleteSelectedCommand}" />
         </ContextMenu>
       </TreeView.ContextMenu>
     </TreeView>

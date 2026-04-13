@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not exist &quot;$(SolutionDir)out\$(Configuration)\AddIns\ExtendedObjectModels&quot; mkdir &quot;$(SolutionDir)out\$(Configuration)\AddIns\ExtendedObjectModels&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(SolutionDir)out\$(Configuration)\AddIns\ExtendedObjectModels&quot;&#xD;&#xA;copy /Y &quot;$(ProjectDir)Manifest.addin&quot; &quot;$(SolutionDir)out\$(Configuration)\AddIns\ExtendedObjectModels&quot;&#xD;&#xA;if exist &quot;$(TargetDir)$(TargetName).pdb&quot; copy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(SolutionDir)out\$(Configuration)\AddIns\ExtendedObjectModels&quot;" />
+    <Exec Command="if not exist &quot;$(MSBuildProjectDirectory)\..\out\$(Configuration)\AddIns\ExtendedObjectModels&quot; mkdir &quot;$(MSBuildProjectDirectory)\..\out\$(Configuration)\AddIns\ExtendedObjectModels&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;$(MSBuildProjectDirectory)\..\out\$(Configuration)\AddIns\ExtendedObjectModels&quot;&#xD;&#xA;copy /Y &quot;$(ProjectDir)Manifest.addin&quot; &quot;$(MSBuildProjectDirectory)\..\out\$(Configuration)\AddIns\ExtendedObjectModels&quot;&#xD;&#xA;if exist &quot;$(TargetDir)$(TargetName).pdb&quot; copy /Y &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(MSBuildProjectDirectory)\..\out\$(Configuration)\AddIns\ExtendedObjectModels&quot;" />
   </Target>
 
 </Project>

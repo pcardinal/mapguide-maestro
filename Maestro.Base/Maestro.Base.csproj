@@ -27,7 +27,9 @@
     <ProjectReference Include="..\Maestro.Editors\Maestro.Editors.csproj" />
     <ProjectReference Include="..\Maestro.Login\Maestro.Login.csproj" />
     <ProjectReference Include="..\Maestro.Shared.UI\Maestro.Shared.UI.csproj" />
-    <ProjectReference Include="..\MaestroFsPreview\MaestroFsPreview.csproj" />
+    <ProjectReference Include="..\MaestroFsPreview\MaestroFsPreview.csproj">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </ProjectReference>
     <ProjectReference Include="..\OSGeo.MapGuide.MaestroAPI\OSGeo.MapGuide.MaestroAPI.csproj" />
     <ProjectReference Include="..\Thirdparty\SharpDevelop\ICSharpCode.Core.WinForms\ICSharpCode.Core.WinForms.csproj" />
     <ProjectReference Include="..\Thirdparty\SharpDevelop\ICSharpCode.Core\ICSharpCode.Core.csproj" />

@@ -1362,10 +1362,10 @@ namespace Maestro.MapViewer
 
                 if (bHasMin)
                 {
-                    double minVal = double.Parse(cat.MinScale);
+                    double minVal = double.Parse(cat.MinScale, System.Globalization.CultureInfo.InvariantCulture);
                     if (bHasMax) //bHasMin = true, bHasMax = true
                     {
-                        double maxVal = double.Parse(cat.MaxScale);
+                        double maxVal = double.Parse(cat.MaxScale, System.Globalization.CultureInfo.InvariantCulture);
                         if (scale >= minVal && scale < maxVal)
                             bApplicable = true;
                     }
@@ -1379,7 +1379,7 @@ namespace Maestro.MapViewer
                 {
                     if (bHasMax) //bHasMin = false, bHasMax = true
                     {
-                        double maxVal = double.Parse(cat.MaxScale);
+                        double maxVal = double.Parse(cat.MaxScale, System.Globalization.CultureInfo.InvariantCulture);
                         if (scale < maxVal)
                             bApplicable = true;
                     }

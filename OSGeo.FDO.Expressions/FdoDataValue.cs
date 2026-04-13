@@ -168,7 +168,7 @@ namespace OSGeo.FDO.Expressions
         internal FdoDoubleValue(ParseTreeNode node)
         {
             this.DataType = DataType.Double;
-            this.Value = Convert.ToDouble(node.Token.ValueString);
+            this.Value = double.Parse(node.Token.ValueString, System.Globalization.CultureInfo.InvariantCulture);
         }
 
         private FdoDoubleValue(double value)

@@ -465,10 +465,10 @@ namespace OSGeo.MapGuide.ObjectModels
                                         
                                         //Update extents
                                         sht.Extent = ObjectFactory.CreateEnvelope(
-                                            Convert.ToDouble(sllx),
-                                            Convert.ToDouble(slly),
-                                            Convert.ToDouble(surx),
-                                            Convert.ToDouble(sury));
+                                            double.Parse(sllx, System.Globalization.CultureInfo.InvariantCulture),
+                                            double.Parse(slly, System.Globalization.CultureInfo.InvariantCulture),
+                                            double.Parse(surx, System.Globalization.CultureInfo.InvariantCulture),
+                                            double.Parse(sury, System.Globalization.CultureInfo.InvariantCulture));
                                     }
                                     catch { }
                                 }

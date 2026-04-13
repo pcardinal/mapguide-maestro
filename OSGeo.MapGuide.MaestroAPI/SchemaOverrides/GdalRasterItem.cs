@@ -247,10 +247,10 @@ namespace OSGeo.MapGuide.MaestroAPI.SchemaOverrides
             if (maxy.Name != "MaxY") //NOXLATE
                 throw new Exception(string.Format(Strings.ErrorBadDocumentExpectedElement, "MaxY"));
 
-            this.MinX = Convert.ToDouble(minx.InnerText);
-            this.MinY = Convert.ToDouble(miny.InnerText);
-            this.MaxX = Convert.ToDouble(maxx.InnerText);
-            this.MaxY = Convert.ToDouble(maxy.InnerText);
+            this.MinX = double.Parse(minx.InnerText, System.Globalization.CultureInfo.InvariantCulture);
+            this.MinY = double.Parse(miny.InnerText, System.Globalization.CultureInfo.InvariantCulture);
+            this.MaxX = double.Parse(maxx.InnerText, System.Globalization.CultureInfo.InvariantCulture);
+            this.MaxY = double.Parse(maxy.InnerText, System.Globalization.CultureInfo.InvariantCulture);
         }
     }
 }

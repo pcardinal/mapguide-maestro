@@ -1,4 +1,4 @@
-﻿#region Disclaimer / License
+#region Disclaimer / License
 
 // Copyright (C) 2014, Jackie Ng
 // https://github.com/jumpinjackie/mapguide-maestro
@@ -1323,7 +1323,7 @@ namespace OSGeo.MapGuide.ObjectModels.LayerDefinition.v1_0_0
             }
             set
             {
-                this.InsertionPointY = Convert.ToDouble(value);
+                this.InsertionPointY = double.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
             }
         }
     }

@@ -489,7 +489,7 @@ namespace OSGeo.MapGuide.ObjectModels.TileSetDefinition
             Check.ArgumentNotNull(tileSet, nameof(tileSet));
             var p = tileSet.GetParameter("FiniteScaleList"); //NOXLATE
             if (p != null && !string.IsNullOrEmpty(p.Value))
-                return p.Value.Split(',').Select(x => x.Trim()).Select(x => Convert.ToDouble(x)).OrderBy(s => s).ToArray();
+                return p.Value.Split(',').Select(x => x.Trim()).Select(x => double.Parse(x, System.Globalization.CultureInfo.InvariantCulture)).OrderBy(s => s).ToArray();
             return new double[0];
         }
 

@@ -54,3 +54,21 @@ Status: Complete.
 
 Success - All Tier 3 services and utilities upgraded to net10.0/net10.0-windows.
 
+
+## [2026-04-13 00:13] TASK-005: Remove OSGeo.MapGuide.MaestroAPI.Local provider
+
+Status: Complete.
+
+- **Verified**: OSGeo.MapGuide.MaestroAPI.Local removed from Maestro.sln via dotnet sln remove
+- **Verified**: Maestro.AddIn.Local removed from Maestro.sln via dotnet sln remove
+- **Verified**: No remaining GUID or path references to either removed project in Maestro.sln
+- **Verified**: Maestro.csproj has no ProjectReference to either removed project (only LocalConfigure remains)
+- **Verified**: MaestroAPITestRunner.csproj and MaestroAPITestRunner64.csproj (not in solution) reference removed projects but are excluded from build
+- **Verified**: No mapguide-api-base-x64, mg-desktop-x64, mg-desktop-viewer-x64 references remain in active solution projects
+- **Verified**: Build output contains zero errors referencing removed Local provider projects
+- **Commits**: 632a4150: "TASK-005: Remove Local provider per Option B recommendation"
+- **Files Modified**: Maestro.sln
+- **Build Status**: NU1201 errors are pre-existing incremental-upgrade state (Maestro.csproj still on net6.0, resolved in later tasks) — no errors from removed projects
+
+Success - Local provider (Option B) cleanly removed from solution.
+

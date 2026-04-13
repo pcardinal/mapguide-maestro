@@ -52,7 +52,7 @@ namespace Maestro.Editors.MapDefinition
                 string[] values = txtScales.Lines;
                 foreach (var str in values)
                 {
-                    scales.Add(double.Parse(str, System.Threading.Thread.CurrentThread.CurrentUICulture));
+                    scales.Add(double.Parse(str, System.Globalization.CultureInfo.InvariantCulture));
                 }
                 return scales.ToArray();
             }

@@ -64,6 +64,9 @@
               <DataTemplate DataType="vm:ApplicationDefinitionEditorViewModel">
                 <editors:ApplicationDefinitionEditorView />
               </DataTemplate>
+              <DataTemplate DataType="vm:SymbolDefinitionEditorViewModel">
+                <editors:SymbolDefinitionEditorView />
+              </DataTemplate>
               <DataTemplate DataType="vm:GenericResourceEditorViewModel">
                 <editors:GenericResourceEditorView />
               </DataTemplate>

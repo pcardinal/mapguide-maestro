@@ -34,6 +34,7 @@ internal static class Program
         services.AddSingleton<IResourceService, ResourceService>();
         services.AddSingleton<INotificationService, NotificationService>();
         services.AddSingleton<INewResourceService, NewResourceService>();
+        services.AddSingleton<IPreferencesService, PreferencesService>();
 
         // Workbench-level singletons
         services.AddSingleton<ViewModels.DocumentManagerViewModel>();

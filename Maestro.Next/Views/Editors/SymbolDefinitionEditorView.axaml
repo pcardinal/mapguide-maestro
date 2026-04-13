@@ -1,0 +1,121 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Maestro.Next.ViewModels"
+             x:Class="Maestro.Next.Views.Editors.SymbolDefinitionEditorView"
+             x:DataType="vm:SymbolDefinitionEditorViewModel">
+
+  <Grid RowDefinitions="Auto,*">
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="4" Margin="8,6">
+      <Button Content="💾 Save" Command="{Binding SaveCommand}"
+              IsEnabled="{Binding IsDirty}" Classes="accent" />
+      <TextBlock Text="{Binding SymbolType}" FontWeight="SemiBold"
+                 VerticalAlignment="Center" Margin="12,0,0,0" />
+      <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"
+                   Width="80" Height="8" VerticalAlignment="Center" />
+    </StackPanel>
+
+    <ScrollViewer Grid.Row="1" Margin="8,0,8,8">
+      <StackPanel Spacing="12">
+
+        <!-- General -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Symbol Identity" FontWeight="SemiBold" />
+            <Grid ColumnDefinitions="130,*" RowDefinitions="Auto,Auto">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" VerticalAlignment="Center" />
+              <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SymbolName}" Margin="8,2,0,2" />
+              <TextBlock Grid.Row="1" Grid.Column="0" Text="Description" VerticalAlignment="Center" />
+              <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SymbolDescription}" Margin="8,2,0,2" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- Simple: Usage flags -->
+        <Border IsVisible="{Binding IsSimple}"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Usage" FontWeight="SemiBold" />
+            <WrapPanel>
+              <CheckBox Content="Point Usage" IsChecked="{Binding HasPointUsage}" IsEnabled="False" Margin="0,0,16,4" />
+              <CheckBox Content="Line Usage"  IsChecked="{Binding HasLineUsage}"  IsEnabled="False" Margin="0,0,16,4" />
+              <CheckBox Content="Area Usage"  IsChecked="{Binding HasAreaUsage}"  IsEnabled="False" Margin="0,0,16,4" />
+            </WrapPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Simple: Graphics -->
+        <Border IsVisible="{Binding IsSimple}"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Graphics Elements" FontWeight="SemiBold" />
+            <ItemsControl ItemsSource="{Binding Graphics}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:GraphicElementViewModel">
+                  <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,2">
+                    <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                            CornerRadius="2" Padding="4,2" MinWidth="60">
+                      <TextBlock Text="{Binding Kind}" FontSize="10" Foreground="Gray" />
+                    </Border>
+                    <TextBlock Text="{Binding Preview}" FontFamily="Consolas,Monospace"
+                               FontSize="11" VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis" MaxWidth="300" />
+                  </StackPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+        <!-- Simple: Parameters -->
+        <Border IsVisible="{Binding IsSimple}"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Parameters" FontWeight="SemiBold" />
+            <ItemsControl ItemsSource="{Binding Parameters}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:SymbolParameterViewModel">
+                  <Grid ColumnDefinitions="120,120,*" Margin="0,3">
+                    <TextBlock Grid.Column="0" Text="{Binding Identifier}" FontWeight="Medium" />
+                    <TextBlock Grid.Column="1" Text="{Binding DataType}" FontSize="11" Foreground="Gray" />
+                    <TextBlock Grid.Column="2" Text="{Binding DefaultValue}"
+                               FontFamily="Consolas,Monospace" FontSize="11" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+        <!-- Compound: Parts -->
+        <Border IsVisible="{Binding IsCompound}"
+                Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Compound Symbol Parts" FontWeight="SemiBold" />
+            <ItemsControl ItemsSource="{Binding Parts}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:CompoundSymbolPartViewModel">
+                  <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,3">
+                    <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                            CornerRadius="2" Padding="4,2">
+                      <TextBlock Text="{Binding ReferenceType}" FontSize="10" Foreground="Gray" />
+                    </Border>
+                    <TextBlock Text="{Binding Label}" FontFamily="Consolas,Monospace" FontSize="11"
+                               TextTrimming="CharacterEllipsis" MaxWidth="300" />
+                    <TextBlock Text="{Binding RenderingPass, StringFormat='Pass: {0}'}"
+                               FontSize="10" Foreground="Gray" VerticalAlignment="Center" />
+                  </StackPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

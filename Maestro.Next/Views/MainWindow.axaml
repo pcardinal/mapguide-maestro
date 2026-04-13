@@ -8,6 +8,12 @@
         Width="1280" Height="800"
         WindowStartupLocation="CenterScreen">
 
+  <Window.KeyBindings>
+    <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveActiveDocumentCommand}" />
+    <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseActiveDocumentCommand}" />
+    <KeyBinding Gesture="Ctrl+Q" Command="{Binding ExitCommand}" />
+  </Window.KeyBindings>
+
   <!-- Panel wraps DockPanel so the notification overlay can float on top -->
   <Panel>
   <DockPanel>
@@ -21,7 +27,16 @@
                   Command="{Binding DisconnectCommand}"
                   IsEnabled="{Binding IsConnected}" />
         <Separator />
-        <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
+        <MenuItem Header="_Save"
+                  Command="{Binding SaveActiveDocumentCommand}"
+                  InputGesture="Ctrl+S" />
+        <MenuItem Header="_Close Tab"
+                  Command="{Binding CloseActiveDocumentCommand}"
+                  InputGesture="Ctrl+W" />
+        <Separator />
+        <MenuItem Header="E_xit"
+                  Command="{Binding ExitCommand}"
+                  InputGesture="Ctrl+Q" />
       </MenuItem>
       <MenuItem Header="_View">
         <MenuItem Header="Close All Documents"
@@ -29,7 +44,8 @@
                   IsEnabled="{Binding Documents.HasOpenDocuments}" />
       </MenuItem>
       <MenuItem Header="_Tools">
-        <MenuItem Header="_Options..." IsEnabled="False" />
+        <MenuItem Header="_Options..."
+                  Command="{Binding ShowOptionsCommand}" />
       </MenuItem>
       <MenuItem Header="_Help">
         <MenuItem Header="_About MapGuide Maestro"

@@ -183,7 +183,7 @@ public static class ResourceEditorFactory
             nameof(ResourceTypes.MapDefinition)         => new MapDefinitionEditorViewModel(resourceId),
             nameof(ResourceTypes.WebLayout)             => new WebLayoutEditorViewModel(resourceId),
             nameof(ResourceTypes.ApplicationDefinition) => new ApplicationDefinitionEditorViewModel(resourceId),
-            nameof(ResourceTypes.SymbolDefinition)      => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.SymbolDefinition)      => new SymbolDefinitionEditorViewModel(resourceId),
             nameof(ResourceTypes.PrintLayout)           => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.LoadProcedure)         => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.WatermarkDefinition)   => new GenericResourceEditorViewModel(resourceId, resourceType),

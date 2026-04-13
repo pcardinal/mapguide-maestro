@@ -80,11 +80,37 @@ public partial class MainWindowViewModel : ViewModelBase
     /// <summary>Raised when the About dialog should be shown</summary>
     public event Func<Task>? AboutRequested;
 
+    /// <summary>Raised when the Options dialog should be shown</summary>
+    public event Func<Task>? OptionsRequested;
+
     [RelayCommand]
     private async Task ShowAboutAsync()
     {
         if (AboutRequested != null)
             await AboutRequested.Invoke();
+    }
+
+    [RelayCommand]
+    private async Task ShowOptionsAsync()
+    {
+        if (OptionsRequested != null)
+            await OptionsRequested.Invoke();
+    }
+
+    /// <summary>Save the active document (Ctrl+S)</summary>
+    [RelayCommand]
+    private async Task SaveActiveDocumentAsync()
+    {
+        if (Documents.ActiveDocument is { IsDirty: true } doc)
+            await doc.SaveCommand.ExecuteAsync(null);
+    }
+
+    /// <summary>Close the active tab (Ctrl+W)</summary>
+    [RelayCommand]
+    private void CloseActiveDocument()
+    {
+        if (Documents.ActiveDocument is { } doc)
+            Documents.CloseDocumentCommand.Execute(doc);
     }
 
     private void OnConnectionStateChanged(object? sender, bool connected)

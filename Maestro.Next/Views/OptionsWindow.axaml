@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        xmlns:svc="using:Maestro.Next.Services"
+        x:Class="Maestro.Next.Views.OptionsWindow"
+        x:DataType="vm:OptionsViewModel"
+        Title="Options"
+        Width="420" Height="260"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False">
+
+  <StackPanel Margin="24" Spacing="16">
+    <TextBlock Text="Preferences"
+               FontSize="18" FontWeight="SemiBold" />
+
+    <!-- Theme selector -->
+    <StackPanel Spacing="6">
+      <TextBlock Text="Theme" FontWeight="Medium" />
+      <ComboBox SelectedItem="{Binding SelectedTheme}"
+                HorizontalAlignment="Stretch">
+        <svc:AppTheme>Light</svc:AppTheme>
+        <svc:AppTheme>Dark</svc:AppTheme>
+        <svc:AppTheme>System</svc:AppTheme>
+      </ComboBox>
+    </StackPanel>
+
+    <Separator />
+
+    <!-- Buttons -->
+    <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Spacing="8">
+      <Button Content="Cancel"
+              Click="OnCancelClick"
+              Width="90" />
+      <Button Content="Apply &amp; Close"
+              Command="{Binding ApplyCommand}"
+              Click="OnApplyClick"
+              Classes="accent"
+              Width="110" />
+    </StackPanel>
+  </StackPanel>
+</Window>

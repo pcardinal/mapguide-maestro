@@ -1,0 +1,1899 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": false
+    },
+    "targetId": "net10.0",
+    "targetDisplayName": ".NETCoreApp,Version=v10.0"
+  },
+  "analysisStartTime": "2026-04-13T03:25:14.1751399Z",
+  "analysisEndTime": "2026-04-13T03:25:32.4159563Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 33,
+      "issues": 4,
+      "incidents": 39,
+      "effort": 39
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 35,
+        "Optional": 0,
+        "Potential": 4,
+        "Information": 0
+      },
+      "category": {
+        "NuGet": 11,
+        "Project": 28
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "Thirdparty\\SharpDevelop\\ICSharpCode.Core\\ICSharpCode.Core.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "ICSharpCode.Core",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "netstandard2.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 73,
+        "numberOfCodeFiles": 73,
+        "linesTotal": 7535,
+        "linesOfCode": 7535,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "b4161497-7295-419b-aec5-80758f8b96aa",
+          "ruleId": "NuGet.0003",
+          "projectPath": "Thirdparty\\SharpDevelop\\ICSharpCode.Core\\ICSharpCode.Core.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.Win32.Registry, 5.0.0\n\nRecommandation\u00A0:\n\nFonctionnalit\u00E9s de package incluses dans la nouvelle r\u00E9f\u00E9rence de framework",
+              "protected": "Microsoft.Win32.Registry, 5.0.0\n\nRecommandation\u00A0:\n\nFonctionnalit\u00E9s de package incluses dans la nouvelle r\u00E9f\u00E9rence de framework"
+            },
+            "kind": "File",
+            "path": "Thirdparty\\SharpDevelop\\ICSharpCode.Core\\ICSharpCode.Core.csproj",
+            "snippet": "Microsoft.Win32.Registry, 5.0.0\n\nRecommandation\u00A0:\n\nFonctionnalit\u00E9s de package incluses dans la nouvelle r\u00E9f\u00E9rence de framework",
+            "protectedSnippet": "Microsoft.Win32.Registry, 5.0.0\n\nRecommandation\u00A0:\n\nFonctionnalit\u00E9s de package incluses dans la nouvelle r\u00E9f\u00E9rence de framework",
+            "label": "Microsoft.Win32.Registry 5.0.0",
+            "properties": {
+              "PackageId": "Microsoft.Win32.Registry",
+              "PackageVersion": "5.0.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Thirdparty\\SharpDevelop\\ICSharpCode.Core.WinForms\\ICSharpCode.Core.WinForms.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "ICSharpCode.Core.WinForms",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 29,
+        "numberOfCodeFiles": 29,
+        "linesTotal": 2997,
+        "linesOfCode": 2997,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "c0dd470d-aac5-4ba6-9247-c3b1716e4b78",
+          "ruleId": "Project.0002",
+          "projectPath": "Thirdparty\\SharpDevelop\\ICSharpCode.Core.WinForms\\ICSharpCode.Core.WinForms.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Thirdparty\\SharpDevelop\\ICSharpCode.Core.WinForms\\ICSharpCode.Core.WinForms.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Thirdparty\\SharpDevelop\\ICSharpCode.TextEditor\\ICSharpCode.TextEditor.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "ICSharpCode.TextEditor",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 141,
+        "numberOfCodeFiles": 119,
+        "linesTotal": 25131,
+        "linesOfCode": 21989,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "1555356d-dcbc-4f4e-8d2a-d4f238c760d4",
+          "ruleId": "Project.0002",
+          "projectPath": "Thirdparty\\SharpDevelop\\ICSharpCode.TextEditor\\ICSharpCode.TextEditor.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Thirdparty\\SharpDevelop\\ICSharpCode.TextEditor\\ICSharpCode.TextEditor.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "LocalConfigure\\LocalConfigure.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "LocalConfigure",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 5,
+        "numberOfCodeFiles": 4,
+        "linesTotal": 393,
+        "linesOfCode": 266,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "700eb06f-b2a5-4f56-9d44-0060592e2ecc",
+          "ruleId": "Project.0002",
+          "projectPath": "LocalConfigure\\LocalConfigure.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "LocalConfigure\\LocalConfigure.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.AddIn.ExtendedObjectModels\\Maestro.AddIn.ExtendedObjectModels.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.AddIn.ExtendedObjectModels",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 30,
+        "numberOfCodeFiles": 27,
+        "linesTotal": 3064,
+        "linesOfCode": 2551,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "763e16d9-41b6-4dab-9b22-94ce20de17ff",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.AddIn.ExtendedObjectModels\\Maestro.AddIn.ExtendedObjectModels.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.AddIn.ExtendedObjectModels\\Maestro.AddIn.ExtendedObjectModels.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.AddIn.FdoToolbox\\Maestro.AddIn.FdoToolbox.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.AddIn.FdoToolbox",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 8,
+        "numberOfCodeFiles": 6,
+        "linesTotal": 366,
+        "linesOfCode": 223,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "b3a9d162-f51b-4b1e-a1c2-241c27dc2b73",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.AddIn.FdoToolbox\\Maestro.AddIn.FdoToolbox.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.AddIn.FdoToolbox\\Maestro.AddIn.FdoToolbox.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.AddIn.Local\\Maestro.AddIn.Local.csproj",
+      "startingProject": true,
+      "issues": 2,
+      "storyPoints": 3,
+      "properties": {
+        "appName": "Maestro.AddIn.Local",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 23,
+        "numberOfCodeFiles": 16,
+        "linesTotal": 2063,
+        "linesOfCode": 1264,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "13074ddd-5774-4476-aeb3-2696a4650410",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Maestro.AddIn.Local\\Maestro.AddIn.Local.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "mg-desktop-viewer-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+              "protected": "mg-desktop-viewer-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable"
+            },
+            "kind": "File",
+            "path": "Maestro.AddIn.Local\\Maestro.AddIn.Local.csproj",
+            "snippet": "mg-desktop-viewer-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "protectedSnippet": "mg-desktop-viewer-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "label": "mg-desktop-viewer-x64 3.1.2.9484",
+            "properties": {
+              "PackageId": "mg-desktop-viewer-x64",
+              "PackageVersion": "3.1.2.9484",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "2b282713-ae66-45ae-8efa-bf2e84665951",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Maestro.AddIn.Local\\Maestro.AddIn.Local.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "mg-desktop-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+              "protected": "mg-desktop-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable"
+            },
+            "kind": "File",
+            "path": "Maestro.AddIn.Local\\Maestro.AddIn.Local.csproj",
+            "snippet": "mg-desktop-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "protectedSnippet": "mg-desktop-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "label": "mg-desktop-x64 3.1.2.9484",
+            "properties": {
+              "PackageId": "mg-desktop-x64",
+              "PackageVersion": "3.1.2.9484",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "39adca45-7b05-4a53-a674-6a8cefc1c6d0",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.AddIn.Local\\Maestro.AddIn.Local.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.AddIn.Local\\Maestro.AddIn.Local.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.AddIn.Rest\\Maestro.AddIn.Rest.csproj",
+      "startingProject": true,
+      "issues": 2,
+      "storyPoints": 2,
+      "properties": {
+        "appName": "Maestro.AddIn.Rest",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 44,
+        "numberOfCodeFiles": 32,
+        "linesTotal": 6925,
+        "linesOfCode": 3159,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "9d921cec-6d38-4e70-9e27-9e4ab247c97c",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Maestro.AddIn.Rest\\Maestro.AddIn.Rest.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Newtonsoft.Json, 13.0.3\n\nRecommandation\u00A0:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+              "protected": "Newtonsoft.Json, 13.0.3\n\nRecommandation\u00A0:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4"
+            },
+            "kind": "File",
+            "path": "Maestro.AddIn.Rest\\Maestro.AddIn.Rest.csproj",
+            "snippet": "Newtonsoft.Json, 13.0.3\n\nRecommandation\u00A0:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+            "protectedSnippet": "Newtonsoft.Json, 13.0.3\n\nRecommandation\u00A0:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+            "label": "Newtonsoft.Json 13.0.3",
+            "properties": {
+              "PackageId": "Newtonsoft.Json",
+              "PackageVersion": "13.0.3",
+              "PackageNewVersion": "13.0.4",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "e7163403-0d10-4bca-aadb-229c90375367",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.AddIn.Rest\\Maestro.AddIn.Rest.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.AddIn.Rest\\Maestro.AddIn.Rest.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.AddIn.Scripting\\Maestro.AddIn.Scripting.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.AddIn.Scripting",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 19,
+        "numberOfCodeFiles": 14,
+        "linesTotal": 1604,
+        "linesOfCode": 1071,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "eae4d527-1575-4330-88ab-c92c67525d35",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.AddIn.Scripting\\Maestro.AddIn.Scripting.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.AddIn.Scripting\\Maestro.AddIn.Scripting.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.AddInManager\\Maestro.AddInManager.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.AddInManager",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 10,
+        "numberOfCodeFiles": 8,
+        "linesTotal": 2723,
+        "linesOfCode": 2344,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "db485ad1-2da5-4ea6-9f7e-e1c29316f3a3",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.AddInManager\\Maestro.AddInManager.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.AddInManager\\Maestro.AddInManager.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.Base\\Maestro.Base.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.Base",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 263,
+        "numberOfCodeFiles": 221,
+        "linesTotal": 46189,
+        "linesOfCode": 28641,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "18e0cdd0-f5f9-4684-8251-72d9bd0ae5a2",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.Base\\Maestro.Base.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.Base\\Maestro.Base.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro\\Maestro.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro",
+        "projectKind": "WinForms",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 19,
+        "numberOfCodeFiles": 8,
+        "linesTotal": 3248,
+        "linesOfCode": 520,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "63095906-f239-472f-a200-46bfe81f8bb8",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro\\Maestro.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows"
+            },
+            "kind": "File",
+            "path": "Maestro\\Maestro.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0-windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.Editors\\Maestro.Editors.csproj",
+      "startingProject": true,
+      "issues": 3,
+      "storyPoints": 3,
+      "properties": {
+        "appName": "Maestro.Editors",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 936,
+        "numberOfCodeFiles": 509,
+        "linesTotal": 187207,
+        "linesOfCode": 99829,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "354c5257-5346-4aaf-91d4-0478d533f5b6",
+          "ruleId": "NuGet.0002",
+          "projectPath": "Maestro.Editors\\Maestro.Editors.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Data.Odbc, 6.0.0\n\nRecommandation\u00A0:\n\nRemove System.Data.Odbc, and replace with new package System.Data.Odbc 10.0.5",
+              "protected": "System.Data.Odbc, 6.0.0\n\nRecommandation\u00A0:\n\nRemove System.Data.Odbc, and replace with new package System.Data.Odbc 10.0.5"
+            },
+            "kind": "File",
+            "path": "Maestro.Editors\\Maestro.Editors.csproj",
+            "snippet": "System.Data.Odbc, 6.0.0\n\nRecommandation\u00A0:\n\nRemove System.Data.Odbc, and replace with new package System.Data.Odbc 10.0.5",
+            "protectedSnippet": "System.Data.Odbc, 6.0.0\n\nRecommandation\u00A0:\n\nRemove System.Data.Odbc, and replace with new package System.Data.Odbc 10.0.5",
+            "label": "System.Data.Odbc 6.0.0",
+            "properties": {
+              "PackageId": "System.Data.Odbc",
+              "PackageVersion": "6.0.0",
+              "PackageNewVersion": "10.0.5",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "2ef249af-6f55-46b2-8392-332208b673ff",
+          "ruleId": "NuGet.0001",
+          "projectPath": "Maestro.Editors\\Maestro.Editors.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "TreeViewAdv, 1.7.0\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+              "protected": "TreeViewAdv, 1.7.0\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable"
+            },
+            "kind": "File",
+            "path": "Maestro.Editors\\Maestro.Editors.csproj",
+            "snippet": "TreeViewAdv, 1.7.0\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "protectedSnippet": "TreeViewAdv, 1.7.0\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "label": "TreeViewAdv 1.7.0",
+            "properties": {
+              "PackageId": "TreeViewAdv",
+              "PackageVersion": "1.7.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "cebcbab7-1e31-4aaf-ae3e-be6bc38a2a0a",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.Editors\\Maestro.Editors.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.Editors\\Maestro.Editors.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.LiveMapEditor\\Maestro.LiveMapEditor.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.LiveMapEditor",
+        "projectKind": "WinForms",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 22,
+        "numberOfCodeFiles": 16,
+        "linesTotal": 4913,
+        "linesOfCode": 1921,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "94dd34d9-e071-4f0f-ada8-5e854fa0740c",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.LiveMapEditor\\Maestro.LiveMapEditor.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows"
+            },
+            "kind": "File",
+            "path": "Maestro.LiveMapEditor\\Maestro.LiveMapEditor.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0-windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.Login\\Maestro.Login.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.Login",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 33,
+        "numberOfCodeFiles": 24,
+        "linesTotal": 5114,
+        "linesOfCode": 2722,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "e72f487b-2aa1-47eb-8350-f982d1ebd3a2",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.Login\\Maestro.Login.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.Login\\Maestro.Login.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.MapPublisher.Common\\Maestro.MapPublisher.Common.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "Maestro.MapPublisher.Common",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "netstandard2.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 17,
+        "numberOfCodeFiles": 17,
+        "linesTotal": 2637,
+        "linesOfCode": 2637,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [],
+      "features": []
+    },
+    {
+      "path": "Maestro.MapPublisher\\Maestro.MapPublisher.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.MapPublisher",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net6.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 171,
+        "numberOfCodeFiles": 4,
+        "linesTotal": 259849,
+        "linesOfCode": 1423,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "42335c9e-15eb-4fac-a47f-d19093307a7c",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.MapPublisher\\Maestro.MapPublisher.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+              "protected": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0"
+            },
+            "kind": "File",
+            "path": "Maestro.MapPublisher\\Maestro.MapPublisher.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net6.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.MapViewer\\Maestro.MapViewer.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.MapViewer",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 19,
+        "numberOfCodeFiles": 16,
+        "linesTotal": 8591,
+        "linesOfCode": 7842,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "ffdf0e0b-8a22-4e9a-be4f-02babcd4b837",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.MapViewer\\Maestro.MapViewer.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.MapViewer\\Maestro.MapViewer.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.Packaging\\Maestro.Packaging.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.Packaging",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 22,
+        "numberOfCodeFiles": 17,
+        "linesTotal": 4537,
+        "linesOfCode": 3262,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "6a225d65-6c52-42eb-a5be-9de6d6fac470",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.Packaging\\Maestro.Packaging.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.Packaging\\Maestro.Packaging.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.Scripting.Core\\Maestro.Scripting.Core.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.Scripting.Core",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 11,
+        "numberOfCodeFiles": 10,
+        "linesTotal": 1389,
+        "linesOfCode": 1265,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "2cca6377-16d0-463b-9689-78fcca941e74",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.Scripting.Core\\Maestro.Scripting.Core.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.Scripting.Core\\Maestro.Scripting.Core.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "Maestro.Shared.UI\\Maestro.Shared.UI.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "Maestro.Shared.UI",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 116,
+        "numberOfCodeFiles": 34,
+        "linesTotal": 7520,
+        "linesOfCode": 3699,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "f7434102-5ab3-4839-ac05-92285ddba1dd",
+          "ruleId": "Project.0002",
+          "projectPath": "Maestro.Shared.UI\\Maestro.Shared.UI.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "Maestro.Shared.UI\\Maestro.Shared.UI.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "MaestroFsPreview\\MaestroFsPreview.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "MaestroFsPreview",
+        "projectKind": "WinForms",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 13,
+        "numberOfCodeFiles": 10,
+        "linesTotal": 1655,
+        "linesOfCode": 648,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "dca465b1-9a5e-44dc-aaf2-ac03fe2c7977",
+          "ruleId": "Project.0002",
+          "projectPath": "MaestroFsPreview\\MaestroFsPreview.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows"
+            },
+            "kind": "File",
+            "path": "MaestroFsPreview\\MaestroFsPreview.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0-windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "MgTileSeeder\\MgTileSeeder.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "MgTileSeeder",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net6.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 1,
+        "numberOfCodeFiles": 1,
+        "linesTotal": 526,
+        "linesOfCode": 526,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "78f62bf6-7017-4729-aea4-298ad466f7e9",
+          "ruleId": "Project.0002",
+          "projectPath": "MgTileSeeder\\MgTileSeeder.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+              "protected": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0"
+            },
+            "kind": "File",
+            "path": "MgTileSeeder\\MgTileSeeder.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net6.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "MpuCalc\\MpuCalc.csproj",
+      "startingProject": true,
+      "issues": 2,
+      "storyPoints": 2,
+      "properties": {
+        "appName": "MpuCalc",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 3,
+        "numberOfCodeFiles": 3,
+        "linesTotal": 166,
+        "linesOfCode": 166,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "d877451d-8760-41e8-8679-cece58274b11",
+          "ruleId": "NuGet.0001",
+          "projectPath": "MpuCalc\\MpuCalc.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "mapguide-api-base-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+              "protected": "mapguide-api-base-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable"
+            },
+            "kind": "File",
+            "path": "MpuCalc\\MpuCalc.csproj",
+            "snippet": "mapguide-api-base-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "protectedSnippet": "mapguide-api-base-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "label": "mapguide-api-base-x64 3.1.2.9484",
+            "properties": {
+              "PackageId": "mapguide-api-base-x64",
+              "PackageVersion": "3.1.2.9484",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "06f32231-f28f-452e-ae77-2005309e4abe",
+          "ruleId": "Project.0002",
+          "projectPath": "MpuCalc\\MpuCalc.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "MpuCalc\\MpuCalc.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "OSGeo.FDO.Expressions\\OSGeo.FDO.Expressions.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "OSGeo.FDO.Expressions",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "netstandard2.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 32,
+        "numberOfCodeFiles": 31,
+        "linesTotal": 2827,
+        "linesOfCode": 2683,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [],
+      "features": []
+    },
+    {
+      "path": "OSGeo.MapGuide.MaestroAPI\\OSGeo.MapGuide.MaestroAPI.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "OSGeo.MapGuide.MaestroAPI",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "netstandard2.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 185,
+        "numberOfCodeFiles": 182,
+        "linesTotal": 46557,
+        "linesOfCode": 45407,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [],
+      "features": []
+    },
+    {
+      "path": "OSGeo.MapGuide.MaestroAPI.FxBridge\\OSGeo.MapGuide.MaestroAPI.FxBridge.csproj",
+      "startingProject": true,
+      "issues": 2,
+      "storyPoints": 2,
+      "properties": {
+        "appName": "OSGeo.MapGuide.MaestroAPI.FxBridge",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 5,
+        "numberOfCodeFiles": 5,
+        "linesTotal": 214,
+        "linesOfCode": 214,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "28baf44d-1687-4295-8072-944258a4f1ef",
+          "ruleId": "NuGet.0002",
+          "projectPath": "OSGeo.MapGuide.MaestroAPI.FxBridge\\OSGeo.MapGuide.MaestroAPI.FxBridge.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "System.Drawing.Common, 6.0.0\n\nRecommandation\u00A0:\n\nRemove System.Drawing.Common, and replace with new package System.Drawing.Common 10.0.5",
+              "protected": "System.Drawing.Common, 6.0.0\n\nRecommandation\u00A0:\n\nRemove System.Drawing.Common, and replace with new package System.Drawing.Common 10.0.5"
+            },
+            "kind": "File",
+            "path": "OSGeo.MapGuide.MaestroAPI.FxBridge\\OSGeo.MapGuide.MaestroAPI.FxBridge.csproj",
+            "snippet": "System.Drawing.Common, 6.0.0\n\nRecommandation\u00A0:\n\nRemove System.Drawing.Common, and replace with new package System.Drawing.Common 10.0.5",
+            "protectedSnippet": "System.Drawing.Common, 6.0.0\n\nRecommandation\u00A0:\n\nRemove System.Drawing.Common, and replace with new package System.Drawing.Common 10.0.5",
+            "label": "System.Drawing.Common 6.0.0",
+            "properties": {
+              "PackageId": "System.Drawing.Common",
+              "PackageVersion": "6.0.0",
+              "PackageNewVersion": "10.0.5",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "db3edb01-7718-4194-bdb0-85e8efa832f9",
+          "ruleId": "Project.0002",
+          "projectPath": "OSGeo.MapGuide.MaestroAPI.FxBridge\\OSGeo.MapGuide.MaestroAPI.FxBridge.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "OSGeo.MapGuide.MaestroAPI.FxBridge\\OSGeo.MapGuide.MaestroAPI.FxBridge.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "OSGeo.MapGuide.MaestroAPI.IntegrationTests\\OSGeo.MapGuide.MaestroAPI.IntegrationTests.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "OSGeo.MapGuide.MaestroAPI.IntegrationTests",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net6.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 17,
+        "numberOfCodeFiles": 14,
+        "linesTotal": 6539,
+        "linesOfCode": 4618,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "1193421a-4bfa-4090-a4b0-95f14ad9b5a9",
+          "ruleId": "Project.0002",
+          "projectPath": "OSGeo.MapGuide.MaestroAPI.IntegrationTests\\OSGeo.MapGuide.MaestroAPI.IntegrationTests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+              "protected": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0"
+            },
+            "kind": "File",
+            "path": "OSGeo.MapGuide.MaestroAPI.IntegrationTests\\OSGeo.MapGuide.MaestroAPI.IntegrationTests.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net6.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "OSGeo.MapGuide.MaestroAPI.Local\\OSGeo.MapGuide.MaestroAPI.Local.csproj",
+      "startingProject": true,
+      "issues": 2,
+      "storyPoints": 3,
+      "properties": {
+        "appName": "OSGeo.MapGuide.MaestroAPI.Local",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "net48"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 20,
+        "numberOfCodeFiles": 20,
+        "linesTotal": 4524,
+        "linesOfCode": 4524,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "e266d229-1708-4e51-b03c-f5b3941bedcd",
+          "ruleId": "NuGet.0001",
+          "projectPath": "OSGeo.MapGuide.MaestroAPI.Local\\OSGeo.MapGuide.MaestroAPI.Local.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "mg-desktop-viewer-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+              "protected": "mg-desktop-viewer-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable"
+            },
+            "kind": "File",
+            "path": "OSGeo.MapGuide.MaestroAPI.Local\\OSGeo.MapGuide.MaestroAPI.Local.csproj",
+            "snippet": "mg-desktop-viewer-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "protectedSnippet": "mg-desktop-viewer-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "label": "mg-desktop-viewer-x64 3.1.2.9484",
+            "properties": {
+              "PackageId": "mg-desktop-viewer-x64",
+              "PackageVersion": "3.1.2.9484",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "0937994b-6de3-4967-8c11-98a2ff55b5a8",
+          "ruleId": "NuGet.0001",
+          "projectPath": "OSGeo.MapGuide.MaestroAPI.Local\\OSGeo.MapGuide.MaestroAPI.Local.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "mg-desktop-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+              "protected": "mg-desktop-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable"
+            },
+            "kind": "File",
+            "path": "OSGeo.MapGuide.MaestroAPI.Local\\OSGeo.MapGuide.MaestroAPI.Local.csproj",
+            "snippet": "mg-desktop-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "protectedSnippet": "mg-desktop-x64, 3.1.2.9484\n\nRecommandation\u00A0:\n\nVersion prise en charge introuvable",
+            "label": "mg-desktop-x64 3.1.2.9484",
+            "properties": {
+              "PackageId": "mg-desktop-x64",
+              "PackageVersion": "3.1.2.9484",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "bda2bfc0-8afd-4b19-b269-566fdb954d1a",
+          "ruleId": "Project.0002",
+          "projectPath": "OSGeo.MapGuide.MaestroAPI.Local\\OSGeo.MapGuide.MaestroAPI.Local.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net48\nInfrastructure cible recommand\u00E9: net10.0",
+              "protected": "Infrastructure cible actuelle: net48\nInfrastructure cible recommand\u00E9: net10.0"
+            },
+            "kind": "File",
+            "path": "OSGeo.MapGuide.MaestroAPI.Local\\OSGeo.MapGuide.MaestroAPI.Local.csproj",
+            "snippet": "Infrastructure cible actuelle: net48\nInfrastructure cible recommand\u00E9: net10.0",
+            "protectedSnippet": "Infrastructure cible actuelle: net48\nInfrastructure cible recommand\u00E9: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net48",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "OSGeo.MapGuide.MaestroAPI.Tests\\OSGeo.MapGuide.MaestroAPI.Tests.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "OSGeo.MapGuide.MaestroAPI.Tests",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net6.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 45,
+        "numberOfCodeFiles": 43,
+        "linesTotal": 13118,
+        "linesOfCode": 11330,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "dab9b1a0-bbc7-4ea3-a3fb-4bbd519cd275",
+          "ruleId": "Project.0002",
+          "projectPath": "OSGeo.MapGuide.MaestroAPI.Tests\\OSGeo.MapGuide.MaestroAPI.Tests.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+              "protected": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0"
+            },
+            "kind": "File",
+            "path": "OSGeo.MapGuide.MaestroAPI.Tests\\OSGeo.MapGuide.MaestroAPI.Tests.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0\nInfrastructure cible recommand\u00E9: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "net6.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "OSGeo.MapGuide.ObjectModels\\OSGeo.MapGuide.ObjectModels.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "OSGeo.MapGuide.ObjectModels",
+        "projectKind": "ClassLibrary",
+        "frameworks": [
+          "netstandard2.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 162,
+        "numberOfCodeFiles": 161,
+        "linesTotal": 277284,
+        "linesOfCode": 274548,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "94ec5157-a42b-47c1-9319-3e635b2229cc",
+          "ruleId": "NuGet.0002",
+          "projectPath": "OSGeo.MapGuide.ObjectModels\\OSGeo.MapGuide.ObjectModels.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Newtonsoft.Json, 13.0.3\n\nRecommandation\u00A0:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+              "protected": "Newtonsoft.Json, 13.0.3\n\nRecommandation\u00A0:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4"
+            },
+            "kind": "File",
+            "path": "OSGeo.MapGuide.ObjectModels\\OSGeo.MapGuide.ObjectModels.csproj",
+            "snippet": "Newtonsoft.Json, 13.0.3\n\nRecommandation\u00A0:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+            "protectedSnippet": "Newtonsoft.Json, 13.0.3\n\nRecommandation\u00A0:\n\nRemove Newtonsoft.Json, and replace with new package Newtonsoft.Json 13.0.4",
+            "label": "Newtonsoft.Json 13.0.3",
+            "properties": {
+              "PackageId": "Newtonsoft.Json",
+              "PackageVersion": "13.0.3",
+              "PackageNewVersion": "13.0.4",
+              "PackageReplacements": null
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "RtMapInspector\\RtMapInspector.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "RtMapInspector",
+        "projectKind": "WinForms",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 19,
+        "numberOfCodeFiles": 14,
+        "linesTotal": 2825,
+        "linesOfCode": 1534,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "b2163887-e019-44a0-9a8c-1d13bbc06f67",
+          "ruleId": "Project.0002",
+          "projectPath": "RtMapInspector\\RtMapInspector.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows"
+            },
+            "kind": "File",
+            "path": "RtMapInspector\\RtMapInspector.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0-windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0-windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    },
+    {
+      "path": "SignMapGuideApi\\SignMapGuideApi.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "SignMapGuideApi",
+        "projectKind": "DotNetCoreApp",
+        "frameworks": [
+          "net6.0-windows"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 3,
+        "numberOfCodeFiles": 3,
+        "linesTotal": 392,
+        "linesOfCode": 392,
+        "totalApiScanned": 0,
+        "minLinesOfCodeToChange": 0,
+        "maxLinesOfCodeToChange": 0
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "2eebfdd7-6fd0-493e-a49f-9c965126c718",
+          "ruleId": "Project.0002",
+          "projectPath": "SignMapGuideApi\\SignMapGuideApi.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+              "protected": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows"
+            },
+            "kind": "File",
+            "path": "SignMapGuideApi\\SignMapGuideApi.csproj",
+            "snippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "protectedSnippet": "Infrastructure cible actuelle: net6.0-windows\nInfrastructure cible recommand\u00E9: net10.0--windows",
+            "properties": {
+              "CurrentTargetFramework": "net6.0-windows",
+              "RecommendedTargetFramework": "net10.0--windows"
+            }
+          }
+        }
+      ],
+      "features": []
+    }
+  ],
+  "rules": {
+    "NuGet.0003": {
+      "id": "NuGet.0003",
+      "isFeature": false,
+      "description": "La fonctionnalit\u00E9 du package NuGet est incluse dans la r\u00E9f\u00E9rence de l\u2019infrastructure.\n\nLe package doit \u00EAtre supprim\u00E9.",
+      "label": "La fonctionnalit\u00E9 du package NuGet est incluse dans la r\u00E9f\u00E9rence de l\u2019infrastructure",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262609",
+          "isCustom": false
+        }
+      ]
+    },
+    "Project.0002": {
+      "id": "Project.0002",
+      "isFeature": false,
+      "description": "Le ou les infrastructures cibles du projet doivent \u00EAtre remplac\u00E9es par la nouvelle infrastructure cible que vous avez s\u00E9lectionn\u00E9e pour cette mise \u00E0 niveau.\n\nPendant la mise \u00E0 niveau, l\u2019infrastructure cible est ajust\u00E9e en fonction de la plateforme correspondante, le cas \u00E9ch\u00E9ant. Dans certains cas, le projet entra\u00EEnera plusieurs infrastructures cibles apr\u00E8s la mise \u00E0 niveau s\u2019il utilisait des fonctionnalit\u00E9s qui ont d\u00E9sormais leurs propres plateformes dans les infrastructures .NET modernes (Windows, iOS, Android, etc.).",
+      "label": "Le ou les frameworks cibles du projet doivent \u00EAtre modifi\u00E9s",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": "Vue d\u2019ensemble du transfert de .NET Framework vers .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265227",
+          "isCustom": false
+        },
+        {
+          "title": "Kits de d\u00E9veloppement logiciel (SDK) de projet .NET",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265226",
+          "isCustom": false
+        }
+      ]
+    },
+    "NuGet.0002": {
+      "id": "NuGet.0002",
+      "isFeature": false,
+      "description": "La mise \u00E0 niveau du package NuGet est recommand\u00E9e pour l\u2019infrastructure cible s\u00E9lectionn\u00E9e.\n\nLes packages .NET standard sont recommand\u00E9s pour avoir des versions correspondant \u00E0 la version de .NET cibl\u00E9e par le projet.\n\nCertains autres packages fonctionnent \u00E9galement mieux pour les infrastructures cibles s\u00E9lectionn\u00E9es.",
+      "label": "La mise \u00E0 niveau du package NuGet est recommand\u00E9e",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262530",
+          "isCustom": false
+        }
+      ]
+    },
+    "NuGet.0001": {
+      "id": "NuGet.0001",
+      "isFeature": false,
+      "description": "Le package NuGet est incompatible avec l\u2019infrastructure cible s\u00E9lectionn\u00E9e.\n\nLe package doit \u00EAtre mis \u00E0 niveau vers une version qui prend en charge l\u2019infrastructure cible du projet s\u00E9lectionn\u00E9e. Si aucune nouvelle version de package ne prend en charge la nouvelle infrastructure cible, un package diff\u00E9rent doit \u00EAtre utilis\u00E9 et tout le code doit \u00EAtre mis \u00E0 niveau vers la nouvelle API.",
+      "label": "Le package NuGet est incompatible",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262529",
+          "isCustom": false
+        }
+      ]
+    }
+  }
+}

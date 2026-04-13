@@ -40,3 +40,17 @@ Status: Complete.
 
 Success - Tier 2 core API layer upgraded to net10.0/net10.0-windows.
 
+
+## [2026-04-13 00:07] TASK-004: Upgrade Tier 3 services and utilities
+
+Status: Complete.
+
+- **Verified**: TFMs updated — Maestro.AddInManager, Maestro.Login, Maestro.Packaging, OSGeo.MapGuide.MaestroAPI.FxBridge → net10.0-windows; MgTileSeeder → net10.0
+- **Verified**: System.Drawing.Common updated 6.0.0 → 10.0.5 in OSGeo.MapGuide.MaestroAPI.FxBridge
+- **Verified**: All 5 Tier 3 regular projects build with 0 errors
+- **Commits**: 00923f29: "TASK-004: Upgrade Tier 3 services and utilities to net10.0"
+- **Files Modified**: Maestro.AddInManager.csproj, Maestro.Login.csproj, Maestro.Packaging.csproj, OSGeo.MapGuide.MaestroAPI.FxBridge.csproj, MgTileSeeder.csproj
+- **Build Status**: Successful — 0 errors
+
+Success - All Tier 3 services and utilities upgraded to net10.0/net10.0-windows.
+

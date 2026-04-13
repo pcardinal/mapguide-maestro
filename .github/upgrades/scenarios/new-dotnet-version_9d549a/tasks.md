@@ -4,7 +4,7 @@
 
 This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 to .NET 10 using a bottom-up (dependency-first) strategy. Foundation libraries will be upgraded first, progressing through 8 dependency tiers to the main application.
 
-**Progress**: 3/13 tasks complete (23%) ![0%](https://progress-bar.xyz/23)
+**Progress**: 4/13 tasks complete (31%) ![0%](https://progress-bar.xyz/31)
 
 ---
 
@@ -49,24 +49,24 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 
 ---
 
-### [▶] TASK-004: Upgrade Tier 3 services and utilities
+### [✓] TASK-004: Upgrade Tier 3 services and utilities *(Completed: 2026-04-13 04:07)*
 **References**: Plan §Tier 3, Plan §Package Update Reference
 
-- [▶] (1) Update target framework to `net10.0-windows` in Maestro.AddInManager, Maestro.Login, Maestro.Packaging, OSGeo.MapGuide.MaestroAPI.FxBridge per Plan §Tier 3
-- [ ] (2) Update target framework to `net10.0` in MgTileSeeder per Plan §Tier 3
-- [ ] (3) Framework updated in all 5 projects (**Verify**)
-- [ ] (4) Update `System.Drawing.Common` from 6.0.0 to 10.0.5 in OSGeo.MapGuide.MaestroAPI.FxBridge per Plan §Tier 3
-- [ ] (5) Package updated (**Verify**)
-- [ ] (6) Build all Tier 3 regular projects (excluding Local provider and tests)
-- [ ] (7) All Tier 3 regular projects build with 0 errors (**Verify**)
-- [ ] (8) Commit changes with message: "TASK-004: Upgrade Tier 3 services and utilities to net10.0"
+- [✓] (1) Update target framework to `net10.0-windows` in Maestro.AddInManager, Maestro.Login, Maestro.Packaging, OSGeo.MapGuide.MaestroAPI.FxBridge per Plan §Tier 3
+- [✓] (2) Update target framework to `net10.0` in MgTileSeeder per Plan §Tier 3
+- [✓] (3) Framework updated in all 5 projects (**Verify**)
+- [✓] (4) Update `System.Drawing.Common` from 6.0.0 to 10.0.5 in OSGeo.MapGuide.MaestroAPI.FxBridge per Plan §Tier 3
+- [✓] (5) Package updated (**Verify**)
+- [✓] (6) Build all Tier 3 regular projects (excluding Local provider and tests)
+- [✓] (7) All Tier 3 regular projects build with 0 errors (**Verify**)
+- [✓] (8) Commit changes with message: "TASK-004: Upgrade Tier 3 services and utilities to net10.0"
 
 ---
 
-### [ ] TASK-005: Remove OSGeo.MapGuide.MaestroAPI.Local provider
+### [▶] TASK-005: Remove OSGeo.MapGuide.MaestroAPI.Local provider
 **References**: Plan §Special Case, Plan §Option B
 
-- [ ] (1) Remove OSGeo.MapGuide.MaestroAPI.Local project from solution per Plan §Option B
+- [▶] (1) Remove OSGeo.MapGuide.MaestroAPI.Local project from solution per Plan §Option B
 - [ ] (2) Remove Maestro.AddIn.Local project from solution per Plan §Option B
 - [ ] (3) Remove references to OSGeo.MapGuide.MaestroAPI.Local from Maestro.csproj
 - [ ] (4) Remove references to Maestro.AddIn.Local from Maestro.csproj
@@ -183,6 +183,8 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 - [ ] (7) Commit final validation with message: "TASK-013: Complete .NET 10 upgrade - all tests passing"
 
 ---
+
+
 
 
 

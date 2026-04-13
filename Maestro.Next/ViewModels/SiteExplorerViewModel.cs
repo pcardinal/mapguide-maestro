@@ -36,7 +36,36 @@ public partial class SiteExplorerViewModel : ViewModelBase
     [ObservableProperty]
     private ResourceTreeNode? _selectedNode;
 
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsSearchActive))]
+    private string _searchText = string.Empty;
+
+    public bool IsSearchActive => !string.IsNullOrWhiteSpace(SearchText);
+
     public ObservableCollection<ResourceTreeNode> RootNodes { get; } = new();
+
+    /// <summary>Flat list of all leaf (resource) nodes — used for search</summary>
+    private readonly List<ResourceTreeNode> _flatLeaves = new();
+
+    /// <summary>Search results (shown when IsSearchActive)</summary>
+    public ObservableCollection<ResourceTreeNode> SearchResults { get; } = new();
+
+    partial void OnSearchTextChanged(string value) => ApplyFilter(value);
+
+    private void ApplyFilter(string text)
+    {
+        SearchResults.Clear();
+        if (string.IsNullOrWhiteSpace(text)) return;
+
+        var lower = text.ToLowerInvariant();
+        foreach (var node in _flatLeaves)
+            if (node.Name.Contains(lower, StringComparison.OrdinalIgnoreCase)
+                || node.ResourceType.Contains(lower, StringComparison.OrdinalIgnoreCase))
+                SearchResults.Add(node);
+    }
+
+    [RelayCommand]
+    private void ClearSearch() => SearchText = string.Empty;
 
     [RelayCommand]
     private async Task LoadRootAsync()
@@ -46,10 +75,14 @@ public partial class SiteExplorerViewModel : ViewModelBase
             IsLoading = true;
             ErrorMessage = null;
             RootNodes.Clear();
+            _flatLeaves.Clear();
 
             var items = await _resourceService.GetResourceListAsync("Library://");
             foreach (var item in items.OrderByDescending(i => i.IsFolder).ThenBy(i => i.Name))
-                RootNodes.Add(new ResourceTreeNode(item, _resourceService));
+            {
+                var node = new ResourceTreeNode(item, _resourceService, _flatLeaves);
+                RootNodes.Add(node);
+            }
         }
         catch (Exception ex)
         {
@@ -102,7 +135,7 @@ public static class ResourceEditorFactory
             nameof(ResourceTypes.FeatureSource)         => new FeatureSourceEditorViewModel(resourceId),
             nameof(ResourceTypes.LayerDefinition)       => new LayerDefinitionEditorViewModel(resourceId),
             nameof(ResourceTypes.MapDefinition)         => new MapDefinitionEditorViewModel(resourceId),
-            nameof(ResourceTypes.WebLayout)             => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.WebLayout)             => new WebLayoutEditorViewModel(resourceId),
             nameof(ResourceTypes.ApplicationDefinition) => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.SymbolDefinition)      => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.PrintLayout)           => new GenericResourceEditorViewModel(resourceId, resourceType),
@@ -119,15 +152,20 @@ public static class ResourceEditorFactory
 public partial class ResourceTreeNode : ViewModelBase
 {
     private readonly IResourceService _resourceService;
+    private readonly List<ResourceTreeNode>? _flatLeaves;
     private bool _hasLoadedChildren;
 
-    public ResourceTreeNode(ResourceListItem item, IResourceService resourceService)
+    public ResourceTreeNode(ResourceListItem item, IResourceService resourceService,
+        List<ResourceTreeNode>? flatLeaves = null)
     {
         Item = item;
         _resourceService = resourceService;
+        _flatLeaves = flatLeaves;
         Icon = ResourceTypeIconMap.GetIcon(item.ResourceType, item.IsFolder);
 
-        // Add a placeholder child so the tree shows an expander for folders
+        if (!item.IsFolder && flatLeaves != null)
+            flatLeaves.Add(this);
+
         if (item.IsFolder)
             Children.Add(PlaceholderNode(resourceService));
     }
@@ -165,7 +203,7 @@ public partial class ResourceTreeNode : ViewModelBase
             var items = await _resourceService.GetResourceListAsync(ResourceId);
             Children.Clear();
             foreach (var item in items.OrderByDescending(i => i.IsFolder).ThenBy(i => i.Name))
-                Children.Add(new ResourceTreeNode(item, _resourceService));
+                Children.Add(new ResourceTreeNode(item, _resourceService, _flatLeaves));
             _hasLoadedChildren = true;
         }
         catch

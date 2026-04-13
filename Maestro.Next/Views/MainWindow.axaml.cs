@@ -22,6 +22,7 @@ public partial class MainWindow : Window
         if (DataContext is MainWindowViewModel vm)
         {
             vm.LoginRequested += ShowLoginDialogAsync;
+            vm.AboutRequested += ShowAboutDialogAsync;
         }
     }
 
@@ -30,6 +31,7 @@ public partial class MainWindow : Window
         if (DataContext is MainWindowViewModel vm)
         {
             vm.LoginRequested -= ShowLoginDialogAsync;
+            vm.AboutRequested -= ShowAboutDialogAsync;
         }
         base.OnClosed(e);
     }
@@ -42,5 +44,11 @@ public partial class MainWindow : Window
 
         var result = await dialog.ShowDialog<bool?>(this);
         return result == true;
+    }
+
+    private async Task ShowAboutDialogAsync()
+    {
+        var dialog = new AboutWindow();
+        await dialog.ShowDialog(this);
     }
 }

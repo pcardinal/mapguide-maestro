@@ -58,6 +58,9 @@
               <DataTemplate DataType="vm:MapDefinitionEditorViewModel">
                 <editors:MapDefinitionEditorView />
               </DataTemplate>
+              <DataTemplate DataType="vm:WebLayoutEditorViewModel">
+                <editors:WebLayoutEditorView />
+              </DataTemplate>
               <DataTemplate DataType="vm:GenericResourceEditorViewModel">
                 <editors:GenericResourceEditorView />
               </DataTemplate>

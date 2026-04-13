@@ -20,10 +20,14 @@ public partial class SiteExplorerView : UserControl
 
         var tree = this.FindControl<TreeView>("ResourceTree");
         if (tree != null)
-            tree.DoubleTapped += OnTreeDoubleTapped;
+            tree.DoubleTapped += OnDoubleTapped;
+
+        var list = this.FindControl<ListBox>("SearchResultsList");
+        if (list != null)
+            list.DoubleTapped += OnDoubleTapped;
     }
 
-    private void OnTreeDoubleTapped(object? sender, TappedEventArgs e)
+    private void OnDoubleTapped(object? sender, TappedEventArgs e)
     {
         if (DataContext is SiteExplorerViewModel vm)
             vm.OpenResourceCommand.Execute(vm.SelectedNode);

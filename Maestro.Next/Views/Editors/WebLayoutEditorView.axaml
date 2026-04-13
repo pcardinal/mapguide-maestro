@@ -1,0 +1,127 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Maestro.Next.ViewModels"
+             x:Class="Maestro.Next.Views.Editors.WebLayoutEditorView"
+             x:DataType="vm:WebLayoutEditorViewModel">
+
+  <Grid RowDefinitions="Auto,*">
+    <!-- Toolbar -->
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="4" Margin="8,6">
+      <Button Content="💾 Save"
+              Command="{Binding SaveCommand}"
+              IsEnabled="{Binding IsDirty}"
+              Classes="accent" />
+      <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"
+                   Width="80" Height="8" VerticalAlignment="Center" />
+    </StackPanel>
+
+    <ScrollViewer Grid.Row="1" Margin="8,0,8,8">
+      <StackPanel Spacing="12">
+
+        <!-- General -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="General" FontWeight="SemiBold" />
+            <Grid ColumnDefinitions="160,*" RowDefinitions="Auto,Auto">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="Title"
+                         VerticalAlignment="Center" />
+              <TextBox   Grid.Row="0" Grid.Column="1"
+                         Text="{Binding LayoutTitle}" Margin="8,2,0,2" />
+
+              <TextBlock Grid.Row="1" Grid.Column="0" Text="Map Definition"
+                         VerticalAlignment="Center" />
+              <TextBox   Grid.Row="1" Grid.Column="1"
+                         Text="{Binding MapDefinitionId}"
+                         FontFamily="Consolas,Monospace" FontSize="11"
+                         Margin="8,2,0,2" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- Initial View -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Initial View" FontWeight="SemiBold" />
+            <Grid ColumnDefinitions="160,*" RowDefinitions="Auto,Auto,Auto">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="Center X"
+                         VerticalAlignment="Center" />
+              <TextBox   Grid.Row="0" Grid.Column="1"
+                         Text="{Binding InitialViewCenterX}" Margin="8,2,0,2" />
+
+              <TextBlock Grid.Row="1" Grid.Column="0" Text="Center Y"
+                         VerticalAlignment="Center" />
+              <TextBox   Grid.Row="1" Grid.Column="1"
+                         Text="{Binding InitialViewCenterY}" Margin="8,2,0,2" />
+
+              <TextBlock Grid.Row="2" Grid.Column="0" Text="Scale"
+                         VerticalAlignment="Center" />
+              <TextBox   Grid.Row="2" Grid.Column="1"
+                         Text="{Binding InitialViewScale}" Margin="8,2,0,2" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- UI Panels -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="UI Panels" FontWeight="SemiBold" />
+            <WrapPanel>
+              <CheckBox Content="Toolbar"     IsChecked="{Binding ToolbarVisible}"    Margin="0,0,16,4" />
+              <CheckBox Content="Status Bar"  IsChecked="{Binding StatusBarVisible}"  Margin="0,0,16,4" />
+              <CheckBox Content="Zoom Control" IsChecked="{Binding ZoomControlVisible}" Margin="0,0,16,4" />
+              <CheckBox Content="Task Pane"   IsChecked="{Binding TaskPaneVisible}"   Margin="0,0,16,4" />
+              <CheckBox Content="Legend / Properties"
+                        IsChecked="{Binding InfoLegendVisible}" Margin="0,0,16,4" />
+            </WrapPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Task Pane -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12"
+                IsVisible="{Binding TaskPaneVisible}">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Task Pane" FontWeight="SemiBold" />
+            <Grid ColumnDefinitions="160,*">
+              <TextBlock Grid.Column="0" Text="Initial Task URL"
+                         VerticalAlignment="Center" />
+              <TextBox   Grid.Column="1"
+                         Text="{Binding InitialTaskUrl}"
+                         FontFamily="Consolas,Monospace" FontSize="11"
+                         Margin="8,0,0,0" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- Toolbar items -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Toolbar Commands" FontWeight="SemiBold" />
+            <ItemsControl ItemsSource="{Binding ToolbarItems}">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:ToolbarItemViewModel">
+                  <Border BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                          BorderThickness="1" CornerRadius="3"
+                          Padding="6,3" Margin="2"
+                          ToolTip.Tip="{Binding Kind}">
+                    <TextBlock Text="{Binding Label}" FontSize="11" />
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

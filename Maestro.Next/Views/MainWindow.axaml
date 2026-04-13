@@ -32,7 +32,8 @@
         <MenuItem Header="_Options..." IsEnabled="False" />
       </MenuItem>
       <MenuItem Header="_Help">
-        <MenuItem Header="_About..." IsEnabled="False" />
+        <MenuItem Header="_About MapGuide Maestro"
+                  Command="{Binding ShowAboutCommand}" />
       </MenuItem>
     </Menu>
 

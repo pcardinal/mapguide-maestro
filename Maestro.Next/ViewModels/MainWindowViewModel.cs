@@ -77,6 +77,16 @@ public partial class MainWindowViewModel : ViewModelBase
         }
     }
 
+    /// <summary>Raised when the About dialog should be shown</summary>
+    public event Func<Task>? AboutRequested;
+
+    [RelayCommand]
+    private async Task ShowAboutAsync()
+    {
+        if (AboutRequested != null)
+            await AboutRequested.Invoke();
+    }
+
     private void OnConnectionStateChanged(object? sender, bool connected)
     {
         IsConnected = connected;

@@ -96,15 +96,44 @@ public partial class MapDefinitionEditorViewModel : DocumentViewModel
     private void MoveUp()
     {
         if (_mapDef is null || SelectedNode is null) return;
-        // TODO: call _mapDef.MoveUp / MoveUpGroup then rebuild tree
+
+        if (SelectedNode.IsGroup)
+        {
+            var grp = _mapDef.MapLayerGroup
+                .FirstOrDefault(g => g.Name == SelectedNode.Name);
+            if (grp != null) _mapDef.MoveUpGroup(grp);
+        }
+        else
+        {
+            var layer = _mapDef.MapLayer
+                .FirstOrDefault(l => l.Name == SelectedNode.Name);
+            if (layer != null) _mapDef.MoveUp(layer);
+        }
+
         IsDirty = true;
+        BuildLayerTree();
     }
 
     [RelayCommand(CanExecute = nameof(CanMoveDown))]
     private void MoveDown()
     {
         if (_mapDef is null || SelectedNode is null) return;
+
+        if (SelectedNode.IsGroup)
+        {
+            var grp = _mapDef.MapLayerGroup
+                .FirstOrDefault(g => g.Name == SelectedNode.Name);
+            if (grp != null) _mapDef.MoveDownGroup(grp);
+        }
+        else
+        {
+            var layer = _mapDef.MapLayer
+                .FirstOrDefault(l => l.Name == SelectedNode.Name);
+            if (layer != null) _mapDef.MoveDown(layer);
+        }
+
         IsDirty = true;
+        BuildLayerTree();
     }
 
     private bool CanMoveUp()   => SelectedNode != null;

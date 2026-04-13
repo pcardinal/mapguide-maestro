@@ -11,6 +11,8 @@
               Command="{Binding SaveCommand}"
               IsEnabled="{Binding IsDirty}"
               Classes="accent" />
+      <Button Content="✓ Validate"
+              Command="{Binding ValidateCommand}" />
       <TextBlock Text="{Binding LayerType}"
                  FontWeight="SemiBold"
                  VerticalAlignment="Center"

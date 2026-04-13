@@ -11,6 +11,8 @@
               Command="{Binding SaveCommand}"
               IsEnabled="{Binding IsDirty}"
               Classes="accent" />
+      <Button Content="✓ Validate"
+              Command="{Binding ValidateCommand}" />
       <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"
                    Width="80" Height="8" VerticalAlignment="Center" />
     </StackPanel>

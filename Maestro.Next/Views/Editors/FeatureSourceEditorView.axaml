@@ -13,6 +13,8 @@
               Classes="accent" />
       <Button Content="🔌 Test Connection"
               Command="{Binding TestConnectionCommand}" />
+      <Button Content="✓ Validate"
+              Command="{Binding ValidateCommand}" />
       <ProgressBar IsIndeterminate="True"
                    IsVisible="{Binding IsBusy}"
                    Width="100" Height="8"

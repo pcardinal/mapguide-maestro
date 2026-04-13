@@ -245,9 +245,33 @@ public partial class GenericResourceEditorViewModel : DocumentViewModel
         }
     }
 
-    protected override Task SaveAsync()
+    protected override async Task SaveAsync()
     {
-        // TODO: implement XML save
-        return Task.CompletedTask;
+        if (ResourceId is null) return;
+        try
+        {
+            IsBusy = true;
+            BusyMessage = "Saving XML...";
+
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+
+            await Task.Run(() =>
+            {
+                using var ms = new System.IO.MemoryStream(
+                    System.Text.Encoding.UTF8.GetBytes(XmlContent));
+                conn.ResourceService.SetResourceXmlData(ResourceId, ms);
+            });
+
+            IsDirty = false;
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Success("Resource XML saved.");
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"Save failed: {ex.Message}");
+        }
+        finally { IsBusy = false; BusyMessage = null; }
     }
 }

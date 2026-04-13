@@ -8,6 +8,8 @@
     <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="4" Margin="8,6">
       <Button Content="💾 Save" Command="{Binding SaveCommand}"
               IsEnabled="{Binding IsDirty}" Classes="accent" />
+      <Button Content="✓ Validate"
+              Command="{Binding ValidateCommand}" />
       <TextBlock Text="{Binding SymbolType}" FontWeight="SemiBold"
                  VerticalAlignment="Center" Margin="12,0,0,0" />
       <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"

@@ -6,12 +6,20 @@
 
   <Grid RowDefinitions="Auto,*">
     <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="4" Margin="8,6">
+      <Button Content="💾 Save"
+              Command="{Binding SaveCommand}"
+              IsEnabled="{Binding IsDirty}"
+              Classes="accent" />
+      <Button Content="✓ Validate"
+              Command="{Binding ValidateCommand}" />
       <TextBlock Text="{Binding ResourceType}"
                  FontWeight="SemiBold"
-                 VerticalAlignment="Center" />
-      <TextBlock Text="— XML view (full editor coming soon)"
+                 VerticalAlignment="Center"
+                 Margin="8,0,0,0" />
+      <TextBlock Text="— XML Editor"
                  Foreground="Gray" FontSize="11"
-                 VerticalAlignment="Center" />
+                 VerticalAlignment="Center"
+                 Margin="4,0,0,0" />
       <ProgressBar IsIndeterminate="True"
                    IsVisible="{Binding IsBusy}"
                    Width="100" Height="8"
@@ -23,7 +31,6 @@
              Text="{Binding XmlContent}"
              FontFamily="Consolas,Monospace"
              FontSize="12"
-             IsReadOnly="True"
              AcceptsReturn="True"
              TextWrapping="NoWrap"
              Margin="8,0,8,8" />

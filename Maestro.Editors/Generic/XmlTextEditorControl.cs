@@ -328,9 +328,9 @@ namespace Maestro.Editors.Generic
             Document.UndoStack.EndUndoGroup();
         }
 
-        private void CodeCompletionWindowClosed(object sender, EventArgs e)
+        private void CodeCompletionWindowClosed(object sender, FormClosedEventArgs e)
         {
-            codeCompletionWindow.Closed -= new EventHandler(CodeCompletionWindowClosed);
+            codeCompletionWindow.FormClosed -= CodeCompletionWindowClosed;
             codeCompletionWindow.Dispose();
             codeCompletionWindow = null;
         }
@@ -357,7 +357,7 @@ namespace Maestro.Editors.Generic
 
                 if (codeCompletionWindow != null)
                 {
-                    codeCompletionWindow.Closed += new EventHandler(CodeCompletionWindowClosed);
+                    codeCompletionWindow.FormClosed += CodeCompletionWindowClosed;
                 }
             }
         }

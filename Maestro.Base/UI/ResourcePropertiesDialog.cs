@@ -957,9 +957,8 @@ namespace Maestro.Base.UI
                         r.Add(s.Value);
                 e.Result = new object[] { lst, r };
             }
-            catch (System.Threading.ThreadAbortException)
+            catch (OperationCanceledException)
             {
-                System.Threading.Thread.ResetAbort();
                 e.Cancel = true;
                 return;
             }
@@ -1043,7 +1042,6 @@ namespace Maestro.Base.UI
                 if (m_backgroundThread != null)
                 {
                     this.Enabled = false;
-                    m_backgroundThread.Abort();
                     e.Cancel = true;
                     return;
                 }

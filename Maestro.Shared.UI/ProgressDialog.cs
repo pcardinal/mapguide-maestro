@@ -44,7 +44,7 @@ namespace Maestro.Shared.UI
         private bool m_cancelAborts = false;
         private CultureInfo m_culture;
 
-        private System.Threading.Thread m_worker;
+        private CancellationTokenSource m_cts;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressDialog"/> class.
@@ -108,19 +108,12 @@ namespace Maestro.Shared.UI
                     Thread.CurrentThread.CurrentCulture =
                         Thread.CurrentThread.CurrentUICulture = m_culture;
                 }
-                m_worker = System.Threading.Thread.CurrentThread;
                 e.Result = m_method(BackgroundWorker, e, m_args);
             }
-            catch (System.Threading.ThreadAbortException)
+            catch (OperationCanceledException)
             {
                 e.Cancel = true;
                 e.Result = null;
-                //We exit, but hide the abort details from the BackgroundWorker, so it processes events as it should
-                System.Threading.Thread.ResetAbort();
-            }
-            finally
-            {
-                m_worker = null;
             }
         }
 
@@ -165,28 +158,18 @@ namespace Maestro.Shared.UI
 
         private void WaitForOperation_Load(object sender, EventArgs e)
         {
-            BackgroundWorker.WorkerSupportsCancellation = !m_cancelAborts;
+            BackgroundWorker.WorkerSupportsCancellation = true;
+            m_cts = new CancellationTokenSource();
             BackgroundWorker.RunWorkerAsync();
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
             CancelBtn.Enabled = false;
-            if (!BackgroundWorker.CancellationPending && BackgroundWorker.WorkerSupportsCancellation)
+            if (!BackgroundWorker.CancellationPending)
                 BackgroundWorker.CancelAsync();
 
-            if (m_cancelAborts)
-            {
-                try
-                {
-                    //Protected, because threading can make it null after the check
-                    if (m_worker != null && m_worker.IsAlive)
-                        m_worker.Abort();
-                }
-                catch
-                {
-                }
-            }
+            m_cts?.Cancel();
         }
 
         private void WaitForOperation_FormClosing(object sender, FormClosingEventArgs e)

@@ -50,11 +50,6 @@ namespace Maestro.Base.Commands.SiteExplorer
                 : base(message, inner)
             {
             }
-
-            protected SpatialContextNotFoundException(
-              System.Runtime.Serialization.SerializationInfo info,
-              System.Runtime.Serialization.StreamingContext context)
-                : base(info, context) { }
         }
 
         public override void Run()

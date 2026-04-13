@@ -26,6 +26,7 @@ using OSGeo.MapGuide.ObjectModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Maestro.Packaging
@@ -52,7 +53,7 @@ namespace Maestro.Packaging
         }
 
         private bool m_allowClose = true;
-        private volatile System.Threading.Thread m_thread;
+        private CancellationTokenSource m_cts;
 
         private PackageBuilder m_invokeObj = null;
         private Func<object> m_method = null;
@@ -276,12 +277,11 @@ namespace Maestro.Packaging
 
         private void PackageProgress_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (m_thread != null && !m_allowClose && e.CloseReason == CloseReason.UserClosing)
+            if (m_cts != null && !m_allowClose && e.CloseReason == CloseReason.UserClosing)
             {
                 if (MessageBox.Show(this, Strings.CancelConfirmation, Application.ProductName, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3) == DialogResult.Yes)
                 {
-                    try { m_thread.Abort(); }
-                    catch { }
+                    m_cts.Cancel();
                 }
                 else
                     e.Cancel = true;
@@ -391,21 +391,16 @@ namespace Maestro.Packaging
         {
             try
             {
-                m_thread = System.Threading.Thread.CurrentThread;
+                m_cts = new CancellationTokenSource();
                 e.Result = m_method.Invoke();
             }
-            catch (System.Threading.ThreadAbortException)
+            catch (OperationCanceledException)
             {
-                System.Threading.Thread.ResetAbort();
                 e.Cancel = true;
             }
             catch (System.Reflection.TargetInvocationException tai)
             {
                 throw tai.InnerException;
-            }
-            finally
-            {
-                m_thread = null;
             }
         }
 
@@ -434,8 +429,7 @@ namespace Maestro.Packaging
             PackageProgress_FormClosing(sender, ev);
             if (!ev.Cancel)
             {
-                try { m_thread.Abort(); }
-                catch { }
+                m_cts?.Cancel();
             }
         }
     }

@@ -395,15 +395,15 @@ namespace Maestro.Editors.Common
             if (completionWindow != null)
             {
                 completionWindow.Width = 250;
-                completionWindow.Closed += CompletionWindowClosed;
+                completionWindow.FormClosed += CompletionWindowClosed;
             }
         }
 
-        private void CompletionWindowClosed(object source, EventArgs e)
+        private void CompletionWindowClosed(object source, FormClosedEventArgs e)
         {
             if (completionWindow != null)
             {
-                completionWindow.Closed -= CompletionWindowClosed;
+                completionWindow.FormClosed -= CompletionWindowClosed;
                 completionWindow.Dispose();
                 completionWindow = null;
             }

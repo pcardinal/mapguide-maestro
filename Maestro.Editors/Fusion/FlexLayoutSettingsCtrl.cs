@@ -28,7 +28,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Net;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -141,14 +140,9 @@ namespace Maestro.Editors.Fusion
                 string prevUrl = _baseUrl + tpl.PreviewImageUrl;
                 try
                 {
-                    var req = (HttpWebRequest)HttpWebRequest.Create(prevUrl);
-                    using (var resp = (HttpWebResponse)req.GetResponse())
-                    {
-                        using (var stream = resp.GetResponseStream())
-                        {
-                            img = Image.FromStream(stream);
-                        }
-                    }
+                    using var client = new System.Net.Http.HttpClient();
+                    using var stream = client.GetStreamAsync(prevUrl).GetAwaiter().GetResult();
+                    img = Image.FromStream(stream);
                 }
                 catch
                 {

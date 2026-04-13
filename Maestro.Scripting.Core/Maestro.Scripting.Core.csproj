@@ -11,10 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="IronPython" Version="2.7.11">
+    <PackageReference Include="IronPython" Version="3.4.2">
     <IncludeAssets>all</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="IronPython.StdLib" Version="2.7.11" />
+    <PackageReference Include="IronPython.StdLib" Version="3.4.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,133 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Maestro.Next.ViewModels"
+             x:Class="Maestro.Next.Views.Editors.LayerDefinitionEditorView"
+             x:DataType="vm:LayerDefinitionEditorViewModel">
+
+  <Grid RowDefinitions="Auto,*">
+    <!-- Toolbar -->
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="4" Margin="8,6">
+      <Button Content="💾 Save"
+              Command="{Binding SaveCommand}"
+              IsEnabled="{Binding IsDirty}"
+              Classes="accent" />
+      <TextBlock Text="{Binding LayerType}"
+                 FontWeight="SemiBold"
+                 VerticalAlignment="Center"
+                 Margin="12,0,0,0" />
+      <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"
+                   Width="80" Height="8" VerticalAlignment="Center" />
+    </StackPanel>
+
+    <ScrollViewer Grid.Row="1" Margin="8,0,8,8">
+      <StackPanel Spacing="12">
+
+        <!-- ─── Vector sub-layer ─────────────────────────────────── -->
+        <StackPanel IsVisible="{Binding IsVector}" Spacing="10">
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="8">
+              <TextBlock Text="Data Source" FontWeight="SemiBold" />
+              <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto,Auto">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Feature Source"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="0" Grid.Column="1"
+                           Text="{Binding FeatureSourceId}" Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Feature Class"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="1" Grid.Column="1"
+                           Text="{Binding FeatureName}" Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Geometry Property"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="2" Grid.Column="1"
+                           Text="{Binding Geometry}" Margin="8,2,0,2" />
+              </Grid>
+            </StackPanel>
+          </Border>
+
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="8">
+              <TextBlock Text="Display" FontWeight="SemiBold" />
+              <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Filter"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="0" Grid.Column="1"
+                           Text="{Binding Filter}" Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Tooltip"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="1" Grid.Column="1"
+                           Text="{Binding Tooltip}" Margin="8,2,0,2" />
+              </Grid>
+            </StackPanel>
+          </Border>
+
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="8">
+              <TextBlock Text="Scale Ranges" FontWeight="SemiBold" />
+              <ItemsControl ItemsSource="{Binding ScaleRanges}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate DataType="vm:ScaleRangeSummaryViewModel">
+                    <Border BorderThickness="0,0,0,1"
+                            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                            Padding="0,4">
+                      <TextBlock Text="{Binding Summary}"
+                                 FontFamily="Consolas,Monospace" FontSize="12" />
+                    </Border>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <!-- ─── Raster sub-layer ────────────────────────────────── -->
+        <StackPanel IsVisible="{Binding IsRaster}" Spacing="10">
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="8">
+              <TextBlock Text="Raster Source" FontWeight="SemiBold" />
+              <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Feature Class"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="0" Grid.Column="1"
+                           Text="{Binding RasterFeatureName}" Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Raster Property"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="1" Grid.Column="1"
+                           Text="{Binding RasterGeometry}" Margin="8,2,0,2" />
+              </Grid>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <!-- ─── Drawing sub-layer ───────────────────────────────── -->
+        <StackPanel IsVisible="{Binding IsDrawing}" Spacing="10">
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="8">
+              <TextBlock Text="Drawing Source" FontWeight="SemiBold" />
+              <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Drawing Source"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="0" Grid.Column="1"
+                           Text="{Binding DrawingResourceId}" Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Sheet"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="1" Grid.Column="1"
+                           Text="{Binding DrawingSheet}" Margin="8,2,0,2" />
+              </Grid>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

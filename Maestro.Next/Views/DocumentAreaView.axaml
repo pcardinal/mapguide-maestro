@@ -44,13 +44,19 @@
         </DataTemplate>
       </TabControl.ItemTemplate>
 
-      <!-- Tab content template — dispatches to the correct editor view -->
+      <!-- Dispatches to the correct editor view by ViewModel type -->
       <TabControl.ContentTemplate>
         <DataTemplate DataType="vm:DocumentViewModel">
           <ContentControl Content="{Binding}">
             <ContentControl.DataTemplates>
               <DataTemplate DataType="vm:FeatureSourceEditorViewModel">
                 <editors:FeatureSourceEditorView />
+              </DataTemplate>
+              <DataTemplate DataType="vm:LayerDefinitionEditorViewModel">
+                <editors:LayerDefinitionEditorView />
+              </DataTemplate>
+              <DataTemplate DataType="vm:MapDefinitionEditorViewModel">
+                <editors:MapDefinitionEditorView />
               </DataTemplate>
               <DataTemplate DataType="vm:GenericResourceEditorViewModel">
                 <editors:GenericResourceEditorView />

@@ -32,6 +32,7 @@ internal static class Program
         // Core services
         services.AddSingleton<IConnectionService, ConnectionService>();
         services.AddSingleton<IResourceService, ResourceService>();
+        services.AddSingleton<INotificationService, NotificationService>();
 
         // Workbench-level singletons
         services.AddSingleton<ViewModels.DocumentManagerViewModel>();

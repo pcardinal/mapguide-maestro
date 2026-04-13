@@ -1,0 +1,30 @@
+<ItemsControl xmlns="https://github.com/avaloniaui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:svc="using:Maestro.Next.Services"
+              x:Class="Maestro.Next.Views.NotificationOverlay"
+              x:DataType="svc:NotificationService"
+              ItemsSource="{Binding Recent}"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Bottom"
+              Margin="0,0,16,40"
+              IsHitTestVisible="False">
+
+  <ItemsControl.ItemTemplate>
+    <DataTemplate DataType="svc:Notification">
+      <Border Background="#CC1E1E2E"
+              CornerRadius="6"
+              Padding="12,8"
+              Margin="0,4,0,0"
+              MinWidth="240" MaxWidth="400">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Text="{Binding Icon}" FontSize="16"
+                     VerticalAlignment="Center" />
+          <TextBlock Text="{Binding Message}"
+                     Foreground="White"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Center" />
+        </StackPanel>
+      </Border>
+    </DataTemplate>
+  </ItemsControl.ItemTemplate>
+</ItemsControl>

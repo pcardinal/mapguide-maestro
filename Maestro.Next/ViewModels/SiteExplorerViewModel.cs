@@ -100,8 +100,8 @@ public static class ResourceEditorFactory
         return resourceType switch
         {
             nameof(ResourceTypes.FeatureSource)         => new FeatureSourceEditorViewModel(resourceId),
-            nameof(ResourceTypes.LayerDefinition)       => new GenericResourceEditorViewModel(resourceId, resourceType),
-            nameof(ResourceTypes.MapDefinition)         => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.LayerDefinition)       => new LayerDefinitionEditorViewModel(resourceId),
+            nameof(ResourceTypes.MapDefinition)         => new MapDefinitionEditorViewModel(resourceId),
             nameof(ResourceTypes.WebLayout)             => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.ApplicationDefinition) => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.SymbolDefinition)      => new GenericResourceEditorViewModel(resourceId, resourceType),

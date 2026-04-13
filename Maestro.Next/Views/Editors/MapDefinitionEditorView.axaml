@@ -1,0 +1,113 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Maestro.Next.ViewModels"
+             x:Class="Maestro.Next.Views.Editors.MapDefinitionEditorView"
+             x:DataType="vm:MapDefinitionEditorViewModel">
+
+  <Grid RowDefinitions="Auto,*">
+    <!-- Toolbar -->
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="4" Margin="8,6">
+      <Button Content="💾 Save"
+              Command="{Binding SaveCommand}"
+              IsEnabled="{Binding IsDirty}"
+              Classes="accent" />
+      <Button Content="⬆ Move Up"
+              Command="{Binding MoveUpCommand}" />
+      <Button Content="⬇ Move Down"
+              Command="{Binding MoveDownCommand}" />
+      <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"
+                   Width="80" Height="8" VerticalAlignment="Center" />
+    </StackPanel>
+
+    <Grid Grid.Row="1" ColumnDefinitions="320,4,*">
+      <!-- Layer tree (left) -->
+      <DockPanel Grid.Column="0">
+        <TextBlock DockPanel.Dock="Top" Text="Layers &amp; Groups"
+                   FontWeight="SemiBold" Margin="8,4" />
+        <TreeView ItemsSource="{Binding LayerTree}"
+                  SelectedItem="{Binding SelectedNode}">
+          <TreeView.ItemTemplate>
+            <TreeDataTemplate ItemsSource="{Binding Children}"
+                              x:DataType="vm:MapLayerTreeNode">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <CheckBox IsChecked="{Binding Visible}"
+                          ToolTip.Tip="Toggle visibility" />
+                <TextBlock Text="{Binding Icon}" FontSize="14"
+                           VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Name}"
+                           VerticalAlignment="Center" />
+              </StackPanel>
+            </TreeDataTemplate>
+          </TreeView.ItemTemplate>
+        </TreeView>
+      </DockPanel>
+
+      <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
+
+      <!-- Properties panel (right) -->
+      <ScrollViewer Grid.Column="2" Margin="8">
+        <StackPanel Spacing="12">
+          <!-- Map metadata -->
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="8">
+              <TextBlock Text="Map Metadata" FontWeight="SemiBold" />
+              <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto,Auto">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Name"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="0" Grid.Column="1"
+                           Text="{Binding MapName}" Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Coordinate System"
+                           VerticalAlignment="Center" />
+                <TextBox   Grid.Row="1" Grid.Column="1"
+                           Text="{Binding CoordinateSystem}"
+                           FontFamily="Consolas,Monospace" FontSize="11"
+                           Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Extents"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Row="2" Grid.Column="1"
+                           Text="{Binding Extents}"
+                           FontFamily="Consolas,Monospace" FontSize="11"
+                           Margin="8,4,0,2" />
+              </Grid>
+            </StackPanel>
+          </Border>
+
+          <!-- Selected layer properties -->
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12"
+                  IsVisible="{Binding SelectedNode,
+                              Converter={x:Static ObjectConverters.IsNotNull}}">
+            <StackPanel Spacing="8">
+              <TextBlock Text="Selected Item" FontWeight="SemiBold" />
+              <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto,Auto">
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" VerticalAlignment="Center" />
+                <TextBlock Grid.Row="0" Grid.Column="1"
+                           Text="{Binding SelectedNode.Name}"
+                           FontWeight="Medium" Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Legend Label"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Row="1" Grid.Column="1"
+                           Text="{Binding SelectedNode.LegendLabel}"
+                           Margin="8,2,0,2" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Layer Definition"
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding !SelectedNode.IsGroup}" />
+                <TextBlock Grid.Row="2" Grid.Column="1"
+                           Text="{Binding SelectedNode.ResourceId}"
+                           FontFamily="Consolas,Monospace" FontSize="11"
+                           TextWrapping="Wrap"
+                           IsVisible="{Binding !SelectedNode.IsGroup}"
+                           Margin="8,2,0,2" />
+              </Grid>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+  </Grid>
+</UserControl>

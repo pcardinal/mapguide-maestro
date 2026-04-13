@@ -8,6 +8,8 @@
         Width="1280" Height="800"
         WindowStartupLocation="CenterScreen">
 
+  <!-- Panel wraps DockPanel so the notification overlay can float on top -->
+  <Panel>
   <DockPanel>
     <!-- Menu Bar -->
     <Menu DockPanel.Dock="Top">
@@ -88,4 +90,9 @@
                               DataContext="{Binding Documents}" />
     </Grid>
   </DockPanel>
+
+  <!-- Toast notifications overlay (floats above everything) -->
+  <views:NotificationOverlay />
+
+  </Panel>
 </Window>

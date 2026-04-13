@@ -155,3 +155,17 @@ Status: Complete.
 
 Success - Maestro.Base upgraded to net10.0-windows, all TreeViewAdv replaced.
 
+
+## [2026-04-13 10:17] TASK-012: Upgrade Tier 8 add-ins and main application
+
+Status: Complete.
+
+- **Verified**: All 5 TFMs updated to net10.0-windows
+- **Verified**: RestSharp 106.15.0 is .NET Standard 2.0 — compatible with net10.0; pinned at 106.x per plan
+- **Code Changes**: Fixed Newtonsoft.Json version downgrade in Maestro.AddIn.Rest (13.0.3 → 13.0.4); Fixed NETSDK1151 in LocalConfigure.csproj by removing SelfContained=true/RuntimeIdentifier (new .NET 10 restriction)
+- **Verified**: Full solution builds with 0 errors, 2 pre-existing NU1904 warnings
+- **Commits**: bad64024: "TASK-012: Upgrade Tier 8 add-ins and main application to net10.0"
+- **Build Status**: Solution — 0 errors
+
+Success - All Tier 8 add-ins and main application upgraded to net10.0-windows.
+

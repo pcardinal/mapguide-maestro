@@ -4,7 +4,7 @@
 
 This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 to .NET 10 using a bottom-up (dependency-first) strategy. Foundation libraries will be upgraded first, progressing through 8 dependency tiers to the main application.
 
-**Progress**: 11/13 tasks complete (85%) ![0%](https://progress-bar.xyz/85)
+**Progress**: 12/13 tasks complete (92%) ![0%](https://progress-bar.xyz/92)
 
 ---
 
@@ -158,23 +158,23 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 
 ---
 
-### [▶] TASK-012: Upgrade Tier 8 add-ins and main application
+### [✓] TASK-012: Upgrade Tier 8 add-ins and main application *(Completed: 2026-04-13 14:17)*
 **References**: Plan §Tier 8, Plan §Package Update Reference
 
-- [▶] (1) Update target framework to `net10.0-windows` in Maestro.AddIn.ExtendedObjectModels, Maestro.AddIn.FdoToolbox, Maestro.AddIn.Rest, Maestro.AddIn.Scripting, Maestro per Plan §Tier 8
-- [ ] (2) Framework updated in all 5 projects (**Verify**)
-- [ ] (3) Verify `RestSharp` 106.15.0 is compatible with net10.0 per Plan §Tier 8 (pin at 106.x)
-- [ ] (4) RestSharp compatibility confirmed (**Verify**)
-- [ ] (5) Build all Tier 8 projects and fix any compilation errors per Plan §Breaking Changes Catalog
-- [ ] (6) All Tier 8 projects build with 0 errors (**Verify**)
-- [ ] (7) Commit changes with message: "TASK-012: Upgrade Tier 8 add-ins and main application to net10.0"
+- [✓] (1) Update target framework to `net10.0-windows` in Maestro.AddIn.ExtendedObjectModels, Maestro.AddIn.FdoToolbox, Maestro.AddIn.Rest, Maestro.AddIn.Scripting, Maestro per Plan §Tier 8
+- [✓] (2) Framework updated in all 5 projects (**Verify**)
+- [✓] (3) Verify `RestSharp` 106.15.0 is compatible with net10.0 per Plan §Tier 8 (pin at 106.x)
+- [✓] (4) RestSharp compatibility confirmed (**Verify**)
+- [✓] (5) Build all Tier 8 projects and fix any compilation errors per Plan §Breaking Changes Catalog
+- [✓] (6) All Tier 8 projects build with 0 errors (**Verify**)
+- [✓] (7) Commit changes with message: "TASK-012: Upgrade Tier 8 add-ins and main application to net10.0"
 
 ---
 
-### [ ] TASK-013: Final validation and testing
+### [▶] TASK-013: Final validation and testing
 **References**: Plan §Testing & Validation Strategy, Plan §Success Criteria
 
-- [ ] (1) Build entire solution
+- [▶] (1) Build entire solution
 - [ ] (2) Solution builds with 0 errors and 0 warnings (**Verify**)
 - [ ] (3) Run all unit tests in OSGeo.MapGuide.MaestroAPI.Tests
 - [ ] (4) All unit tests pass with 0 failures (**Verify**)
@@ -183,6 +183,8 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 - [ ] (7) Commit final validation with message: "TASK-013: Complete .NET 10 upgrade - all tests passing"
 
 ---
+
+
 
 
 

@@ -19,6 +19,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public SiteExplorerViewModel SiteExplorer { get; }
     public DocumentManagerViewModel Documents { get; }
+    public ServerInfoViewModel ServerInfo { get; }
 
     public MainWindowViewModel(
         IConnectionService connectionService,
@@ -28,6 +29,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _connectionService = connectionService;
         SiteExplorer = siteExplorer;
         Documents = documents;
+        ServerInfo = new ServerInfoViewModel();
 
         _connectionService.ConnectionStateChanged += OnConnectionStateChanged;
     }
@@ -121,11 +123,13 @@ public partial class MainWindowViewModel : ViewModelBase
             var conn = _connectionService.CurrentConnection!;
             StatusMessage = $"Connected to MapGuide {conn.SiteVersion}";
             Title = $"MapGuide Maestro (Next) — {conn.DisplayName}";
+            _ = ServerInfo.RefreshCommand.ExecuteAsync(null);
         }
         else
         {
             StatusMessage = "Not connected";
             Title = "MapGuide Maestro (Next)";
+            _ = ServerInfo.RefreshCommand.ExecuteAsync(null);
         }
     }
 }

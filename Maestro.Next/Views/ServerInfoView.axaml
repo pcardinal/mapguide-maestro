@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Maestro.Next.ViewModels"
+             x:Class="Maestro.Next.Views.ServerInfoView"
+             x:DataType="vm:ServerInfoViewModel">
+
+  <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+          CornerRadius="4" Padding="12" Margin="8">
+    <StackPanel Spacing="10">
+      <TextBlock Text="Server Information" FontWeight="SemiBold" FontSize="14" />
+
+      <StackPanel Spacing="6" IsVisible="{Binding IsConnected}">
+        <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,Auto">
+          <TextBlock Grid.Row="0" Grid.Column="0" Text="Server" FontWeight="Medium" />
+          <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DisplayName}" />
+
+          <TextBlock Grid.Row="1" Grid.Column="0" Text="Version" FontWeight="Medium" />
+          <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ServerVersion}" />
+        </Grid>
+
+        <Separator Margin="0,4" />
+
+        <TextBlock Text="FDO Providers" FontWeight="Medium" />
+        <TextBox Text="{Binding ProviderList}"
+                 IsReadOnly="True"
+                 AcceptsReturn="True"
+                 MaxHeight="200"
+                 FontFamily="Consolas,Monospace"
+                 FontSize="11" />
+      </StackPanel>
+
+      <TextBlock Text="Not connected"
+                 Foreground="Gray"
+                 IsVisible="{Binding !IsConnected}" />
+
+      <Button Content="↻ Refresh"
+              Command="{Binding RefreshCommand}"
+              HorizontalAlignment="Left"
+              Padding="12,4" />
+    </StackPanel>
+  </Border>
+</UserControl>

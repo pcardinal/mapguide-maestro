@@ -92,11 +92,19 @@
     <Grid IsVisible="{Binding IsConnected}"
           ColumnDefinitions="280,4,*">
 
-      <!-- Site Explorer -->
+      <!-- Site Explorer + Server Info panel -->
       <Border Grid.Column="0"
               BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
               BorderThickness="0,0,1,0">
-        <views:SiteExplorerView DataContext="{Binding SiteExplorer}" />
+        <Grid RowDefinitions="*,Auto">
+          <views:SiteExplorerView Grid.Row="0" DataContext="{Binding SiteExplorer}" />
+          <Expander Grid.Row="1"
+                    Header="Server Info"
+                    IsExpanded="False"
+                    Padding="0">
+            <views:ServerInfoView DataContext="{Binding ServerInfo}" />
+          </Expander>
+        </Grid>
       </Border>
 
       <!-- Splitter -->

@@ -171,6 +171,93 @@ public partial class FeatureSourceEditorViewModel : DocumentViewModel
                 .Where(p => !string.IsNullOrEmpty(p.Value))
                 .Select(p => $"{p.Name}={p.Value}"));
     }
+
+    // ── Schema Preview ──────────────────────────────────────────
+    public ObservableCollection<SchemaClassViewModel> SchemaClasses { get; } = new();
+
+    [ObservableProperty] private bool _schemaLoaded;
+
+    [RelayCommand]
+    private async Task LoadSchemaAsync()
+    {
+        if (ResourceId is null) return;
+        try
+        {
+            IsBusy = true;
+            BusyMessage = "Loading schema...";
+            SchemaClasses.Clear();
+
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+
+            var schemas = await Task.Run(() =>
+                conn.FeatureService.GetSchemas(ResourceId));
+
+            foreach (var schemaName in schemas)
+            {
+                var classNames = await Task.Run(() =>
+                    conn.FeatureService.GetClassNames(ResourceId, schemaName));
+
+                foreach (var className in classNames)
+                {
+                    try
+                    {
+                        var classDef = await Task.Run(() =>
+                            conn.FeatureService.GetClassDefinition(ResourceId, className));
+
+                        var props = new ObservableCollection<SchemaPropertyViewModel>();
+                        foreach (var p in classDef.Properties)
+                        {
+                            var isKey = classDef.IdentityProperties
+                                .Any(ip => ip.Name == p.Name);
+                            props.Add(new SchemaPropertyViewModel(
+                                p.Name,
+                                p.Type.ToString(),
+                                isKey));
+                        }
+
+                        SchemaClasses.Add(new SchemaClassViewModel(
+                            classDef.QualifiedName, props));
+                    }
+                    catch
+                    {
+                        SchemaClasses.Add(new SchemaClassViewModel(
+                            className, new ObservableCollection<SchemaPropertyViewModel>()));
+                    }
+                }
+            }
+
+            SchemaLoaded = true;
+
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Success($"Schema loaded: {SchemaClasses.Count} class(es)");
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"Schema load failed: {ex.Message}");
+        }
+        finally { IsBusy = false; BusyMessage = null; }
+    }
+}
+
+public partial class SchemaClassViewModel : ViewModelBase
+{
+    public SchemaClassViewModel(string qualifiedName, ObservableCollection<SchemaPropertyViewModel> properties)
+    {
+        QualifiedName = qualifiedName;
+        Properties = properties;
+    }
+
+    public string QualifiedName { get; }
+    public ObservableCollection<SchemaPropertyViewModel> Properties { get; }
+
+    [ObservableProperty] private bool _isExpanded;
+}
+
+public record SchemaPropertyViewModel(string Name, string Type, bool IsKey)
+{
+    public string Icon => IsKey ? "🔑" : Type == "Geometry" ? "📐" : "📋";
 }
 
 /// <summary>

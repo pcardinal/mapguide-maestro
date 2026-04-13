@@ -99,6 +99,46 @@ public abstract partial class DocumentViewModel : ViewModelBase
         }
         finally { IsBusy = false; BusyMessage = null; }
     }
+
+    // ── Resource References ─────────────────────────────────────
+    public ObservableCollection<string> ResourceReferences { get; } = new();
+
+    [ObservableProperty]
+    private bool _hasResourceReferences;
+
+    [RelayCommand]
+    protected virtual async Task ShowReferencesAsync()
+    {
+        if (ResourceId is null) return;
+        try
+        {
+            IsBusy = true;
+            BusyMessage = "Finding references...";
+            ResourceReferences.Clear();
+
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+            var refs = await Task.Run(
+                () => conn.ResourceService.EnumerateResourceReferences(ResourceId));
+
+            if (refs?.ResourceId != null)
+            {
+                foreach (var refId in refs.ResourceId)
+                    ResourceReferences.Add(refId);
+            }
+
+            HasResourceReferences = ResourceReferences.Count > 0;
+
+            var svc = Program.Services!.GetRequiredService<INotificationService>();
+            svc.Info($"{ResourceReferences.Count} resource(s) reference this resource.");
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"References lookup failed: {ex.Message}");
+        }
+        finally { IsBusy = false; BusyMessage = null; }
+    }
 }
 
 public record ValidationIssueViewModel(string Status, string Message, string Code)

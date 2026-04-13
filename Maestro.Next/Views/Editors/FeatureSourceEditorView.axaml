@@ -13,6 +13,8 @@
               Classes="accent" />
       <Button Content="🔌 Test Connection"
               Command="{Binding TestConnectionCommand}" />
+      <Button Content="📋 Load Schema"
+              Command="{Binding LoadSchemaCommand}" />
       <Button Content="✓ Validate"
               Command="{Binding ValidateCommand}" />
       <ProgressBar IsIndeterminate="True"
@@ -25,68 +27,111 @@
                  Foreground="Gray" FontSize="11" />
     </StackPanel>
 
-    <!-- Main content -->
-    <ScrollViewer Grid.Row="1" Margin="8,0">
-      <StackPanel Spacing="16">
-        <!-- Provider section -->
+    <!-- Two-column layout: Properties | Schema -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,4,*">
+
+      <!-- Left: Connection Properties -->
+      <ScrollViewer Grid.Column="0" Margin="8,0,4,0">
+        <StackPanel Spacing="16">
+          <!-- Provider section -->
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="8">
+              <TextBlock Text="FDO Provider"
+                         FontWeight="SemiBold" FontSize="13" />
+              <TextBlock Text="{Binding Provider}"
+                         FontFamily="Consolas,Monospace" FontSize="12" />
+            </StackPanel>
+          </Border>
+
+          <!-- Connection properties section -->
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="10">
+              <TextBlock Text="Connection Properties"
+                         FontWeight="SemiBold" FontSize="13" />
+              <ItemsControl ItemsSource="{Binding ConnectionProperties}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate DataType="vm:ConnectionPropertyViewModel">
+                    <Grid ColumnDefinitions="180,*" Margin="0,4">
+                      <TextBlock Grid.Column="0"
+                                 Text="{Binding Name}"
+                                 VerticalAlignment="Center"
+                                 FontWeight="Medium" />
+                      <TextBox Grid.Column="1"
+                               Text="{Binding Value}"
+                               Margin="8,0,0,0" />
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </Border>
+
+          <!-- Connection string preview -->
+          <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                  CornerRadius="4" Padding="12">
+            <StackPanel Spacing="8">
+              <TextBlock Text="Connection String Preview"
+                         FontWeight="SemiBold" FontSize="13" />
+              <TextBlock Text="{Binding ConnectionString}"
+                         FontFamily="Consolas,Monospace" FontSize="11"
+                         TextWrapping="Wrap" Foreground="Gray" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+
+      <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
+
+      <!-- Right: Schema Preview -->
+      <ScrollViewer Grid.Column="2" Margin="4,0,8,0">
         <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
                 CornerRadius="4" Padding="12">
           <StackPanel Spacing="8">
-            <TextBlock Text="FDO Provider"
-                       FontWeight="SemiBold" FontSize="13" />
-            <TextBlock Text="{Binding Provider}"
-                       FontFamily="Consolas,Monospace"
-                       FontSize="12" />
-          </StackPanel>
-        </Border>
+            <TextBlock Text="Schema" FontWeight="SemiBold" FontSize="13" />
 
-        <!-- Connection properties section -->
-        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-                CornerRadius="4" Padding="12">
-          <StackPanel Spacing="10">
-            <TextBlock Text="Connection Properties"
-                       FontWeight="SemiBold" FontSize="13" />
-            <ItemsControl ItemsSource="{Binding ConnectionProperties}">
+            <TextBlock Text="Click 'Load Schema' to inspect feature classes"
+                       Foreground="Gray" FontSize="11"
+                       IsVisible="{Binding !SchemaLoaded}" />
+
+            <ItemsControl ItemsSource="{Binding SchemaClasses}"
+                          IsVisible="{Binding SchemaLoaded}">
               <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="vm:ConnectionPropertyViewModel">
-                  <Grid ColumnDefinitions="180,*" Margin="0,4">
-                    <TextBlock Grid.Column="0"
-                               Text="{Binding Name}"
-                               VerticalAlignment="Center"
-                               FontWeight="Medium" />
-                    <TextBox Grid.Column="1"
-                             Text="{Binding Value}"
-                             Margin="8,0,0,0" />
-                  </Grid>
+                <DataTemplate DataType="vm:SchemaClassViewModel">
+                  <Expander IsExpanded="{Binding IsExpanded}"
+                            Margin="0,2">
+                    <Expander.Header>
+                      <TextBlock Text="{Binding QualifiedName}"
+                                 FontWeight="Medium"
+                                 FontFamily="Consolas,Monospace" FontSize="12" />
+                    </Expander.Header>
+                    <ItemsControl ItemsSource="{Binding Properties}" Margin="16,4,0,4">
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="vm:SchemaPropertyViewModel">
+                          <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,2">
+                            <TextBlock Text="{Binding Icon}" FontSize="12" />
+                            <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="12" />
+                            <TextBlock Text="{Binding Type}" FontSize="11" Foreground="Gray" />
+                          </StackPanel>
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </Expander>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
           </StackPanel>
         </Border>
-
-        <!-- Connection string preview -->
-        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-                CornerRadius="4" Padding="12">
-          <StackPanel Spacing="8">
-            <TextBlock Text="Connection String Preview"
-                       FontWeight="SemiBold" FontSize="13" />
-            <TextBlock Text="{Binding ConnectionString}"
-                       FontFamily="Consolas,Monospace"
-                       FontSize="11"
-                       TextWrapping="Wrap"
-                       Foreground="Gray" />
-          </StackPanel>
-        </Border>
-      </StackPanel>
-    </ScrollViewer>
+      </ScrollViewer>
+    </Grid>
 
     <!-- Test connection result -->
     <Border Grid.Row="2"
             IsVisible="{Binding TestConnectionResult,
                         Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
             Padding="12,8" Margin="8,4">
-      <TextBlock Text="{Binding TestConnectionResult}"
-                 FontSize="12" />
+      <TextBlock Text="{Binding TestConnectionResult}" FontSize="12" />
     </Border>
   </Grid>
 </UserControl>

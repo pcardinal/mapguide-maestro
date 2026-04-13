@@ -21,7 +21,7 @@
 
     <!-- Tab + Validation area when documents are open -->
     <Grid IsVisible="{Binding HasOpenDocuments}"
-          RowDefinitions="*,Auto">
+          RowDefinitions="*,Auto,Auto">
 
     <TabControl Grid.Row="0"
                 ItemsSource="{Binding OpenDocuments}"
@@ -102,6 +102,33 @@
                   <TextBlock Text="{Binding Message}" TextWrapping="Wrap"
                              FontSize="12" MaxWidth="700" />
                 </StackPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </DockPanel>
+    </Border>
+
+    <!-- Resource references panel -->
+    <Border Grid.Row="2"
+            IsVisible="{Binding ActiveDocument.HasResourceReferences}"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+            BorderThickness="0,1,0,0"
+            MaxHeight="140">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="8,6" Spacing="8">
+          <TextBlock Text="Referenced By" FontWeight="SemiBold" VerticalAlignment="Center" />
+          <TextBlock Text="{Binding ActiveDocument.ResourceReferences.Count, StringFormat='({0})'}"
+                     Foreground="Gray" VerticalAlignment="Center" />
+        </StackPanel>
+        <ScrollViewer>
+          <ItemsControl ItemsSource="{Binding ActiveDocument.ResourceReferences}" Margin="8,0,8,8">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <TextBlock Text="{Binding}"
+                           FontFamily="Consolas,Monospace" FontSize="11"
+                           Margin="0,1" />
               </DataTemplate>
             </ItemsControl.ItemTemplate>
           </ItemsControl>

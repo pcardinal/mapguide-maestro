@@ -88,3 +88,16 @@ Status: Complete.
 
 Success - Tier 3 test projects upgraded; 311 unit tests pass; integration tests fail at fixture init (no server — pre-existing, not a regression).
 
+
+## [2026-04-13 00:22] TASK-007: Upgrade Tier 4 viewer components
+
+Status: Complete.
+
+- **Verified**: Maestro.MapPublisher → net10.0; Maestro.MapViewer → net10.0-windows
+- **Verified**: Both projects build with 0 errors
+- **Commits**: 1504f319: "TASK-007: Upgrade Tier 4 viewer components to net10.0"
+- **Files Modified**: Maestro.MapPublisher/Maestro.MapPublisher.csproj, Maestro.MapViewer/Maestro.MapViewer.csproj
+- **Build Status**: Successful — 0 errors
+
+Success - Tier 4 viewer components upgraded to net10.0/net10.0-windows.
+

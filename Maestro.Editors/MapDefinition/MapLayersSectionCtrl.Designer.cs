@@ -1,4 +1,4 @@
-﻿namespace Maestro.Editors.MapDefinition
+namespace Maestro.Editors.MapDefinition
 {
     partial class MapLayersSectionCtrl
     {
@@ -31,9 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MapLayersSectionCtrl));
             this.tabs = new System.Windows.Forms.TabControl();
             this.TAB_GROUP = new System.Windows.Forms.TabPage();
-            this.trvLayersGroup = new Aga.Controls.Tree.TreeViewAdv();
-            this.NODE_GROUP_ICON = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.NODE_GROUP_TEXT = new Aga.Controls.Tree.NodeControls.NodeTextBox();
+            this.trvLayersGroup = new System.Windows.Forms.TreeView();
+            this.NODE_GROUP_ICON = new System.Windows.Forms.Label();
+            this.NODE_GROUP_TEXT = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnAddGroup = new System.Windows.Forms.ToolStripButton();
             this.btnRemoveGroup = new System.Windows.Forms.ToolStripButton();
@@ -46,9 +46,9 @@
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.btnConvertLayerGroupToBaseGroup = new System.Windows.Forms.ToolStripButton();
             this.TAB_DRAWING_ORDER = new System.Windows.Forms.TabPage();
-            this.trvLayerDrawingOrder = new Aga.Controls.Tree.TreeViewAdv();
-            this.NODE_DRAW_ICON = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.NODE_DRAW_TEXT = new Aga.Controls.Tree.NodeControls.NodeTextBox();
+            this.trvLayerDrawingOrder = new System.Windows.Forms.TreeView();
+            this.NODE_DRAW_ICON = new System.Windows.Forms.Label();
+            this.NODE_DRAW_TEXT = new System.Windows.Forms.Label();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.btnDLAddLayer = new System.Windows.Forms.ToolStripButton();
             this.btnDLRemoveLayer = new System.Windows.Forms.ToolStripButton();
@@ -59,9 +59,9 @@
             this.btnDLMoveLayerTop = new System.Windows.Forms.ToolStripButton();
             this.btnDLMoveLayerBottom = new System.Windows.Forms.ToolStripButton();
             this.TAB_BASE_LAYERS = new System.Windows.Forms.TabPage();
-            this.trvBaseLayers = new Aga.Controls.Tree.TreeViewAdv();
-            this.nodeIcon1 = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.nodeTextBox1 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
+            this.trvBaseLayers = new System.Windows.Forms.TreeView();
+            this.nodeIcon1 = new System.Windows.Forms.Label();
+            this.nodeTextBox1 = new System.Windows.Forms.Label();
             this.TAB_TILE_SET = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnBrowse = new System.Windows.Forms.Button();
@@ -122,38 +122,17 @@
             // 
             this.trvLayersGroup.AllowDrop = true;
             this.trvLayersGroup.BackColor = System.Drawing.SystemColors.Window;
-            this.trvLayersGroup.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.trvLayersGroup.DefaultToolTipProvider = null;
-            resources.ApplyResources(this.trvLayersGroup, "trvLayersGroup");
-            this.trvLayersGroup.DragDropMarkColor = System.Drawing.Color.Black;
-            this.trvLayersGroup.LineColor = System.Drawing.SystemColors.ControlDark;
-            this.trvLayersGroup.Model = null;
-            this.trvLayersGroup.Name = "trvLayersGroup";
-            this.trvLayersGroup.NodeControls.Add(this.NODE_GROUP_ICON);
-            this.trvLayersGroup.NodeControls.Add(this.NODE_GROUP_TEXT);
-            this.trvLayersGroup.SelectedNode = null;
-            this.trvLayersGroup.SelectionMode = Aga.Controls.Tree.TreeSelectionMode.Multi;
-            this.trvLayersGroup.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.trvLayersGroup_ItemDrag);
-            this.trvLayersGroup.SelectionChanged += new System.EventHandler(this.trvLayersGroup_SelectionChanged);
+            this.trvLayersGroup.BorderStyle = System.Windows.Forms.BorderStyle.None;            resources.ApplyResources(this.trvLayersGroup, "trvLayersGroup");            this.trvLayersGroup.Name = "trvLayersGroup";            this.trvLayersGroup.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.trvLayersGroup_ItemDrag);
+            this.trvLayersGroup.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvLayersGroup_AfterSelect);
             this.trvLayersGroup.DragDrop += new System.Windows.Forms.DragEventHandler(this.trvLayersGroup_DragDrop);
             this.trvLayersGroup.DragEnter += new System.Windows.Forms.DragEventHandler(this.trvLayersGroup_DragEnter);
             this.trvLayersGroup.DragOver += new System.Windows.Forms.DragEventHandler(this.trvLayersGroup_DragOver);
             this.trvLayersGroup.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.trvLayersGroup_MouseDoubleClick);
             // 
             // NODE_GROUP_ICON
-            // 
-            this.NODE_GROUP_ICON.DataPropertyName = "Icon";
-            this.NODE_GROUP_ICON.LeftMargin = 1;
-            this.NODE_GROUP_ICON.ParentColumn = null;
-            this.NODE_GROUP_ICON.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // NODE_GROUP_TEXT
-            // 
-            this.NODE_GROUP_TEXT.DataPropertyName = "Text";
-            this.NODE_GROUP_TEXT.IncrementalSearchEnabled = true;
-            this.NODE_GROUP_TEXT.LeftMargin = 3;
-            this.NODE_GROUP_TEXT.ParentColumn = null;
-            // 
+            //            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -253,38 +232,17 @@
             // 
             this.trvLayerDrawingOrder.AllowDrop = true;
             this.trvLayerDrawingOrder.BackColor = System.Drawing.SystemColors.Window;
-            this.trvLayerDrawingOrder.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.trvLayerDrawingOrder.DefaultToolTipProvider = null;
-            resources.ApplyResources(this.trvLayerDrawingOrder, "trvLayerDrawingOrder");
-            this.trvLayerDrawingOrder.DragDropMarkColor = System.Drawing.Color.Black;
-            this.trvLayerDrawingOrder.LineColor = System.Drawing.SystemColors.ControlDark;
-            this.trvLayerDrawingOrder.Model = null;
-            this.trvLayerDrawingOrder.Name = "trvLayerDrawingOrder";
-            this.trvLayerDrawingOrder.NodeControls.Add(this.NODE_DRAW_ICON);
-            this.trvLayerDrawingOrder.NodeControls.Add(this.NODE_DRAW_TEXT);
-            this.trvLayerDrawingOrder.SelectedNode = null;
-            this.trvLayerDrawingOrder.SelectionMode = Aga.Controls.Tree.TreeSelectionMode.Multi;
-            this.trvLayerDrawingOrder.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.trvLayerDrawingOrder_ItemDrag);
-            this.trvLayerDrawingOrder.SelectionChanged += new System.EventHandler(this.trvLayerDrawingOrder_SelectionChanged);
+            this.trvLayerDrawingOrder.BorderStyle = System.Windows.Forms.BorderStyle.None;            resources.ApplyResources(this.trvLayerDrawingOrder, "trvLayerDrawingOrder");            this.trvLayerDrawingOrder.Name = "trvLayerDrawingOrder";            this.trvLayerDrawingOrder.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.trvLayerDrawingOrder_ItemDrag);
+            this.trvLayerDrawingOrder.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvLayerDrawingOrder_AfterSelect);
             this.trvLayerDrawingOrder.DragDrop += new System.Windows.Forms.DragEventHandler(this.trvLayerDrawingOrder_DragDrop);
             this.trvLayerDrawingOrder.DragEnter += new System.Windows.Forms.DragEventHandler(this.trvLayerDrawingOrder_DragEnter);
             this.trvLayerDrawingOrder.DragOver += new System.Windows.Forms.DragEventHandler(this.trvLayerDrawingOrder_DragOver);
             this.trvLayerDrawingOrder.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.trvLayerDrawingOrder_MouseDoubleClick);
             // 
             // NODE_DRAW_ICON
-            // 
-            this.NODE_DRAW_ICON.DataPropertyName = "Icon";
-            this.NODE_DRAW_ICON.LeftMargin = 1;
-            this.NODE_DRAW_ICON.ParentColumn = null;
-            this.NODE_DRAW_ICON.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // NODE_DRAW_TEXT
-            // 
-            this.NODE_DRAW_TEXT.DataPropertyName = "Text";
-            this.NODE_DRAW_TEXT.IncrementalSearchEnabled = true;
-            this.NODE_DRAW_TEXT.LeftMargin = 3;
-            this.NODE_DRAW_TEXT.ParentColumn = null;
-            // 
+            //            // 
             // toolStrip2
             // 
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -369,38 +327,17 @@
             // 
             this.trvBaseLayers.AllowDrop = true;
             this.trvBaseLayers.BackColor = System.Drawing.SystemColors.Window;
-            this.trvBaseLayers.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.trvBaseLayers.DefaultToolTipProvider = null;
-            resources.ApplyResources(this.trvBaseLayers, "trvBaseLayers");
-            this.trvBaseLayers.DragDropMarkColor = System.Drawing.Color.Black;
-            this.trvBaseLayers.LineColor = System.Drawing.SystemColors.ControlDark;
-            this.trvBaseLayers.Model = null;
-            this.trvBaseLayers.Name = "trvBaseLayers";
-            this.trvBaseLayers.NodeControls.Add(this.nodeIcon1);
-            this.trvBaseLayers.NodeControls.Add(this.nodeTextBox1);
-            this.trvBaseLayers.SelectedNode = null;
-            this.trvBaseLayers.SelectionMode = Aga.Controls.Tree.TreeSelectionMode.Multi;
-            this.trvBaseLayers.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.trvBaseLayers_ItemDrag);
-            this.trvBaseLayers.SelectionChanged += new System.EventHandler(this.trvBaseLayers_SelectionChanged);
+            this.trvBaseLayers.BorderStyle = System.Windows.Forms.BorderStyle.None;            resources.ApplyResources(this.trvBaseLayers, "trvBaseLayers");            this.trvBaseLayers.Name = "trvBaseLayers";            this.trvBaseLayers.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.trvBaseLayers_ItemDrag);
+            this.trvBaseLayers.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvBaseLayers_AfterSelect);
             this.trvBaseLayers.DragDrop += new System.Windows.Forms.DragEventHandler(this.trvBaseLayers_DragDrop);
             this.trvBaseLayers.DragEnter += new System.Windows.Forms.DragEventHandler(this.trvBaseLayers_DragEnter);
             this.trvBaseLayers.DragOver += new System.Windows.Forms.DragEventHandler(this.trvBaseLayers_DragOver);
             this.trvBaseLayers.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.trvBaseLayers_MouseDoubleClick);
             // 
             // nodeIcon1
-            // 
-            this.nodeIcon1.DataPropertyName = "Icon";
-            this.nodeIcon1.LeftMargin = 1;
-            this.nodeIcon1.ParentColumn = null;
-            this.nodeIcon1.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // nodeTextBox1
-            // 
-            this.nodeTextBox1.DataPropertyName = "Text";
-            this.nodeTextBox1.IncrementalSearchEnabled = true;
-            this.nodeTextBox1.LeftMargin = 3;
-            this.nodeTextBox1.ParentColumn = null;
-            // 
+            //            // 
             // TAB_TILE_SET
             // 
             this.TAB_TILE_SET.Controls.Add(this.groupBox1);
@@ -571,8 +508,8 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.Panel propertiesPanel;
         private System.Windows.Forms.Splitter splitter1;
-        private Aga.Controls.Tree.TreeViewAdv trvLayersGroup;
-        private Aga.Controls.Tree.TreeViewAdv trvLayerDrawingOrder;
+        private System.Windows.Forms.TreeView trvLayersGroup;
+        private System.Windows.Forms.TreeView trvLayerDrawingOrder;
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton btnAddGroup;
         private System.Windows.Forms.ToolStripButton btnRemoveGroup;
@@ -589,14 +526,14 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripButton btnDLMoveLayerTop;
         private System.Windows.Forms.ToolStripButton btnDLMoveLayerBottom;
-        private Aga.Controls.Tree.NodeControls.NodeIcon NODE_GROUP_ICON;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox NODE_GROUP_TEXT;
-        private Aga.Controls.Tree.NodeControls.NodeIcon NODE_DRAW_ICON;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox NODE_DRAW_TEXT;
+        private System.Windows.Forms.Label NODE_GROUP_ICON;
+        private System.Windows.Forms.Label NODE_GROUP_TEXT;
+        private System.Windows.Forms.Label NODE_DRAW_ICON;
+        private System.Windows.Forms.Label NODE_DRAW_TEXT;
         private System.Windows.Forms.TabPage TAB_BASE_LAYERS;
-        private Aga.Controls.Tree.TreeViewAdv trvBaseLayers;
-        private Aga.Controls.Tree.NodeControls.NodeIcon nodeIcon1;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox1;
+        private System.Windows.Forms.TreeView trvBaseLayers;
+        private System.Windows.Forms.Label nodeIcon1;
+        private System.Windows.Forms.Label nodeTextBox1;
         private System.Windows.Forms.ToolStripButton btnMoveLayerOrGroupUp;
         private System.Windows.Forms.ToolStripButton btnMoveLayerOrGroupDown;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
@@ -618,3 +555,5 @@
         private System.Windows.Forms.ToolStripButton btnConvertToTileSet;
     }
 }
+
+

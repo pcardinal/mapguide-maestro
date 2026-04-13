@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -454,10 +454,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Data.Odbc" Version="6.0.0">
+    <PackageReference Include="System.Data.Odbc" Version="10.0.5">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
-    <PackageReference Include="TreeViewAdv" Version="1.7.0" />
+    <!-- TreeViewAdv removed: incompatible with .NET 10; replaced with standard WinForms TreeView -->
   </ItemGroup>
 
   <ItemGroup>

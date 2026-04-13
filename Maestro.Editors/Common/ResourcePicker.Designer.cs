@@ -1,4 +1,4 @@
-﻿namespace Maestro.Editors.Generic
+namespace Maestro.Editors.Generic
 {
     partial class ResourcePicker
     {
@@ -29,10 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResourcePicker));
-            this.nodeIcon1 = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.nodeTextBox1 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
-            this.lstResources = new System.Windows.Forms.ListView();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ResourcePicker));            this.lstResources = new System.Windows.Forms.ListView();
             this.resImageList = new System.Windows.Forms.ImageList(this.components);
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -68,19 +65,9 @@
             this.SuspendLayout();
             // 
             // nodeIcon1
-            // 
-            this.nodeIcon1.DataPropertyName = "Icon";
-            this.nodeIcon1.LeftMargin = 1;
-            this.nodeIcon1.ParentColumn = null;
-            this.nodeIcon1.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // nodeTextBox1
-            // 
-            this.nodeTextBox1.DataPropertyName = "Name";
-            this.nodeTextBox1.IncrementalSearchEnabled = true;
-            this.nodeTextBox1.LeftMargin = 3;
-            this.nodeTextBox1.ParentColumn = null;
-            // 
+            //            // 
             // lstResources
             // 
             resources.ApplyResources(this.lstResources, "lstResources");
@@ -311,8 +298,6 @@
         private System.Windows.Forms.ComboBox cmbResourceFilter;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private Aga.Controls.Tree.NodeControls.NodeIcon nodeIcon1;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox1;
         private System.Windows.Forms.ImageList resImageList;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label label2;

@@ -1,4 +1,4 @@
-﻿namespace Maestro.Editors.WebLayout
+namespace Maestro.Editors.WebLayout
 {
     partial class WebLayoutMenusCtrl
     {
@@ -28,20 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebLayoutMenusCtrl));
-            this.nodeIcon3 = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.nodeTextBox3 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
-            this.nodeIcon1 = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.nodeTextBox1 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
-            this.nodeIcon2 = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.nodeTextBox2 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
-            this.grdCommands = new System.Windows.Forms.DataGridView();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebLayoutMenusCtrl));            this.grdCommands = new System.Windows.Forms.DataGridView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.TAB_CONTEXT_MENU = new System.Windows.Forms.TabPage();
-            this.edContextMenu = new Maestro.Editors.WebLayout.MenuEditorCtrl();
-            this.nodeIcon4 = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.nodeTextBox4 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
-            this.TAB_TOOLBAR = new System.Windows.Forms.TabPage();
+            this.edContextMenu = new Maestro.Editors.WebLayout.MenuEditorCtrl();            this.TAB_TOOLBAR = new System.Windows.Forms.TabPage();
             this.edToolbar = new Maestro.Editors.WebLayout.MenuEditorCtrl();
             this.tabMenus = new System.Windows.Forms.TabControl();
             this.TAB_TASK_MENU = new System.Windows.Forms.TabPage();
@@ -64,47 +54,17 @@
             resources.ApplyResources(this.contentPanel, "contentPanel");
             // 
             // nodeIcon3
-            // 
-            this.nodeIcon3.DataPropertyName = "Icon";
-            this.nodeIcon3.LeftMargin = 1;
-            this.nodeIcon3.ParentColumn = null;
-            this.nodeIcon3.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // nodeTextBox3
-            // 
-            this.nodeTextBox3.DataPropertyName = "Label";
-            this.nodeTextBox3.IncrementalSearchEnabled = true;
-            this.nodeTextBox3.LeftMargin = 3;
-            this.nodeTextBox3.ParentColumn = null;
-            // 
+            //            // 
             // nodeIcon1
-            // 
-            this.nodeIcon1.DataPropertyName = "Icon";
-            this.nodeIcon1.LeftMargin = 1;
-            this.nodeIcon1.ParentColumn = null;
-            this.nodeIcon1.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // nodeTextBox1
-            // 
-            this.nodeTextBox1.DataPropertyName = "Label";
-            this.nodeTextBox1.IncrementalSearchEnabled = true;
-            this.nodeTextBox1.LeftMargin = 3;
-            this.nodeTextBox1.ParentColumn = null;
-            // 
+            //            // 
             // nodeIcon2
-            // 
-            this.nodeIcon2.DataPropertyName = "Icon";
-            this.nodeIcon2.LeftMargin = 1;
-            this.nodeIcon2.ParentColumn = null;
-            this.nodeIcon2.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // nodeTextBox2
-            // 
-            this.nodeTextBox2.DataPropertyName = "Label";
-            this.nodeTextBox2.IncrementalSearchEnabled = true;
-            this.nodeTextBox2.LeftMargin = 3;
-            this.nodeTextBox2.ParentColumn = null;
-            // 
+            //            // 
             // grdCommands
             // 
             this.grdCommands.AllowUserToAddRows = false;
@@ -133,24 +93,12 @@
             // 
             // edContextMenu
             // 
-            resources.ApplyResources(this.edContextMenu, "edContextMenu");
-            this.edContextMenu.Model = null;
-            this.edContextMenu.Name = "edContextMenu";
+            resources.ApplyResources(this.edContextMenu, "edContextMenu");            this.edContextMenu.Name = "edContextMenu";
             // 
             // nodeIcon4
-            // 
-            this.nodeIcon4.DataPropertyName = "Icon";
-            this.nodeIcon4.LeftMargin = 1;
-            this.nodeIcon4.ParentColumn = null;
-            this.nodeIcon4.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // nodeTextBox4
-            // 
-            this.nodeTextBox4.DataPropertyName = "Label";
-            this.nodeTextBox4.IncrementalSearchEnabled = true;
-            this.nodeTextBox4.LeftMargin = 3;
-            this.nodeTextBox4.ParentColumn = null;
-            // 
+            //            // 
             // TAB_TOOLBAR
             // 
             this.TAB_TOOLBAR.Controls.Add(this.edToolbar);
@@ -160,9 +108,7 @@
             // 
             // edToolbar
             // 
-            resources.ApplyResources(this.edToolbar, "edToolbar");
-            this.edToolbar.Model = null;
-            this.edToolbar.Name = "edToolbar";
+            resources.ApplyResources(this.edToolbar, "edToolbar");            this.edToolbar.Name = "edToolbar";
             // 
             // tabMenus
             // 
@@ -182,9 +128,7 @@
             // 
             // edTaskMenu
             // 
-            resources.ApplyResources(this.edTaskMenu, "edTaskMenu");
-            this.edTaskMenu.Model = null;
-            this.edTaskMenu.Name = "edTaskMenu";
+            resources.ApplyResources(this.edTaskMenu, "edTaskMenu");            this.edTaskMenu.Name = "edTaskMenu";
             // 
             // btnAddFromCmdSet
             // 
@@ -213,21 +157,15 @@
 
         private System.Windows.Forms.DataGridView grdCommands;
         private System.Windows.Forms.GroupBox groupBox1;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox1;
-        private Aga.Controls.Tree.NodeControls.NodeIcon nodeIcon1;
-        private Aga.Controls.Tree.NodeControls.NodeIcon nodeIcon3;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox3;
-        private Aga.Controls.Tree.NodeControls.NodeIcon nodeIcon2;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox2;
         private System.Windows.Forms.TabControl tabMenus;
         private System.Windows.Forms.TabPage TAB_TOOLBAR;
         private System.Windows.Forms.TabPage TAB_CONTEXT_MENU;
         private System.Windows.Forms.TabPage TAB_TASK_MENU;
-        private Aga.Controls.Tree.NodeControls.NodeIcon nodeIcon4;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox4;
         private MenuEditorCtrl edToolbar;
         private MenuEditorCtrl edContextMenu;
         private MenuEditorCtrl edTaskMenu;
         private System.Windows.Forms.Button btnAddFromCmdSet;
     }
 }
+
+

@@ -32,9 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UnmanagedFileBrowser));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.label3 = new System.Windows.Forms.Label();
-            this.trvFolders = new Aga.Controls.Tree.TreeViewAdv();
-            this.NODE_ICON = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.NODE_NAME = new Aga.Controls.Tree.NodeControls.NodeTextBox();
+            this.trvFolders = new System.Windows.Forms.TreeView();
             this.lstResources = new System.Windows.Forms.ListView();
             this.imgFileList = new System.Windows.Forms.ImageList(this.components);
             this.label4 = new System.Windows.Forms.Label();
@@ -72,30 +70,10 @@
             resources.ApplyResources(this.trvFolders, "trvFolders");
             this.trvFolders.BackColor = System.Drawing.SystemColors.Window;
             this.trvFolders.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.trvFolders.DefaultToolTipProvider = null;
-            this.trvFolders.DragDropMarkColor = System.Drawing.Color.Black;
-            this.trvFolders.LineColor = System.Drawing.SystemColors.ControlDark;
-            this.trvFolders.LoadOnDemand = true;
-            this.trvFolders.Model = null;
+            this.trvFolders.HideSelection = false;
             this.trvFolders.Name = "trvFolders";
-            this.trvFolders.NodeControls.Add(this.NODE_ICON);
-            this.trvFolders.NodeControls.Add(this.NODE_NAME);
-            this.trvFolders.SelectedNode = null;
-            this.trvFolders.SelectionChanged += new System.EventHandler(this.trvFolders_SelectionChanged);
-            // 
-            // NODE_ICON
-            // 
-            this.NODE_ICON.DataPropertyName = "Icon";
-            this.NODE_ICON.LeftMargin = 1;
-            this.NODE_ICON.ParentColumn = null;
-            this.NODE_ICON.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
-            // NODE_NAME
-            // 
-            this.NODE_NAME.DataPropertyName = "Name";
-            this.NODE_NAME.IncrementalSearchEnabled = true;
-            this.NODE_NAME.LeftMargin = 3;
-            this.NODE_NAME.ParentColumn = null;
+            this.trvFolders.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvFolders_AfterSelect);
+            this.trvFolders.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.trvFolders_BeforeExpand);
             // 
             // lstResources
             // 
@@ -186,15 +164,13 @@
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label label3;
-        private Aga.Controls.Tree.TreeViewAdv trvFolders;
+        private System.Windows.Forms.TreeView trvFolders;
         private System.Windows.Forms.ListView lstResources;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtItem;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancel;
-        private Aga.Controls.Tree.NodeControls.NodeIcon NODE_ICON;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox NODE_NAME;
         private System.Windows.Forms.ImageList imgFileList;
     }
 }

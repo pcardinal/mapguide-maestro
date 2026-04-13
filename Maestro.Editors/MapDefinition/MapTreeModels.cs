@@ -20,7 +20,6 @@
 
 #endregion Disclaimer / License
 
-using Aga.Controls.Tree;
 using OSGeo.MapGuide.MaestroAPI;
 using OSGeo.MapGuide.ObjectModels.MapDefinition;
 using OSGeo.MapGuide.ObjectModels.TileSetDefinition;
@@ -28,6 +27,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Maestro.Editors.MapDefinition
 {
@@ -39,20 +40,15 @@ namespace Maestro.Editors.MapDefinition
             this.Icon = icon;
             this.Tag = item;
         }
-
         public Image Icon { get; set; }
-
         public string Text { get; set; }
-
         public T Tag { get; set; }
     }
 
     internal class ScaleItem : TreeItem<IList<double>>
     {
         public ScaleItem(string name, IList<double> range)
-            : base(name, Properties.Resources.magnifier, range)
-        {
-        }
+            : base(name, Properties.Resources.magnifier, range) { }
     }
 
     internal class LayerItem : TreeItem<IMapLayer>
@@ -62,13 +58,10 @@ namespace Maestro.Editors.MapDefinition
         {
             layer.PropertyChanged += WeakEventHandler.Wrap<PropertyChangedEventHandler>(OnPropertyChanged, (eh) => layer.PropertyChanged -= eh);
         }
-
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(this.Tag.Name))
-            {
                 this.Text = this.Tag.Name;
-            }
         }
     }
 
@@ -79,13 +72,10 @@ namespace Maestro.Editors.MapDefinition
         {
             grp.PropertyChanged += WeakEventHandler.Wrap<PropertyChangedEventHandler>(OnPropertyChanged, (eh) => grp.PropertyChanged -= eh);
         }
-
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(this.Tag.Name))
-            {
                 this.Text = this.Tag.Name;
-            }
         }
     }
 
@@ -97,19 +87,11 @@ namespace Maestro.Editors.MapDefinition
             layer.PropertyChanged += WeakEventHandler.Wrap<PropertyChangedEventHandler>(OnPropertyChanged, (eh) => layer.PropertyChanged -= eh);
             this.Parent = parent;
         }
-
-        public IBaseMapGroup Parent
-        {
-            get;
-            set;
-        }
-
+        public IBaseMapGroup Parent { get; set; }
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(this.Tag.Name))
-            {
                 this.Text = this.Tag.Name;
-            }
         }
     }
 
@@ -120,83 +102,50 @@ namespace Maestro.Editors.MapDefinition
         {
             group.PropertyChanged += WeakEventHandler.Wrap<PropertyChangedEventHandler>(OnPropertyChanged, (eh) => group.PropertyChanged -= eh);
         }
-
         private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(this.Tag.Name))
-            {
                 this.Text = this.Tag.Name;
-            }
         }
     }
 
-    internal abstract class TreeModelBase : ITreeModel
+    /// <summary>
+    /// Base class for tree models that directly populate a WinForms TreeView.
+    /// Replaces the former Aga.Controls.Tree ITreeModel pattern.
+    /// </summary>
+    internal abstract class TreeModelBase
     {
-        public abstract System.Collections.IEnumerable GetChildren(TreePath treePath);
+        protected TreeView _boundTree;
 
-        public abstract bool IsLeaf(TreePath treePath);
-
-        public event EventHandler<TreeModelEventArgs> NodesChanged;
-
-        protected void OnNodesInserted(TreeModelEventArgs e)
+        internal virtual void Invalidate()
         {
-            this.NodesInserted?.Invoke(this, e);
+            if (_boundTree != null)
+                PopulateTree(_boundTree);
         }
 
-        public event EventHandler<TreeModelEventArgs> NodesInserted;
+        // Overload kept for call-site compatibility (path argument ignored for standard TreeView)
+        internal void Invalidate(object ignoredPath) => Invalidate();
 
-        protected void OnNodesRemoved(TreeModelEventArgs e)
-        {
-            this.NodesRemoved?.Invoke(this, e);
-        }
-
-        public event EventHandler<TreeModelEventArgs> NodesRemoved;
-
-        protected void OnStructureChanged(TreePathEventArgs e)
-        {
-            this.StructureChanged?.Invoke(this, e);
-        }
-
-        public event EventHandler<TreePathEventArgs> StructureChanged;
-
-        internal void Invalidate()
-        {
-            OnStructureChanged(new TreePathEventArgs(TreePath.Empty));
-        }
-
-        internal void Invalidate(TreePath path)
-        {
-            OnStructureChanged(new TreePathEventArgs(path));
-        }
+        internal abstract void PopulateTree(TreeView tree);
     }
 
     internal class DrawOrderLayerModel : TreeModelBase
     {
         private IMapDefinition _map;
 
-        public DrawOrderLayerModel(IMapDefinition map)
-        {
-            _map = map;
-        }
+        public DrawOrderLayerModel(IMapDefinition map) { _map = map; }
 
-        public override System.Collections.IEnumerable GetChildren(TreePath treePath)
+        internal override void PopulateTree(TreeView tree)
         {
-            if (treePath.IsEmpty())
+            _boundTree = tree;
+            tree.BeginUpdate();
+            tree.Nodes.Clear();
+            foreach (var layer in _map.MapLayer)
             {
-                foreach (var layer in _map.MapLayer)
-                {
-                    yield return new LayerItem(layer);
-                }
+                var item = new LayerItem(layer);
+                tree.Nodes.Add(new TreeNode(item.Text) { Tag = item });
             }
-            else
-            {
-                yield break;
-            }
-        }
-
-        public override bool IsLeaf(TreePath treePath)
-        {
-            return !treePath.IsEmpty();
+            tree.EndUpdate();
         }
     }
 
@@ -204,59 +153,43 @@ namespace Maestro.Editors.MapDefinition
     {
         private IMapDefinition _map;
 
-        public GroupedLayerModel(IMapDefinition map)
+        public GroupedLayerModel(IMapDefinition map) { _map = map; }
+
+        internal override void PopulateTree(TreeView tree)
         {
-            _map = map;
+            _boundTree = tree;
+            tree.BeginUpdate();
+            tree.Nodes.Clear();
+            foreach (var layer in _map.GetLayersWithoutGroups())
+            {
+                var item = new LayerItem(layer);
+                tree.Nodes.Add(new TreeNode(item.Text) { Tag = item });
+            }
+            foreach (var group in _map.MapLayerGroup.Where(g => string.IsNullOrEmpty(g.Group)))
+            {
+                var grpItem = new GroupItem(group);
+                var grpNode = new TreeNode(grpItem.Text) { Tag = grpItem };
+                PopulateGroupNode(grpNode, group.Name);
+                tree.Nodes.Add(grpNode);
+            }
+            tree.ExpandAll();
+            tree.EndUpdate();
         }
 
-        public override System.Collections.IEnumerable GetChildren(TreePath treePath)
+        private void PopulateGroupNode(TreeNode parentNode, string groupName)
         {
-            if (treePath.IsEmpty())
+            foreach (var layer in _map.GetLayersForGroup(groupName))
             {
-                foreach (var layer in _map.GetLayersWithoutGroups())
-                {
-                    yield return new LayerItem(layer);
-                }
-                foreach (var group in _map.MapLayerGroup)
-                {
-                    if (string.IsNullOrEmpty(group.Group))
-                        yield return new GroupItem(group);
-                }
+                var item = new LayerItem(layer);
+                parentNode.Nodes.Add(new TreeNode(item.Text) { Tag = item });
             }
-            else
+            foreach (var subGroup in _map.MapLayerGroup.Where(g => g.Group == groupName))
             {
-                var gitem = treePath.LastNode as GroupItem;
-                if (gitem != null)
-                {
-                    var group = gitem.Tag;
-                    foreach (var l in _map.GetLayersForGroup(group.Name))
-                    {
-                        yield return new LayerItem(l);
-                    }
-                    foreach (var g in _map.MapLayerGroup)
-                    {
-                        if (g.Group == group.Name)
-                            yield return new GroupItem(g);
-                    }
-                }
-                else
-                {
-                    yield break;
-                }
+                var grpItem = new GroupItem(subGroup);
+                var grpNode = new TreeNode(grpItem.Text) { Tag = grpItem };
+                PopulateGroupNode(grpNode, subGroup.Name);
+                parentNode.Nodes.Add(grpNode);
             }
-        }
-
-        public override bool IsLeaf(TreePath treePath)
-        {
-            var layer = treePath.LastNode as LayerItem;
-            var group = treePath.LastNode as GroupItem;
-
-            if (layer != null)
-                return true;
-            else if (group != null)
-                return false;
-
-            throw new ApplicationException();
         }
     }
 
@@ -264,51 +197,40 @@ namespace Maestro.Editors.MapDefinition
     {
         private ITileSetAbstract _tileSet;
 
-        public TiledLayerModel(ITileSetAbstract tileSet)
-        {
-            _tileSet = tileSet;
-        }
-
-        public override System.Collections.IEnumerable GetChildren(TreePath treePath)
-        {
-            if (treePath.IsEmpty())
-            {
-                if (_tileSet != null)
-                {
-                    if (_tileSet.SupportsCustomFiniteDisplayScalesUnconditionally)
-                        yield return new ScaleItem(Strings.FiniteDisplayScales, new List<double>(_tileSet.FiniteDisplayScale));
-                    foreach (var grp in _tileSet.BaseMapLayerGroups)
-                    {
-                        yield return new BaseLayerGroupItem(grp);
-                    }
-                }
-            }
-            else
-            {
-                var grp = treePath.LastNode as BaseLayerGroupItem;
-                if (grp != null)
-                {
-                    if (_tileSet != null)
-                    {
-                        foreach (var layer in _tileSet.GetLayersForGroup(grp.Tag.Name))
-                        {
-                            yield return new BaseLayerItem(layer, grp.Tag);
-                        }
-                    }
-                }
-            }
-        }
-
-        public override bool IsLeaf(TreePath treePath)
-        {
-            var grp = treePath.LastNode as BaseLayerGroupItem;
-            return grp == null;
-        }
+        public TiledLayerModel(ITileSetAbstract tileSet) { _tileSet = tileSet; }
 
         internal void Invalidate(ITileSetAbstract tileSet)
         {
             _tileSet = tileSet;
             base.Invalidate();
+        }
+
+        internal override void PopulateTree(TreeView tree)
+        {
+            _boundTree = tree;
+            tree.BeginUpdate();
+            tree.Nodes.Clear();
+            if (_tileSet != null)
+            {
+                if (_tileSet.SupportsCustomFiniteDisplayScalesUnconditionally)
+                {
+                    var si = new ScaleItem(Strings.FiniteDisplayScales, new List<double>(_tileSet.FiniteDisplayScale));
+                    tree.Nodes.Add(new TreeNode(si.Text) { Tag = si });
+                }
+                foreach (var grp in _tileSet.BaseMapLayerGroups)
+                {
+                    var grpItem = new BaseLayerGroupItem(grp);
+                    var grpNode = new TreeNode(grpItem.Text) { Tag = grpItem };
+                    foreach (var layer in _tileSet.GetLayersForGroup(grp.Name))
+                    {
+                        var layerItem = new BaseLayerItem(layer, grp);
+                        grpNode.Nodes.Add(new TreeNode(layerItem.Text) { Tag = layerItem });
+                    }
+                    tree.Nodes.Add(grpNode);
+                }
+            }
+            tree.ExpandAll();
+            tree.EndUpdate();
         }
     }
 }

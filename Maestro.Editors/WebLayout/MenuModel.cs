@@ -20,12 +20,12 @@
 
 #endregion Disclaimer / License
 
-using Aga.Controls.Tree;
 using OSGeo.MapGuide.ObjectModels.WebLayout;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Maestro.Editors.WebLayout
 {
@@ -40,10 +40,7 @@ namespace Maestro.Editors.WebLayout
 
     internal abstract class ItemBase<T> : ItemBase where T : IUIItem
     {
-        protected ItemBase(T item)
-        {
-            this.Tag = item;
-        }
+        protected ItemBase(T item) { this.Tag = item; }
 
         public T Tag { get; }
 
@@ -52,13 +49,9 @@ namespace Maestro.Editors.WebLayout
 
     internal class CommandItem : ItemBase<ICommandItem>
     {
-        public CommandItem(ICommandItem item, Image icon)
-            : base(item)
+        public CommandItem(ICommandItem item, Image icon) : base(item)
         {
-            if (icon == null)
-                _icon = Properties.Resources.question;
-            else
-                _icon = icon;
+            _icon = icon ?? Properties.Resources.question;
         }
 
         public override string Label => this.Tag.Command;
@@ -70,9 +63,7 @@ namespace Maestro.Editors.WebLayout
 
     internal class SeparatorItem : ItemBase<ISeparatorItem>
     {
-        public SeparatorItem(ISeparatorItem sep)
-            : base(sep)
-        { }
+        public SeparatorItem(ISeparatorItem sep) : base(sep) { }
 
         public override string Label => this.Tag.Function.ToString();
 
@@ -81,9 +72,7 @@ namespace Maestro.Editors.WebLayout
 
     internal class FlyoutItem : ItemBase<IFlyoutItem>
     {
-        public FlyoutItem(IFlyoutItem fly)
-            : base(fly)
-        { }
+        public FlyoutItem(IFlyoutItem fly) : base(fly) { }
 
         public override string Label => this.Tag.Label;
 
@@ -92,10 +81,15 @@ namespace Maestro.Editors.WebLayout
         public IEnumerable<IUIItem> SubItem => this.Tag.Items;
     }
 
-    internal class MenuTreeModel : ITreeModel
+    /// <summary>
+    /// Replaces the former Aga.Controls.Tree ITreeModel-based MenuTreeModel.
+    /// Directly populates a standard WinForms TreeView.
+    /// </summary>
+    internal class MenuTreeModel
     {
-        private IMenu _menu;
-        private IWebLayout _wl;
+        private readonly IMenu _menu;
+        private readonly IWebLayout _wl;
+        private TreeView _boundTree;
 
         public MenuTreeModel(IMenu menu, IWebLayout wl)
         {
@@ -103,64 +97,67 @@ namespace Maestro.Editors.WebLayout
             _wl = wl;
         }
 
-        public System.Collections.IEnumerable GetChildren(TreePath treePath)
+        private TreeNode MakeNode(ItemBase item) => new TreeNode(item.Label) { Tag = item };
+
+        private void PopulateFlyoutNode(TreeNode parentNode, IEnumerable<IUIItem> items)
         {
-            if (treePath.IsEmpty())
+            foreach (var item in items)
             {
-                foreach (var item in _menu.Items)
+                if (item.Function == UIItemFunctionType.Command)
                 {
-                    if (item.Function == UIItemFunctionType.Command)
-                    {
-                        var ci = (ICommandItem)item;
-                        var cmd = _wl.GetCommandByName(ci.Command);
-                        Debug.Assert(cmd != null);
-
-                        yield return new CommandItem(ci, CommandIconCache.GetStandardCommandIcon(cmd.ImageURL));
-                    }
-                    else if (item.Function == UIItemFunctionType.Flyout)
-                        yield return new FlyoutItem((IFlyoutItem)item);
-                    else
-                        yield return new SeparatorItem((ISeparatorItem)item);
+                    var ci = (ICommandItem)item;
+                    var cmd = _wl.GetCommandByName(ci.Command);
+                    Debug.Assert(cmd != null);
+                    parentNode.Nodes.Add(MakeNode(new CommandItem(ci, CommandIconCache.GetStandardCommandIcon(cmd.ImageURL))));
                 }
-            }
-            else
-            {
-                var flyout = treePath.LastNode as FlyoutItem;
-                if (flyout != null)
+                else if (item.Function == UIItemFunctionType.Flyout)
                 {
-                    foreach (var item in flyout.SubItem)
-                    {
-                        if (item.Function == UIItemFunctionType.Command)
-                        {
-                            var ci = (ICommandItem)item;
-                            var cmd = _wl.GetCommandByName(ci.Command);
-                            Debug.Assert(cmd != null);
-
-                            yield return new CommandItem(ci, CommandIconCache.GetStandardCommandIcon(cmd.ImageURL));
-                        }
-                        else if (item.Function == UIItemFunctionType.Flyout)
-                            yield return new FlyoutItem((IFlyoutItem)item);
-                        else
-                            yield return new SeparatorItem((ISeparatorItem)item);
-                    }
+                    var flyItem = new FlyoutItem((IFlyoutItem)item);
+                    var flyNode = MakeNode(flyItem);
+                    PopulateFlyoutNode(flyNode, flyItem.SubItem);
+                    parentNode.Nodes.Add(flyNode);
                 }
                 else
                 {
-                    yield break;
+                    parentNode.Nodes.Add(MakeNode(new SeparatorItem((ISeparatorItem)item)));
                 }
             }
         }
 
-        public bool IsLeaf(TreePath treePath) => (treePath.LastNode as FlyoutItem) == null;
+        internal void PopulateTree(TreeView tree)
+        {
+            _boundTree = tree;
+            tree.BeginUpdate();
+            tree.Nodes.Clear();
+            foreach (var item in _menu.Items)
+            {
+                if (item.Function == UIItemFunctionType.Command)
+                {
+                    var ci = (ICommandItem)item;
+                    var cmd = _wl.GetCommandByName(ci.Command);
+                    Debug.Assert(cmd != null);
+                    tree.Nodes.Add(MakeNode(new CommandItem(ci, CommandIconCache.GetStandardCommandIcon(cmd.ImageURL))));
+                }
+                else if (item.Function == UIItemFunctionType.Flyout)
+                {
+                    var flyItem = new FlyoutItem((IFlyoutItem)item);
+                    var flyNode = MakeNode(flyItem);
+                    PopulateFlyoutNode(flyNode, flyItem.SubItem);
+                    tree.Nodes.Add(flyNode);
+                }
+                else
+                {
+                    tree.Nodes.Add(MakeNode(new SeparatorItem((ISeparatorItem)item)));
+                }
+            }
+            tree.ExpandAll();
+            tree.EndUpdate();
+        }
 
-        internal void Refresh() => this.StructureChanged?.Invoke(this, new TreePathEventArgs(TreePath.Empty));
-
-        public event EventHandler<TreeModelEventArgs> NodesChanged;
-
-        public event EventHandler<TreeModelEventArgs> NodesInserted;
-
-        public event EventHandler<TreeModelEventArgs> NodesRemoved;
-
-        public event EventHandler<TreePathEventArgs> StructureChanged;
+        internal void Refresh()
+        {
+            if (_boundTree != null)
+                PopulateTree(_boundTree);
+        }
     }
 }

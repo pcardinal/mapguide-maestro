@@ -1,4 +1,4 @@
-﻿namespace Maestro.Editors.WebLayout
+namespace Maestro.Editors.WebLayout
 {
     partial class MenuEditorCtrl
     {
@@ -40,9 +40,9 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btnMoveUp = new System.Windows.Forms.ToolStripButton();
             this.btnMoveDown = new System.Windows.Forms.ToolStripButton();
-            this.trvMenuItems = new Aga.Controls.Tree.TreeViewAdv();
-            this.nodeIcon1 = new Aga.Controls.Tree.NodeControls.NodeIcon();
-            this.nodeTextBox1 = new Aga.Controls.Tree.NodeControls.NodeTextBox();
+            this.trvMenuItems = new System.Windows.Forms.TreeView();
+            this.nodeIcon1 = new System.Windows.Forms.Label();
+            this.nodeTextBox1 = new System.Windows.Forms.Label();
             this.toolStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,35 +132,16 @@
             // 
             this.trvMenuItems.AllowDrop = true;
             this.trvMenuItems.BackColor = System.Drawing.SystemColors.Window;
-            this.trvMenuItems.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.trvMenuItems.DefaultToolTipProvider = null;
-            resources.ApplyResources(this.trvMenuItems, "trvMenuItems");
-            this.trvMenuItems.DragDropMarkColor = System.Drawing.Color.Black;
-            this.trvMenuItems.LineColor = System.Drawing.SystemColors.ControlDark;
-            this.trvMenuItems.Model = null;
-            this.trvMenuItems.Name = "trvMenuItems";
-            this.trvMenuItems.NodeControls.Add(this.nodeIcon1);
-            this.trvMenuItems.NodeControls.Add(this.nodeTextBox1);
-            this.trvMenuItems.SelectedNode = null;
-            this.trvMenuItems.SelectionChanged += new System.EventHandler(this.trvMenuItems_SelectionChanged);
+            this.trvMenuItems.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;            resources.ApplyResources(this.trvMenuItems, "trvMenuItems");            this.trvMenuItems.Name = "trvMenuItems";
+            this.trvMenuItems.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.trvMenuItems_AfterSelect);
             this.trvMenuItems.DragOver += new System.Windows.Forms.DragEventHandler(this.trvMenuItems_DragOver);
             this.trvMenuItems.DragDrop += new System.Windows.Forms.DragEventHandler(this.trvMenuItems_DragDrop);
             this.trvMenuItems.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.trvMenuItems_ItemDrag);
             // 
             // nodeIcon1
-            // 
-            this.nodeIcon1.DataPropertyName = "Icon";
-            this.nodeIcon1.LeftMargin = 1;
-            this.nodeIcon1.ParentColumn = null;
-            this.nodeIcon1.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
-            // 
+            //            // 
             // nodeTextBox1
-            // 
-            this.nodeTextBox1.DataPropertyName = "Label";
-            this.nodeTextBox1.IncrementalSearchEnabled = true;
-            this.nodeTextBox1.LeftMargin = 3;
-            this.nodeTextBox1.ParentColumn = null;
-            // 
+            //            // 
             // MenuEditorCtrl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -187,8 +168,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton btnMoveUp;
         private System.Windows.Forms.ToolStripButton btnMoveDown;
-        private Aga.Controls.Tree.TreeViewAdv trvMenuItems;
-        private Aga.Controls.Tree.NodeControls.NodeIcon nodeIcon1;
-        private Aga.Controls.Tree.NodeControls.NodeTextBox nodeTextBox1;
+        private System.Windows.Forms.TreeView trvMenuItems;
+        private System.Windows.Forms.Label nodeIcon1;
+        private System.Windows.Forms.Label nodeTextBox1;
     }
 }
+

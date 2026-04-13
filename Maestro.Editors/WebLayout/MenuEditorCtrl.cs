@@ -20,7 +20,6 @@
 
 #endregion Disclaimer / License
 
-using Aga.Controls.Tree;
 using OSGeo.MapGuide.MaestroAPI;
 using OSGeo.MapGuide.ObjectModels.WebLayout;
 using System;
@@ -40,10 +39,19 @@ namespace Maestro.Editors.WebLayout
             InitializeComponent();
         }
 
-        public ITreeModel Model
+        private MenuTreeModel _model;
+
+        // Replaces the former ITreeModel Model property (TreeViewAdv-specific).
+        // Setting this now calls PopulateTree on the embedded standard TreeView.
+        public MenuTreeModel Model
         {
-            get { return trvMenuItems.Model; }
-            set { trvMenuItems.Model = value; }
+            get { return _model; }
+            set
+            {
+                _model = value;
+                if (_model != null)
+                    _model.PopulateTree(trvMenuItems);
+            }
         }
 
         public override void Bind(IEditorService service) => service.RegisterCustomNotifier(this);
@@ -52,14 +60,12 @@ namespace Maestro.Editors.WebLayout
         {
             _wl.CommandSet.CustomCommandAdded -= OnCustomCommandAdded;
             _wl.CommandSet.CustomCommandRemoved -= OnCustomCommandRemoved;
-
             base.UnsubscribeEventHandlers();
         }
 
         private IEditorService _edsvc;
         private IWebLayout _wl;
         private IMenu _rootMenu;
-        private MenuTreeModel _model;
 
         public void Bind(IEditorService service, IWebLayout wl, IMenu menu)
         {
@@ -70,7 +76,6 @@ namespace Maestro.Editors.WebLayout
             _wl.CommandSet.CustomCommandRemoved += OnCustomCommandRemoved;
             _rootMenu = menu;
             this.Model = _model = new MenuTreeModel(menu, wl);
-
             InitBuiltinCommandMenu();
             InitCustomCommandMenu();
         }
@@ -85,8 +90,6 @@ namespace Maestro.Editors.WebLayout
         private void OnCustomCommandRemoved(object sender, CommandEventArgs args)
         {
             RemoveCustomCommandEntry(mnuCustom, args.Command);
-
-            //Might have invalidated (and removed) some menu items, so refresh
             RefreshModel();
         }
 
@@ -95,9 +98,7 @@ namespace Maestro.Editors.WebLayout
         private void InitCustomCommandMenu()
         {
             foreach (var cmd in _wl.GetCustomCommands())
-            {
                 AddCustomCommandEntry(mnuCustom, cmd);
-            }
         }
 
         private void InitBuiltinCommandMenu()
@@ -108,7 +109,6 @@ namespace Maestro.Editors.WebLayout
                 mi.Tag = type;
                 mnuBuiltin.DropDown.Items.Add(mi);
             }
-            //Need to make sure MapTip is available for v2.4 onwards
             if (_wl.ResourceVersion >= new Version(2, 4, 0))
             {
                 ToolStripMenuItem mi = new ToolStripMenuItem(BasicCommandActionType.MapTip.ToString(), null, new EventHandler(OnAddBuiltInCommand));
@@ -122,16 +122,11 @@ namespace Maestro.Editors.WebLayout
             ToolStripItem find = null;
             foreach (ToolStripItem ti in tsi.DropDown.Items)
             {
-                if (ti.Tag == cmd)
-                {
-                    find = ti;
-                    break;
-                }
+                if (ti.Tag == cmd) { find = ti; break; }
             }
             if (find != null)
             {
                 tsi.DropDown.Items.Remove(find);
-                //Unreg property listener
                 if (_customCommandListeners.ContainsKey(find))
                 {
                     var handler = _customCommandListeners[find];
@@ -145,18 +140,9 @@ namespace Maestro.Editors.WebLayout
 
         private void AddCustomCommandEntry(ToolStripMenuItem tsi, ICommand cmd)
         {
-            var icon = CommandIconCache.GetStandardCommandIcon(cmd.ImageURL);
-            if (icon == null)
-                icon = Properties.Resources.question;
-
+            var icon = CommandIconCache.GetStandardCommandIcon(cmd.ImageURL) ?? Properties.Resources.question;
             ToolStripMenuItem mi = new ToolStripMenuItem(cmd.Name, icon, new EventHandler(OnAddCustomCommand));
-            mi.Text = cmd.Name;
-            //Reg property listener
-            PropertyChangedEventHandler handler = (sender, e) =>
-            {
-                if (e.PropertyName == "Name")
-                    mi.Text = cmd.Name;
-            };
+            PropertyChangedEventHandler handler = (sender, e) => { if (e.PropertyName == "Name") mi.Text = cmd.Name; };
             _customCommandListeners[mi] = handler;
             cmd.PropertyChanged += WeakEventHandler.Wrap(handler, (eh) => cmd.PropertyChanged -= eh);
             mi.Tag = cmd;
@@ -166,31 +152,18 @@ namespace Maestro.Editors.WebLayout
         private void OnAddBuiltInCommand(object sender, EventArgs e)
         {
             var tsi = sender as ToolStripItem;
-            if (tsi != null && tsi.Tag != null)
+            if (tsi?.Tag != null)
             {
                 int cmdAction = Convert.ToInt32(tsi.Tag);
-                //Append to end of model of active treeview
-                //var cmd = _wl.GetCommandByName(cmdName);
                 var cmd = _wl.CommandSet.Commands.OfType<IBasicCommand>().FirstOrDefault(c => cmdAction == (int)c.Action);
                 if (cmd != null)
                 {
                     var ci = _wl.CreateCommandItem(cmd.Name);
-                    if (trvMenuItems.SelectedNode != null)
-                    {
-                        var fly = trvMenuItems.SelectedNode.Tag as FlyoutItem;
-                        if (fly != null)
-                        {
-                            fly.Tag.AddItem(ci);
-                        }
-                        else
-                        {
-                            _rootMenu.AddItem(ci);
-                        }
-                    }
+                    var fly = trvMenuItems.SelectedNode?.Tag as FlyoutItem;
+                    if (fly != null)
+                        fly.Tag.AddItem(ci);
                     else
-                    {
                         _rootMenu.AddItem(ci);
-                    }
                     RefreshModel();
                 }
             }
@@ -199,38 +172,20 @@ namespace Maestro.Editors.WebLayout
         private void OnAddCustomCommand(object sender, EventArgs e)
         {
             var tsi = sender as ToolStripItem;
-            if (tsi != null && tsi.Tag != null)
+            if (tsi?.Tag != null)
             {
                 var cmd = (ICommand)tsi.Tag;
-
                 var ci = _wl.CreateCommandItem(cmd.Name);
-                //Reg property listener
                 PropertyChangedEventHandler handler = (s, evt) =>
                 {
-                    if (evt.PropertyName == "Name")
-                    {
-                        ci.Command = cmd.Name;
-                        trvMenuItems.Refresh();
-                    }
+                    if (evt.PropertyName == "Name") { ci.Command = cmd.Name; trvMenuItems.Refresh(); }
                 };
                 cmd.PropertyChanged += WeakEventHandler.Wrap(handler, (eh) => cmd.PropertyChanged -= eh);
-
-                if (trvMenuItems.SelectedNode != null)
-                {
-                    var fly = trvMenuItems.SelectedNode.Tag as FlyoutItem;
-                    if (fly != null)
-                    {
-                        fly.Tag.AddItem(ci);
-                    }
-                    else
-                    {
-                        _rootMenu.AddItem(ci);
-                    }
-                }
+                var fly = trvMenuItems.SelectedNode?.Tag as FlyoutItem;
+                if (fly != null)
+                    fly.Tag.AddItem(ci);
                 else
-                {
                     _rootMenu.AddItem(ci);
-                }
                 RefreshModel();
             }
         }
@@ -238,24 +193,11 @@ namespace Maestro.Editors.WebLayout
         private void addSeparator_Click(object sender, EventArgs e)
         {
             var sep = _wl.CreateSeparator();
-            if (trvMenuItems.SelectedNode != null)
-            {
-                var obj = trvMenuItems.SelectedNode.Tag;
-
-                var flyout = obj as FlyoutItem;
-                if (flyout != null)
-                {
-                    flyout.Tag.AddItem(sep);
-                }
-                else
-                {
-                    _rootMenu.AddItem(sep);
-                }
-            }
+            var fly = trvMenuItems.SelectedNode?.Tag as FlyoutItem;
+            if (fly != null)
+                fly.Tag.AddItem(sep);
             else
-            {
                 _rootMenu.AddItem(sep);
-            }
             RefreshModel();
         }
 
@@ -267,44 +209,24 @@ namespace Maestro.Editors.WebLayout
 
         private void addFlyout_Click(object sender, EventArgs e)
         {
-            var fly = _wl.CreateFlyout(
-                Strings.NewFlyout,
-                Strings.NewFlyout,
-                Strings.NewFlyout,
-                null, null);
-            if (trvMenuItems.SelectedNode != null)
-            {
-                var obj = trvMenuItems.SelectedNode.Tag;
-
-                var flyout = obj as FlyoutItem;
-                if (flyout != null)
-                {
-                    flyout.Tag.AddItem(fly);
-                }
-                else
-                {
-                    _rootMenu.AddItem(fly);
-                }
-                RefreshModel();
-            }
+            var fly = _wl.CreateFlyout(Strings.NewFlyout, Strings.NewFlyout, Strings.NewFlyout, null, null);
+            var parentFly = trvMenuItems.SelectedNode?.Tag as FlyoutItem;
+            if (parentFly != null)
+                parentFly.Tag.AddItem(fly);
             else
-            {
                 _rootMenu.AddItem(fly);
-                RefreshModel();
-            }
+            RefreshModel();
         }
 
-        private void trvMenuItems_SelectionChanged(object sender, EventArgs e) => EvaluateCommandState();
+        private void trvMenuItems_AfterSelect(object sender, TreeViewEventArgs e) => EvaluateCommandState();
 
         private void EvaluateCommandState()
         {
-            btnDelete.Enabled = btnMoveDown.Enabled = btnMoveUp.Enabled =
-                (trvMenuItems.SelectedNode != null || (trvMenuItems.SelectedNodes != null && trvMenuItems.SelectedNodes.Count > 0));
+            btnDelete.Enabled = btnMoveDown.Enabled = btnMoveUp.Enabled = (trvMenuItems.SelectedNode != null);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            int removed = 0;
             if (trvMenuItems.SelectedNode != null)
             {
                 var it = trvMenuItems.SelectedNode.Tag as ItemBase;
@@ -312,135 +234,95 @@ namespace Maestro.Editors.WebLayout
                 {
                     var menu = it.Item.Parent ?? _rootMenu;
                     menu.RemoveItem(it.Item);
-                    removed++;
+                    RefreshModel();
+                    EvaluateCommandState();
                 }
-            }
-            else if (trvMenuItems.SelectedNodes != null)
-            {
-                foreach (var node in trvMenuItems.SelectedNodes)
-                {
-                    var it = node.Tag as ItemBase;
-                    if (it != null)
-                    {
-                        var menu = it.Item.Parent ?? _rootMenu;
-                        menu.RemoveItem(it.Item);
-                        removed++;
-                    }
-                }
-            }
-
-            if (removed > 0)
-            {
-                RefreshModel();
-                EvaluateCommandState();
             }
         }
 
         private void btnMoveUp_Click(object sender, EventArgs e)
         {
-            if (trvMenuItems.SelectedNode != null)
+            var it = trvMenuItems.SelectedNode?.Tag as ItemBase;
+            if (it != null)
             {
-                var it = trvMenuItems.SelectedNode.Tag as ItemBase;
-                if (it != null)
+                var parent = it.Item.Parent ?? _rootMenu;
+                if (parent.MoveUp(it.Item))
                 {
-                    var parent = it.Item.Parent ?? _rootMenu;
-                    if (parent.MoveUp(it.Item))
-                    {
-                        RefreshModel();
-                        RestoreItemSelection(it);
-                        EvaluateCommandState();
-                    }
+                    RefreshModel();
+                    RestoreItemSelection(it);
+                    EvaluateCommandState();
                 }
             }
         }
 
         private void btnMoveDown_Click(object sender, EventArgs e)
         {
-            if (trvMenuItems.SelectedNode != null)
+            var it = trvMenuItems.SelectedNode?.Tag as ItemBase;
+            if (it != null)
             {
-                var it = trvMenuItems.SelectedNode.Tag as ItemBase;
-                if (it != null)
+                var parent = it.Item.Parent ?? _rootMenu;
+                if (parent.MoveDown(it.Item))
                 {
-                    var parent = it.Item.Parent ?? _rootMenu;
-                    if (parent.MoveDown(it.Item))
-                    {
-                        RefreshModel();
-                        RestoreItemSelection(it);
-                        EvaluateCommandState();
-                    }
+                    RefreshModel();
+                    RestoreItemSelection(it);
+                    EvaluateCommandState();
                 }
             }
         }
 
         private void RestoreItemSelection(ItemBase item)
         {
-            TreeNodeAdv selectedNode = null;
-            foreach (var node in trvMenuItems.AllNodes)
+            var found = FindNodeByItem(trvMenuItems.Nodes, item.Item);
+            if (found != null)
+                trvMenuItems.SelectedNode = found;
+        }
+
+        private static TreeNode FindNodeByItem(TreeNodeCollection nodes, IUIItem target)
+        {
+            foreach (TreeNode node in nodes)
             {
                 var it = node.Tag as ItemBase;
-                if (it != null)
-                {
-                    if (it.Item == item.Item)
-                    {
-                        selectedNode = node;
-                        break;
-                    }
-                }
+                if (it != null && it.Item == target)
+                    return node;
+                var found = FindNodeByItem(node.Nodes, target);
+                if (found != null) return found;
             }
-
-            if (selectedNode != null)
-                trvMenuItems.SelectedNode = selectedNode;
+            return null;
         }
 
         private void trvMenuItems_ItemDrag(object sender, ItemDragEventArgs e)
-            => trvMenuItems.DoDragDrop(((TreeNodeAdv[])e.Item)[0], DragDropEffects.All);
+            => trvMenuItems.DoDragDrop(e.Item, DragDropEffects.All);
 
         private void trvMenuItems_DragDrop(object sender, DragEventArgs e)
         {
-            var dragNode = e.Data.GetData(typeof(TreeNodeAdv)) as TreeNodeAdv;
-            if (dragNode == null)
-                return;
+            var dragNode = e.Data.GetData(typeof(TreeNode)) as TreeNode;
+            if (dragNode == null) return;
 
             var item = ((ItemBase)dragNode.Tag).Item;
-
-            //Detach from parent first
             if (item.Parent != null)
-            {
-                var m = item.Parent;
-                m.RemoveItem(item);
-            }
+                item.Parent.RemoveItem(item);
             else
-            {
                 _rootMenu.RemoveItem(item);
-            }
 
             var dropNode = trvMenuItems.GetNodeAt(trvMenuItems.PointToClient(new Point(e.X, e.Y)));
             if (dropNode != null)
             {
                 var dropItem = ((ItemBase)dropNode.Tag).Item;
-
-                //Attach to new location
                 var menu = dropItem as IMenu;
                 if (menu != null)
                 {
                     if (MessageBox.Show(Strings.QuestionAddItemToFlyout, string.Empty, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                    {
                         menu.AddItem(item);
-                    }
                     else
                     {
-                        //Add to same level as dropped item
                         var pm = dropItem.Parent ?? _rootMenu;
-                        var idx = pm.GetIndex(dropItem);
-                        pm.Insert(item, idx);
+                        pm.Insert(item, pm.GetIndex(dropItem));
                     }
                 }
                 else
                 {
-                    //Add to same level as dropped item
                     var pm = dropItem.Parent ?? _rootMenu;
-                    var idx = pm.GetIndex(dropItem);
-                    pm.Insert(item, idx);
+                    pm.Insert(item, pm.GetIndex(dropItem));
                 }
             }
             else
@@ -452,14 +334,7 @@ namespace Maestro.Editors.WebLayout
 
         private void trvMenuItems_DragOver(object sender, DragEventArgs e)
         {
-            var node = e.Data.GetData(typeof(TreeNodeAdv)) as TreeNodeAdv;
-            if (node == null)
-            {
-                e.Effect = DragDropEffects.None;
-                return;
-            }
-
-            e.Effect = DragDropEffects.Move;
+            e.Effect = e.Data.GetData(typeof(TreeNode)) != null ? DragDropEffects.Move : DragDropEffects.None;
         }
     }
 }

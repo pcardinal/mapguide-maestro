@@ -1,4 +1,4 @@
-﻿#region Disclaimer / License
+#region Disclaimer / License
 
 // Copyright (C) 2010, Jackie Ng
 // https://github.com/jumpinjackie/mapguide-maestro
@@ -20,7 +20,6 @@
 
 #endregion Disclaimer / License
 
-using Aga.Controls.Tree;
 using Maestro.Editors.Common;
 using Maestro.Editors.Generic;
 using OSGeo.MapGuide.MaestroAPI;
@@ -187,9 +186,9 @@ namespace Maestro.Editors.MapDefinition
 
                 _map.PropertyChanged += WeakEventHandler.Wrap<PropertyChangedEventHandler>(OnMapPropertyChanged, (eh) => _map.PropertyChanged -= eh);
 
-                trvLayerDrawingOrder.Model = _doLayerModel = new DrawOrderLayerModel(_map);
-                trvLayersGroup.Model = _grpLayerModel = new GroupedLayerModel(_map);
-                
+                _doLayerModel = new DrawOrderLayerModel(_map); _doLayerModel.PopulateTree(trvLayerDrawingOrder);
+                _grpLayerModel = new GroupedLayerModel(_map); _grpLayerModel.PopulateTree(trvLayersGroup);
+
             }
             finally
             {
@@ -205,7 +204,7 @@ namespace Maestro.Editors.MapDefinition
                 txtTileSet.Text = mdf3.TileSetDefinitionID;
         }
 
-        private void InitInlineModel() => trvBaseLayers.Model = _tiledLayerModel = new TiledLayerModel(_map.BaseMap);
+        private void InitInlineModel() { _tiledLayerModel = new TiledLayerModel(_map.BaseMap); _tiledLayerModel.PopulateTree(trvBaseLayers); }
 
         private void OnMapPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -242,16 +241,16 @@ namespace Maestro.Editors.MapDefinition
 
         private void RefreshModels()
         {
-            _doLayerModel?.Invalidate();
-            _grpLayerModel?.Invalidate();
-            _tiledLayerModel?.Invalidate();
+            _doLayerModel?.PopulateTree(trvLayerDrawingOrder);
+            _grpLayerModel?.PopulateTree(trvLayersGroup);
+            _tiledLayerModel?.PopulateTree(trvBaseLayers);
         }
 
         public event OpenLayerEventHandler RequestLayerOpen;
 
         private void trvLayersGroup_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            TreeNodeAdv node = trvLayersGroup.GetNodeAt(new Point(e.X, e.Y));
+            TreeNode node = trvLayersGroup.GetNodeAt(e.X, e.Y);
             if (node != null)
             {
                 var layer = node.Tag as LayerItem;
@@ -264,7 +263,7 @@ namespace Maestro.Editors.MapDefinition
 
         private void trvLayerDrawingOrder_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            TreeNodeAdv node = trvLayerDrawingOrder.GetNodeAt(new Point(e.X, e.Y));
+            TreeNode node = trvLayerDrawingOrder.GetNodeAt(e.X, e.Y);
             if (node != null)
             {
                 var layer = node.Tag as LayerItem;
@@ -482,7 +481,7 @@ namespace Maestro.Editors.MapDefinition
 
         #region Control Factories
 
-        private void AddMultiControl(System.Collections.ObjectModel.ReadOnlyCollection<TreeNodeAdv> nodes)
+        private void AddMultiControl(System.Collections.ObjectModel.ReadOnlyCollection<TreeNode> nodes)
         {
             propertiesPanel.Controls.Clear();
 
@@ -605,7 +604,7 @@ namespace Maestro.Editors.MapDefinition
             AddLayerControl(layer);
         }
 
-        private static bool AllLayers(System.Collections.ObjectModel.ReadOnlyCollection<TreeNodeAdv> nodes)
+        private static bool AllLayers(System.Collections.ObjectModel.ReadOnlyCollection<TreeNode> nodes)
         {
             foreach (var node in nodes)
             {
@@ -616,7 +615,7 @@ namespace Maestro.Editors.MapDefinition
             return true;
         }
 
-        private static bool AllBaseLayers(System.Collections.ObjectModel.ReadOnlyCollection<TreeNodeAdv> nodes)
+        private static bool AllBaseLayers(System.Collections.ObjectModel.ReadOnlyCollection<TreeNode> nodes)
         {
             foreach (var node in nodes)
             {
@@ -627,7 +626,7 @@ namespace Maestro.Editors.MapDefinition
             return true;
         }
 
-        private static bool AllGroups(System.Collections.ObjectModel.ReadOnlyCollection<TreeNodeAdv> nodes)
+        private static bool AllGroups(System.Collections.ObjectModel.ReadOnlyCollection<TreeNode> nodes)
         {
             foreach (var node in nodes)
             {
@@ -638,7 +637,7 @@ namespace Maestro.Editors.MapDefinition
             return true;
         }
 
-        private static bool AllBaseGroups(System.Collections.ObjectModel.ReadOnlyCollection<TreeNodeAdv> nodes)
+        private static bool AllBaseGroups(System.Collections.ObjectModel.ReadOnlyCollection<TreeNode> nodes)
         {
             foreach (var node in nodes)
             {
@@ -649,7 +648,7 @@ namespace Maestro.Editors.MapDefinition
             return true;
         }
 
-        private void OnMultipleItemsSelected(System.Collections.ObjectModel.ReadOnlyCollection<TreeNodeAdv> nodes)
+        private void OnMultipleItemsSelected(System.Collections.ObjectModel.ReadOnlyCollection<TreeNode> nodes)
         {
             bool bAllLayers = AllLayers(nodes);
             bool bAllGroups = AllGroups(nodes);
@@ -949,13 +948,26 @@ namespace Maestro.Editors.MapDefinition
             }
         }
 
-        private static TaggedType RestoreSelection<TaggedType>(TreeViewAdv tree, Predicate<TaggedType> predicate) where TaggedType : class
+        private static IEnumerable<TreeNode> GetAllNodes(System.Windows.Forms.TreeView tree)
+            => GetAllNodes(tree.Nodes);
+
+        private static IEnumerable<TreeNode> GetAllNodes(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                yield return node;
+                foreach (var child in GetAllNodes(node.Nodes))
+                    yield return child;
+            }
+        }
+
+        private static TaggedType RestoreSelection<TaggedType>(System.Windows.Forms.TreeView tree, Predicate<TaggedType> predicate) where TaggedType : class
         {
             TaggedType ret = null;
 
             //Restore selection
-            TreeNodeAdv selectedNode = null;
-            foreach (var node in tree.AllNodes)
+            TreeNode selectedNode = null;
+            foreach (var node in GetAllNodes(tree))
             {
                 var tag = node.Tag as TaggedType;
 
@@ -972,11 +984,11 @@ namespace Maestro.Editors.MapDefinition
             return ret;
         }
 
-        private static void ExpandNode<TaggedType>(TreeViewAdv tree, Predicate<TaggedType> predicate) where TaggedType : class
+        private static void ExpandNode<TaggedType>(System.Windows.Forms.TreeView tree, Predicate<TaggedType> predicate) where TaggedType : class
         {
             //Restore selection
-            TreeNodeAdv selectedNode = null;
-            foreach (var node in tree.AllNodes)
+            TreeNode selectedNode = null;
+            foreach (var node in GetAllNodes(tree))
             {
                 var tag = node.Tag as TaggedType;
 
@@ -1116,11 +1128,9 @@ namespace Maestro.Editors.MapDefinition
         private IEnumerable<object> GetSelectedLayerGroupItems()
         {
             var result = new List<object>();
-            var nodes = trvLayersGroup.SelectedNodes;
-            if (nodes != null)
-            {
-                result.AddRange(nodes.Select(x => x.Tag));
-            }
+            var node = trvLayersGroup.SelectedNode;
+            if (node != null)
+                result.Add(node.Tag);
             return result;
         }
 
@@ -1129,11 +1139,9 @@ namespace Maestro.Editors.MapDefinition
         private IEnumerable<object> GetSelectedTiledLayerItems()
         {
             var result = new List<object>();
-            var nodes = trvBaseLayers.SelectedNodes;
-            if (nodes != null)
-            {
-                result.AddRange(nodes.Select(x => x.Tag));
-            }
+            var node = trvBaseLayers.SelectedNode;
+            if (node != null)
+                result.Add(node.Tag);
             return result;
         }
 
@@ -1165,14 +1173,14 @@ namespace Maestro.Editors.MapDefinition
                 _map.RemoveBaseLayerGroup(group.Tag, true);
             }
             propertiesPanel.Controls.Clear();
-            _tiledLayerModel.Invalidate();
+            _tiledLayerModel.PopulateTree(trvBaseLayers);
         }
 
         private void RemoveSelectedTiledLayerItem(BaseLayerGroupItem group)
         {
             _map.RemoveBaseLayerGroup(group.Tag, true);
             propertiesPanel.Controls.Clear();
-            _tiledLayerModel.Invalidate();
+            _tiledLayerModel.PopulateTree(trvBaseLayers);
         }
 
         private void btnAddBaseLayer_Click(object sender, EventArgs e)
@@ -1199,7 +1207,7 @@ namespace Maestro.Editors.MapDefinition
                         }
                     }
                     var bl = grp.AddLayer(GenerateBaseLayerName(layerId, _map.BaseMap), layerId);
-                    _tiledLayerModel.Invalidate();
+                    _tiledLayerModel.PopulateTree(trvBaseLayers);
                     RestoreBaseLayerSelection(bl);
                 }
             }
@@ -1282,7 +1290,7 @@ namespace Maestro.Editors.MapDefinition
             var grp = layer.Parent;
             grp.RemoveBaseMapLayer(layer.Tag);
             propertiesPanel.Controls.Clear();
-            _tiledLayerModel.Invalidate();
+            _tiledLayerModel.PopulateTree(trvBaseLayers);
         }
 
         private void btnMoveBaseLayerUp_Click(object sender, EventArgs e)
@@ -1293,8 +1301,7 @@ namespace Maestro.Editors.MapDefinition
                 var grp = layer.Parent;
                 grp.MoveUp(layer.Tag);
                 var node = trvBaseLayers.SelectedNode.Parent;
-                var path = trvBaseLayers.GetPath(node);
-                _tiledLayerModel.Invalidate(path);
+                _tiledLayerModel.Invalidate();
 
                 RestoreBaseLayerSelection(layer);
             }
@@ -1422,8 +1429,7 @@ namespace Maestro.Editors.MapDefinition
                 var grp = layer.Parent;
                 grp.MoveDown(layer.Tag);
                 var node = trvBaseLayers.SelectedNode.Parent;
-                var path = trvBaseLayers.GetPath(node);
-                _tiledLayerModel.Invalidate(path);
+                _tiledLayerModel.Invalidate();
 
                 RestoreBaseLayerSelection(layer);
             }
@@ -1464,7 +1470,7 @@ namespace Maestro.Editors.MapDefinition
 
         private void trvBaseLayers_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            TreeNodeAdv node = trvBaseLayers.GetNodeAt(new Point(e.X, e.Y));
+            TreeNode node = trvBaseLayers.GetNodeAt(e.X, e.Y);
             if (node != null)
             {
                 var layer = node.Tag as BaseLayerItem;
@@ -1511,7 +1517,7 @@ namespace Maestro.Editors.MapDefinition
         private void trvLayersGroup_DragDrop(object sender, DragEventArgs e)
         {
             var rids = e.Data.GetData(typeof(RepositoryHandle[])) as RepositoryHandle[];
-            var nodes = e.Data.GetData(typeof(TreeNodeAdv[])) as TreeNodeAdv[];
+            var nodes = e.Data.GetData(typeof(TreeNode[])) as TreeNode[];
             if (rids != null && rids.Length > 0)
             {
                 IMapLayerGroup parent = null;
@@ -1608,7 +1614,7 @@ namespace Maestro.Editors.MapDefinition
             }
         }
 
-        private static bool TargetIsAmongSource(TreeNodeAdv[] nodes, GroupItem target)
+        private static bool TargetIsAmongSource(TreeNode[] nodes, GroupItem target)
         {
             foreach (var n in nodes)
             {
@@ -1619,7 +1625,7 @@ namespace Maestro.Editors.MapDefinition
             return false;
         }
 
-        private bool TargetIsDescendant(TreeNodeAdv[] nodes, GroupItem target)
+        private bool TargetIsDescendant(TreeNode[] nodes, GroupItem target)
         {
             foreach (var n in nodes)
             {
@@ -1642,7 +1648,7 @@ namespace Maestro.Editors.MapDefinition
 
         private void trvLayersGroup_DragOver(object sender, DragEventArgs e)
         {
-            var data = e.Data.GetData(typeof(TreeNodeAdv[])) as TreeNodeAdv[];
+            var data = e.Data.GetData(typeof(TreeNode[])) as TreeNode[];
             if (data == null)
             {
                 HandleDragOver(e);
@@ -1720,7 +1726,7 @@ namespace Maestro.Editors.MapDefinition
             }
             else
             {
-                var data = e.Data.GetData(typeof(TreeNodeAdv[])) as TreeNodeAdv[];
+                var data = e.Data.GetData(typeof(TreeNode[])) as TreeNode[];
                 if (data != null && data.Length == 1)
                 {
                     var li = data[0].Tag as LayerItem;
@@ -1753,7 +1759,7 @@ namespace Maestro.Editors.MapDefinition
 
         private void trvLayerDrawingOrder_DragEnter(object sender, DragEventArgs e)
         {
-            var data = e.Data.GetData(typeof(TreeNodeAdv[])) as TreeNodeAdv[];
+            var data = e.Data.GetData(typeof(TreeNode[])) as TreeNode[];
             if (data == null)
             {
                 HandleDragEnter(e);
@@ -1771,7 +1777,7 @@ namespace Maestro.Editors.MapDefinition
 
         private void trvLayerDrawingOrder_DragOver(object sender, DragEventArgs e)
         {
-            var data = e.Data.GetData(typeof(TreeNodeAdv[])) as TreeNodeAdv[];
+            var data = e.Data.GetData(typeof(TreeNode[])) as TreeNode[];
             if (data == null)
             {
                 HandleDragOver(e);
@@ -1800,7 +1806,7 @@ namespace Maestro.Editors.MapDefinition
         private void trvBaseLayers_DragDrop(object sender, DragEventArgs e)
         {
             var rids = e.Data.GetData(typeof(RepositoryHandle[])) as RepositoryHandle[];
-            var data = e.Data.GetData(typeof(TreeNodeAdv[])) as TreeNodeAdv[];
+            var data = e.Data.GetData(typeof(TreeNode[])) as TreeNode[];
             if (rids != null && rids.Length > 0)
             {
                 int added = 0;
@@ -1831,7 +1837,7 @@ namespace Maestro.Editors.MapDefinition
 
                 if (added > 0)
                 {
-                    _tiledLayerModel.Invalidate();
+                    _tiledLayerModel.PopulateTree(trvBaseLayers);
                     if (focusLayer != null)
                         RestoreBaseLayerSelection(focusLayer);
                 }
@@ -1862,7 +1868,7 @@ namespace Maestro.Editors.MapDefinition
                         srcGroup.RemoveBaseMapLayer(sourceLayer);
                         targetGroup.InsertLayer(0, sourceLayer);
 
-                        _tiledLayerModel.Invalidate();
+                        _tiledLayerModel.PopulateTree(trvBaseLayers);
 
                         //Keep group expanded
                         if (tli != null)
@@ -1883,7 +1889,7 @@ namespace Maestro.Editors.MapDefinition
                                     srcGroup.RemoveBaseMapLayer(sourceLayer);
                                     srcGroup.InsertLayer(idx, sourceLayer);
 
-                                    _tiledLayerModel.Invalidate();
+                                    _tiledLayerModel.PopulateTree(trvBaseLayers);
 
                                     //Keep group expanded
                                     if (tli != null)
@@ -1895,7 +1901,7 @@ namespace Maestro.Editors.MapDefinition
                                 srcGroup.RemoveBaseMapLayer(sourceLayer);
                                 dstGroup.InsertLayer(0, targetLayer);
 
-                                _tiledLayerModel.Invalidate();
+                                _tiledLayerModel.PopulateTree(trvBaseLayers);
 
                                 //Keep group expanded
                                 if (tli != null)
@@ -1911,7 +1917,7 @@ namespace Maestro.Editors.MapDefinition
 
         private void trvBaseLayers_DragOver(object sender, DragEventArgs e)
         {
-            var data = e.Data.GetData(typeof(TreeNodeAdv[])) as TreeNodeAdv[];
+            var data = e.Data.GetData(typeof(TreeNode[])) as TreeNode[];
             if (data == null)
             {
                 HandleDragOver(e);
@@ -1952,11 +1958,11 @@ namespace Maestro.Editors.MapDefinition
             }
         }
 
-        private void trvBaseLayers_SelectionChanged(object sender, EventArgs e)
+        private void trvBaseLayers_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
-            if (trvBaseLayers.SelectedNodes.Count == 1)
+            if (trvBaseLayers.SelectedNode != null)
             {
-                TreeNodeAdv node = trvBaseLayers.SelectedNodes[0];
+                TreeNode node = trvBaseLayers.SelectedNode;
                 if (node != null)
                 {
                     var layer = node.Tag as BaseLayerItem;
@@ -1983,17 +1989,17 @@ namespace Maestro.Editors.MapDefinition
                     }
                 }
             }
-            else if (trvBaseLayers.SelectedNodes.Count > 1)
+            else if (false)
             {
-                OnMultipleItemsSelected(trvBaseLayers.SelectedNodes);
+                // multi-select not supported with standard TreeView
             }
         }
 
-        private void trvLayerDrawingOrder_SelectionChanged(object sender, EventArgs e)
+        private void trvLayerDrawingOrder_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
-            if (trvLayerDrawingOrder.SelectedNodes.Count == 1)
+            if (trvLayerDrawingOrder.SelectedNode != null)
             {
-                TreeNodeAdv node = trvLayerDrawingOrder.SelectedNodes[0];
+                TreeNode node = trvLayerDrawingOrder.SelectedNode;
                 if (node != null)
                 {
                     var layer = node.Tag as LayerItem;
@@ -2009,17 +2015,17 @@ namespace Maestro.Editors.MapDefinition
                     }
                 }
             }
-            else if (trvLayerDrawingOrder.SelectedNodes.Count > 1)
+            else if (false)
             {
-                OnMultipleItemsSelected(trvLayerDrawingOrder.SelectedNodes);
+                // multi-select not supported with standard TreeView
             }
         }
 
-        private void trvLayersGroup_SelectionChanged(object sender, EventArgs e)
+        private void trvLayersGroup_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
         {
-            if (trvLayersGroup.SelectedNodes.Count == 1)
+            if (trvLayersGroup.SelectedNode != null)
             {
-                TreeNodeAdv node = trvLayersGroup.SelectedNodes[0];
+                TreeNode node = trvLayersGroup.SelectedNode;
                 if (node != null)
                 {
                     var layer = node.Tag as LayerItem;
@@ -2041,9 +2047,9 @@ namespace Maestro.Editors.MapDefinition
                     }
                 }
             }
-            else if (trvLayersGroup.SelectedNodes.Count > 1)
+            else if (false)
             {
-                OnMultipleItemsSelected(trvLayersGroup.SelectedNodes);
+                // multi-select not supported with standard TreeView
             }
         }
 
@@ -2115,3 +2121,9 @@ namespace Maestro.Editors.MapDefinition
         }
     }
 }
+
+
+
+
+
+

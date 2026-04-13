@@ -1,4 +1,4 @@
-﻿namespace Maestro.Editors.Generic
+namespace Maestro.Editors.Generic
 {
     partial class XmlEditorCtrl
     {
@@ -45,7 +45,7 @@
             this.btnFindAndReplace = new System.Windows.Forms.ToolStripButton();
             this.btnReRead = new System.Windows.Forms.ToolStripButton();
             this.resDataCtrl = new Maestro.Editors.Generic.ResourceDataPanel();
-            this.nodeNumericUpDown1 = new Aga.Controls.Tree.NodeControls.NodeNumericUpDown();
+            this.nodeNumericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.txtXmlContent = new Maestro.Editors.Generic.XmlTextEditorControl();
             this.ctxXmlEditor = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -177,26 +177,7 @@
             this.resDataCtrl.DataListChanged += new System.EventHandler(this.resDataCtrl_DataListChanged);
             // 
             // nodeNumericUpDown1
-            // 
-            this.nodeNumericUpDown1.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nodeNumericUpDown1.IncrementalSearchEnabled = true;
-            this.nodeNumericUpDown1.LeftMargin = 3;
-            this.nodeNumericUpDown1.Maximum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.nodeNumericUpDown1.Minimum = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nodeNumericUpDown1.ParentColumn = null;
-            // 
+            //            // 
             // txtXmlContent
             // 
             this.txtXmlContent.ContextMenuStrip = this.ctxXmlEditor;
@@ -267,7 +248,7 @@
             this.PerformLayout();
 
         }
-        private Aga.Controls.Tree.NodeControls.NodeNumericUpDown nodeNumericUpDown1;
+        private System.Windows.Forms.NumericUpDown nodeNumericUpDown1;
 
         #endregion
 
@@ -296,3 +277,4 @@
         private System.Windows.Forms.ToolStripButton btnReRead;
     }
 }
+

@@ -1,5 +1,4 @@
 ﻿#region Disclaimer / License
-
 // Copyright (C) 2010, Jackie Ng
 // https://github.com/jumpinjackie/mapguide-maestro
 //
@@ -17,10 +16,8 @@
 // License along with this library; if not, write to the Free Software
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 //
-
 #endregion Disclaimer / License
 
-using Aga.Controls.Tree;
 using OSGeo.MapGuide.MaestroAPI.Services;
 using OSGeo.MapGuide.ObjectModels.Common;
 using System;
@@ -38,106 +35,24 @@ namespace Maestro.Editors.Common
     {
         private abstract class ModelBase<T>
         {
-            protected ModelBase(T item)
-            {
-                this.Tag = item;
-            }
-
+            protected ModelBase(T item) { this.Tag = item; }
             public T Tag { get; }
         }
 
         private class FolderModel : ModelBase<UnmanagedDataListUnmanagedDataFolder>
         {
-            public FolderModel(UnmanagedDataListUnmanagedDataFolder folder)
-                : base(folder)
+            public FolderModel(UnmanagedDataListUnmanagedDataFolder folder) : base(folder)
             {
                 this.Name = folder.FolderName;
                 this.HasChildren = (folder.NumberOfFolders > 0);
             }
-
             public string Name { get; }
-
             public bool HasChildren { get; }
-
             public Image Icon => Properties.Resources.folder_horizontal;
         }
 
-        private class FolderTreeModel : ITreeModel
-        {
-            private IResourceService _resSvc;
-
-            public FolderTreeModel(IResourceService resSvc)
-            {
-                _resSvc = resSvc;
-            }
-
-            public System.Collections.IEnumerable GetChildren(TreePath treePath)
-            {
-                if (treePath.IsEmpty())
-                {
-                    var list = _resSvc.EnumerateUnmanagedData(null, null, false, OSGeo.MapGuide.MaestroAPI.UnmanagedDataTypes.Folders);
-                    foreach (var item in list.Items)
-                    {
-                        if (typeof(UnmanagedDataListUnmanagedDataFolder).IsAssignableFrom(item.GetType()))
-                        {
-                            var folder = (UnmanagedDataListUnmanagedDataFolder)item;
-
-                            yield return new FolderModel(folder);
-                        }
-                    }
-                }
-                else
-                {
-                    var mdl = treePath.LastNode as FolderModel;
-                    if (mdl != null)
-                    {
-                        var folder = mdl.Tag;
-                        if (folder.NumberOfFolders > 0)
-                        {
-                            var list = _resSvc.EnumerateUnmanagedData(folder.UnmanagedDataId, null, false, OSGeo.MapGuide.MaestroAPI.UnmanagedDataTypes.Folders);
-                            foreach (var item in list.Items)
-                            {
-                                if (typeof(UnmanagedDataListUnmanagedDataFolder).IsAssignableFrom(item.GetType()))
-                                {
-                                    var fl = (UnmanagedDataListUnmanagedDataFolder)item;
-
-                                    yield return new FolderModel(fl);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            public bool IsLeaf(TreePath treePath)
-            {
-                var mdl = treePath.LastNode as FolderModel;
-                if (mdl != null)
-                    return mdl.Tag.NumberOfFolders == 0;
-                else
-                    return true;
-            }
-
-            /// <summary>
-            ///
-            /// </summary>
-            public event EventHandler<TreeModelEventArgs> NodesChanged;
-
-            /// <summary>
-            ///
-            /// </summary>
-            public event EventHandler<TreeModelEventArgs> NodesInserted;
-
-            /// <summary>
-            ///
-            /// </summary>
-            public event EventHandler<TreeModelEventArgs> NodesRemoved;
-
-            /// <summary>
-            ///
-            /// </summary>
-            public event EventHandler<TreePathEventArgs> StructureChanged;
-        }
+        // Lazy-load placeholder text
+        private const string LoadingPlaceholder = "__loading__";
 
         private bool _selectFoldersOnly;
 
@@ -165,7 +80,6 @@ namespace Maestro.Editors.Common
             {
                 if (value && this.SelectFoldersOnly)
                     throw new InvalidOperationException(Strings.UnmanagedBrowserMultiSelectionNotAllowed);
-
                 lstResources.MultiSelect = value;
             }
         }
@@ -182,11 +96,56 @@ namespace Maestro.Editors.Common
         /// Initializes a new instance of the <see cref="UnmanagedFileBrowser"/> class.
         /// </summary>
         /// <param name="resSvc">The res SVC.</param>
-        public UnmanagedFileBrowser(IResourceService resSvc)
-            : this()
+        public UnmanagedFileBrowser(IResourceService resSvc) : this()
         {
             _resSvc = resSvc;
-            trvFolders.Model = new FolderTreeModel(_resSvc);
+            LoadRootFolders();
+        }
+
+        private void LoadRootFolders()
+        {
+            trvFolders.BeginUpdate();
+            trvFolders.Nodes.Clear();
+            var list = _resSvc.EnumerateUnmanagedData(null, null, false, OSGeo.MapGuide.MaestroAPI.UnmanagedDataTypes.Folders);
+            foreach (var item in list.Items)
+            {
+                var folder = item as UnmanagedDataListUnmanagedDataFolder;
+                if (folder != null)
+                {
+                    var mdl = new FolderModel(folder);
+                    var node = new TreeNode(mdl.Name) { Tag = mdl };
+                    if (mdl.HasChildren)
+                        node.Nodes.Add(new TreeNode(LoadingPlaceholder)); // lazy-load placeholder
+                    trvFolders.Nodes.Add(node);
+                }
+            }
+            trvFolders.EndUpdate();
+        }
+
+        private void trvFolders_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+            var node = e.Node;
+            if (node.Nodes.Count == 1 && node.Nodes[0].Text == LoadingPlaceholder)
+            {
+                node.Nodes.Clear();
+                var mdl = node.Tag as FolderModel;
+                if (mdl != null)
+                {
+                    var list = _resSvc.EnumerateUnmanagedData(mdl.Tag.UnmanagedDataId, null, false, OSGeo.MapGuide.MaestroAPI.UnmanagedDataTypes.Folders);
+                    foreach (var item in list.Items)
+                    {
+                        var folder = item as UnmanagedDataListUnmanagedDataFolder;
+                        if (folder != null)
+                        {
+                            var child = new FolderModel(folder);
+                            var childNode = new TreeNode(child.Name) { Tag = child };
+                            if (child.HasChildren)
+                                childNode.Nodes.Add(new TreeNode(LoadingPlaceholder));
+                            node.Nodes.Add(childNode);
+                        }
+                    }
+                }
+            }
         }
 
         private List<string> _fileExtensions;
@@ -202,9 +161,7 @@ namespace Maestro.Editors.Common
             {
                 _fileExtensions.Clear();
                 for (int i = 0; i < value.Length; i++)
-                {
                     _fileExtensions.Add(value[i].ToLower());
-                }
             }
         }
 
@@ -212,13 +169,7 @@ namespace Maestro.Editors.Common
         /// Gets the selected item.
         /// </summary>
         /// <value>The selected item.</value>
-        public string SelectedItem
-        {
-            get
-            {
-                return SelectedItems[0];
-            }
-        }
+        public string SelectedItem => SelectedItems[0];
 
         /// <summary>
         /// Gets the selected items
@@ -227,7 +178,7 @@ namespace Maestro.Editors.Common
         {
             get
             {
-                List<string> items = new List<string>();
+                var items = new List<string>();
                 string[] tokens = txtItem.Text.Split('\t'); //NOXLATE
                 foreach (var path in tokens)
                 {
@@ -239,7 +190,7 @@ namespace Maestro.Editors.Common
             }
         }
 
-        private void trvFolders_SelectionChanged(object sender, EventArgs e)
+        private void trvFolders_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (trvFolders.SelectedNode != null)
             {
@@ -253,7 +204,6 @@ namespace Maestro.Editors.Common
                     }
                     else
                     {
-                        //TODO: file filter
                         var list = _resSvc.EnumerateUnmanagedData(mdl.Tag.UnmanagedDataId, null, false, OSGeo.MapGuide.MaestroAPI.UnmanagedDataTypes.Files);
                         PopulateFileList(list);
                     }

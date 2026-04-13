@@ -1,0 +1,91 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        xmlns:views="using:Maestro.Next.Views"
+        x:Class="Maestro.Next.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="{Binding Title}"
+        Width="1280" Height="800"
+        WindowStartupLocation="CenterScreen">
+
+  <DockPanel>
+    <!-- Menu Bar -->
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Connect..."
+                  Command="{Binding ConnectCommand}"
+                  IsEnabled="{Binding !IsConnected}" />
+        <MenuItem Header="_Disconnect"
+                  Command="{Binding DisconnectCommand}"
+                  IsEnabled="{Binding IsConnected}" />
+        <Separator />
+        <MenuItem Header="E_xit" Command="{Binding ExitCommand}" />
+      </MenuItem>
+      <MenuItem Header="_View">
+        <MenuItem Header="Close All Documents"
+                  Command="{Binding Documents.CloseAllDocumentsCommand}"
+                  IsEnabled="{Binding Documents.HasOpenDocuments}" />
+      </MenuItem>
+      <MenuItem Header="_Tools">
+        <MenuItem Header="_Options..." IsEnabled="False" />
+      </MenuItem>
+      <MenuItem Header="_Help">
+        <MenuItem Header="_About..." IsEnabled="False" />
+      </MenuItem>
+    </Menu>
+
+    <!-- Status Bar -->
+    <Border DockPanel.Dock="Bottom"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            Padding="8,3">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" FontSize="12" />
+        <TextBlock Grid.Column="1"
+                   Text="MapGuide Maestro (Next) — .NET 10 + Avalonia"
+                   FontSize="11" Foreground="Gray" />
+      </Grid>
+    </Border>
+
+    <!-- Welcome screen when not connected -->
+    <Panel IsVisible="{Binding !IsConnected}">
+      <StackPanel HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Spacing="16">
+        <TextBlock Text="MapGuide Maestro"
+                   FontSize="36" FontWeight="Light"
+                   HorizontalAlignment="Center" />
+        <TextBlock Text="Cross-platform MapGuide authoring and administration tool"
+                   FontSize="14" Foreground="Gray"
+                   HorizontalAlignment="Center" />
+        <Button Content="Connect to Server..."
+                Command="{Binding ConnectCommand}"
+                Classes="accent"
+                HorizontalAlignment="Center"
+                Padding="24,10" />
+        <TextBlock Text="Built with Avalonia UI on .NET 10 — runs on Windows, Linux, macOS"
+                   FontSize="11" Foreground="Gray"
+                   HorizontalAlignment="Center"
+                   Margin="0,12,0,0" />
+      </StackPanel>
+    </Panel>
+
+    <!-- Main workbench when connected: Site Explorer | Documents -->
+    <Grid IsVisible="{Binding IsConnected}"
+          ColumnDefinitions="280,4,*">
+
+      <!-- Site Explorer -->
+      <Border Grid.Column="0"
+              BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+              BorderThickness="0,0,1,0">
+        <views:SiteExplorerView DataContext="{Binding SiteExplorer}" />
+      </Border>
+
+      <!-- Splitter -->
+      <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
+
+      <!-- Document area -->
+      <views:DocumentAreaView Grid.Column="2"
+                              DataContext="{Binding Documents}" />
+    </Grid>
+  </DockPanel>
+</Window>

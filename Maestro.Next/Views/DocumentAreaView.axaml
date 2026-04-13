@@ -1,0 +1,65 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Maestro.Next.ViewModels"
+             xmlns:editors="using:Maestro.Next.Views.Editors"
+             x:Class="Maestro.Next.Views.DocumentAreaView"
+             x:DataType="vm:DocumentManagerViewModel">
+
+  <Panel>
+    <!-- Empty state -->
+    <StackPanel IsVisible="{Binding !HasOpenDocuments}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="8">
+      <TextBlock Text="No documents open"
+                 HorizontalAlignment="Center"
+                 Foreground="Gray" FontSize="14" />
+      <TextBlock Text="Double-click a resource in the Site Explorer to open it"
+                 HorizontalAlignment="Center"
+                 Foreground="Gray" FontSize="11" />
+    </StackPanel>
+
+    <!-- Tab control with open documents -->
+    <TabControl IsVisible="{Binding HasOpenDocuments}"
+                ItemsSource="{Binding OpenDocuments}"
+                SelectedItem="{Binding ActiveDocument}">
+
+      <!-- Tab header template -->
+      <TabControl.ItemTemplate>
+        <DataTemplate DataType="vm:DocumentViewModel">
+          <StackPanel Orientation="Horizontal" Spacing="4">
+            <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+            <TextBlock Text="●" Foreground="Orange"
+                       FontSize="10" VerticalAlignment="Center"
+                       IsVisible="{Binding IsDirty}" />
+            <Button Content="✕"
+                    Command="{Binding $parent[TabControl].((vm:DocumentManagerViewModel)DataContext).CloseDocumentCommand}"
+                    CommandParameter="{Binding}"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Padding="2,0"
+                    FontSize="11"
+                    VerticalAlignment="Center" />
+          </StackPanel>
+        </DataTemplate>
+      </TabControl.ItemTemplate>
+
+      <!-- Tab content template — dispatches to the correct editor view -->
+      <TabControl.ContentTemplate>
+        <DataTemplate DataType="vm:DocumentViewModel">
+          <ContentControl Content="{Binding}">
+            <ContentControl.DataTemplates>
+              <DataTemplate DataType="vm:FeatureSourceEditorViewModel">
+                <editors:FeatureSourceEditorView />
+              </DataTemplate>
+              <DataTemplate DataType="vm:GenericResourceEditorViewModel">
+                <editors:GenericResourceEditorView />
+              </DataTemplate>
+            </ContentControl.DataTemplates>
+          </ContentControl>
+        </DataTemplate>
+      </TabControl.ContentTemplate>
+
+    </TabControl>
+  </Panel>
+</UserControl>

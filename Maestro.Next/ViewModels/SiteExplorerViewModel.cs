@@ -1,0 +1,197 @@
+// Copyright (C) 2025, Jackie Ng
+// https://github.com/jumpinjackie/mapguide-maestro
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Maestro.Next.Services;
+using OSGeo.MapGuide.ObjectModels;
+
+namespace Maestro.Next.ViewModels;
+
+public partial class SiteExplorerViewModel : ViewModelBase
+{
+    private readonly IResourceService _resourceService;
+    private readonly DocumentManagerViewModel _documentManager;
+
+    public SiteExplorerViewModel(
+        IResourceService resourceService,
+        DocumentManagerViewModel documentManager)
+    {
+        _resourceService = resourceService;
+        _documentManager = documentManager;
+    }
+
+    [ObservableProperty]
+    private bool _isLoading;
+
+    [ObservableProperty]
+    private string? _errorMessage;
+
+    [ObservableProperty]
+    private ResourceTreeNode? _selectedNode;
+
+    public ObservableCollection<ResourceTreeNode> RootNodes { get; } = new();
+
+    [RelayCommand]
+    private async Task LoadRootAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            ErrorMessage = null;
+            RootNodes.Clear();
+
+            var items = await _resourceService.GetResourceListAsync("Library://");
+            foreach (var item in items.OrderByDescending(i => i.IsFolder).ThenBy(i => i.Name))
+                RootNodes.Add(new ResourceTreeNode(item, _resourceService));
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    [RelayCommand]
+    private void OpenResource(ResourceTreeNode? node)
+    {
+        if (node is null || node.IsFolder) return;
+
+        var doc = ResourceEditorFactory.CreateEditor(node.ResourceId, node.ResourceType);
+        if (doc != null)
+            _documentManager.OpenDocument(doc);
+    }
+
+    [RelayCommand]
+    private async Task RefreshAsync()
+    {
+        if (SelectedNode is { IsFolder: true } folder)
+            await folder.RefreshAsync();
+        else
+            await LoadRootAsync();
+    }
+
+    [RelayCommand(CanExecute = nameof(CanDeleteSelected))]
+    private void DeleteSelected()
+    {
+        // TODO: implement delete resource
+    }
+
+    private bool CanDeleteSelected() =>
+        SelectedNode is { IsFolder: false, IsPlaceholder: false };
+}
+
+/// <summary>
+/// Factory that creates the correct editor ViewModel for a given resource type
+/// </summary>
+public static class ResourceEditorFactory
+{
+    public static DocumentViewModel? CreateEditor(string resourceId, string resourceType)
+    {
+        return resourceType switch
+        {
+            nameof(ResourceTypes.FeatureSource)         => new FeatureSourceEditorViewModel(resourceId),
+            nameof(ResourceTypes.LayerDefinition)       => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.MapDefinition)         => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.WebLayout)             => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.ApplicationDefinition) => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.SymbolDefinition)      => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.PrintLayout)           => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.LoadProcedure)         => new GenericResourceEditorViewModel(resourceId, resourceType),
+            nameof(ResourceTypes.WatermarkDefinition)   => new GenericResourceEditorViewModel(resourceId, resourceType),
+            _ => null
+        };
+    }
+}
+
+/// <summary>
+/// Represents a node in the Site Explorer tree
+/// </summary>
+public partial class ResourceTreeNode : ViewModelBase
+{
+    private readonly IResourceService _resourceService;
+    private bool _hasLoadedChildren;
+
+    public ResourceTreeNode(ResourceListItem item, IResourceService resourceService)
+    {
+        Item = item;
+        _resourceService = resourceService;
+        Icon = ResourceTypeIconMap.GetIcon(item.ResourceType, item.IsFolder);
+
+        // Add a placeholder child so the tree shows an expander for folders
+        if (item.IsFolder)
+            Children.Add(PlaceholderNode(resourceService));
+    }
+
+    private static ResourceTreeNode PlaceholderNode(IResourceService svc) =>
+        new(new ResourceListItem("__placeholder__", "Loading...", "", false), svc)
+        { IsPlaceholder = true };
+
+    public ResourceListItem Item { get; }
+
+    public string Name      => Item.Name;
+    public string ResourceId  => Item.ResourceId;
+    public string ResourceType => Item.ResourceType;
+    public bool   IsFolder   => Item.IsFolder;
+    public bool   IsPlaceholder { get; private init; }
+
+    /// <summary>Unicode emoji used as icon in the tree</summary>
+    public string Icon { get; }
+
+    [ObservableProperty] private bool _isExpanded;
+    [ObservableProperty] private bool _isSelected;
+
+    public ObservableCollection<ResourceTreeNode> Children { get; } = new();
+
+    partial void OnIsExpandedChanged(bool value)
+    {
+        if (value && IsFolder && !_hasLoadedChildren)
+            _ = RefreshAsync();
+    }
+
+    public async Task RefreshAsync()
+    {
+        try
+        {
+            var items = await _resourceService.GetResourceListAsync(ResourceId);
+            Children.Clear();
+            foreach (var item in items.OrderByDescending(i => i.IsFolder).ThenBy(i => i.Name))
+                Children.Add(new ResourceTreeNode(item, _resourceService));
+            _hasLoadedChildren = true;
+        }
+        catch
+        {
+            // Keep placeholder visible on error
+        }
+    }
+}
+
+/// <summary>
+/// Maps resource types to display icons (unicode emoji — will be replaced by vector icons later)
+/// </summary>
+public static class ResourceTypeIconMap
+{
+    public static string GetIcon(string resourceType, bool isFolder) => resourceType switch
+    {
+        nameof(ResourceTypes.FeatureSource)         => "🗄",
+        nameof(ResourceTypes.LayerDefinition)       => "🗺",
+        nameof(ResourceTypes.MapDefinition)         => "🗺",
+        nameof(ResourceTypes.WebLayout)             => "🌐",
+        nameof(ResourceTypes.ApplicationDefinition) => "📱",
+        nameof(ResourceTypes.SymbolDefinition)      => "🔷",
+        nameof(ResourceTypes.PrintLayout)           => "🖨",
+        nameof(ResourceTypes.LoadProcedure)         => "📥",
+        nameof(ResourceTypes.WatermarkDefinition)   => "💧",
+        _  when isFolder                            => "📁",
+        _                                           => "📄",
+    };
+}

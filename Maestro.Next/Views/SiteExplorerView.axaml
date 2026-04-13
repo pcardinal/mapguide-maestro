@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Maestro.Next.ViewModels"
+             x:Class="Maestro.Next.Views.SiteExplorerView"
+             x:DataType="vm:SiteExplorerViewModel">
+
+  <DockPanel>
+    <!-- Toolbar -->
+    <StackPanel DockPanel.Dock="Top"
+                Orientation="Horizontal"
+                Spacing="2" Margin="4,4,4,2">
+      <TextBlock Text="Site Explorer"
+                 FontWeight="SemiBold"
+                 VerticalAlignment="Center"
+                 Margin="4,0,8,0" />
+      <Button Content="↻"
+              Command="{Binding RefreshCommand}"
+              ToolTip.Tip="Refresh"
+              Padding="4,2" FontSize="14" />
+    </StackPanel>
+
+    <!-- Loading indicator -->
+    <ProgressBar DockPanel.Dock="Top"
+                 IsIndeterminate="True"
+                 IsVisible="{Binding IsLoading}"
+                 Height="2" />
+
+    <!-- Error message -->
+    <TextBlock DockPanel.Dock="Top"
+               Text="{Binding ErrorMessage}"
+               Foreground="Red"
+               IsVisible="{Binding ErrorMessage,
+                           Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+               Margin="8,4"
+               TextWrapping="Wrap" />
+
+    <!-- Resource tree -->
+    <TreeView x:Name="ResourceTree"
+              ItemsSource="{Binding RootNodes}"
+              SelectedItem="{Binding SelectedNode}"
+              Margin="2">
+
+      <TreeView.ItemTemplate>
+        <TreeDataTemplate ItemsSource="{Binding Children}"
+                          x:DataType="vm:ResourceTreeNode">
+          <StackPanel Orientation="Horizontal" Spacing="6"
+                      ToolTip.Tip="{Binding ResourceId}">
+            <!-- Icon -->
+            <TextBlock Text="{Binding Icon}" FontSize="14"
+                       VerticalAlignment="Center" />
+            <!-- Name -->
+            <TextBlock Text="{Binding Name}"
+                       VerticalAlignment="Center" />
+            <!-- Resource type badge (for non-folders) -->
+            <Border IsVisible="{Binding !IsFolder}"
+                    Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    CornerRadius="2" Padding="3,1">
+              <TextBlock Text="{Binding ResourceType}"
+                         FontSize="10" Foreground="Gray" />
+            </Border>
+          </StackPanel>
+        </TreeDataTemplate>
+      </TreeView.ItemTemplate>
+
+      <!-- Context menu -->
+      <TreeView.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="Open"
+                    Command="{Binding OpenResourceCommand}"
+                    CommandParameter="{Binding SelectedNode}" />
+          <Separator />
+          <MenuItem Header="Refresh"
+                    Command="{Binding RefreshCommand}" />
+          <Separator />
+          <MenuItem Header="Delete"
+                    Command="{Binding DeleteSelectedCommand}"
+                    IsEnabled="{Binding SelectedNode.IsFolder,
+                                Converter={x:Static BoolConverters.Not}}" />
+        </ContextMenu>
+      </TreeView.ContextMenu>
+    </TreeView>
+  </DockPanel>
+</UserControl>

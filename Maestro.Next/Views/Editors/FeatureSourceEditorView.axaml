@@ -1,0 +1,90 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Maestro.Next.ViewModels"
+             x:Class="Maestro.Next.Views.Editors.FeatureSourceEditorView"
+             x:DataType="vm:FeatureSourceEditorViewModel">
+
+  <Grid RowDefinitions="Auto,*,Auto">
+    <!-- Toolbar -->
+    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="4" Margin="8,6">
+      <Button Content="💾 Save"
+              Command="{Binding SaveCommand}"
+              IsEnabled="{Binding IsDirty}"
+              Classes="accent" />
+      <Button Content="🔌 Test Connection"
+              Command="{Binding TestConnectionCommand}" />
+      <ProgressBar IsIndeterminate="True"
+                   IsVisible="{Binding IsBusy}"
+                   Width="100" Height="8"
+                   VerticalAlignment="Center" />
+      <TextBlock Text="{Binding BusyMessage}"
+                 IsVisible="{Binding IsBusy}"
+                 VerticalAlignment="Center"
+                 Foreground="Gray" FontSize="11" />
+    </StackPanel>
+
+    <!-- Main content -->
+    <ScrollViewer Grid.Row="1" Margin="8,0">
+      <StackPanel Spacing="16">
+        <!-- Provider section -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="FDO Provider"
+                       FontWeight="SemiBold" FontSize="13" />
+            <TextBlock Text="{Binding Provider}"
+                       FontFamily="Consolas,Monospace"
+                       FontSize="12" />
+          </StackPanel>
+        </Border>
+
+        <!-- Connection properties section -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="10">
+            <TextBlock Text="Connection Properties"
+                       FontWeight="SemiBold" FontSize="13" />
+            <ItemsControl ItemsSource="{Binding ConnectionProperties}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:ConnectionPropertyViewModel">
+                  <Grid ColumnDefinitions="180,*" Margin="0,4">
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding Name}"
+                               VerticalAlignment="Center"
+                               FontWeight="Medium" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding Value}"
+                             Margin="8,0,0,0" />
+                  </Grid>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </Border>
+
+        <!-- Connection string preview -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Connection String Preview"
+                       FontWeight="SemiBold" FontSize="13" />
+            <TextBlock Text="{Binding ConnectionString}"
+                       FontFamily="Consolas,Monospace"
+                       FontSize="11"
+                       TextWrapping="Wrap"
+                       Foreground="Gray" />
+          </StackPanel>
+        </Border>
+      </StackPanel>
+    </ScrollViewer>
+
+    <!-- Test connection result -->
+    <Border Grid.Row="2"
+            IsVisible="{Binding TestConnectionResult,
+                        Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            Padding="12,8" Margin="8,4">
+      <TextBlock Text="{Binding TestConnectionResult}"
+                 FontSize="12" />
+    </Border>
+  </Grid>
+</UserControl>

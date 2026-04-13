@@ -1,0 +1,54 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        x:Class="Maestro.Next.Views.LoginWindow"
+        x:DataType="vm:LoginViewModel"
+        Title="Connect to MapGuide Server"
+        Width="450" Height="320"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False">
+
+  <Design.DataContext>
+    <vm:LoginViewModel />
+  </Design.DataContext>
+
+  <StackPanel Margin="20" Spacing="12">
+    <TextBlock Text="MapGuide Server Connection"
+               FontSize="18" FontWeight="SemiBold"
+               Margin="0,0,0,8" />
+
+    <TextBlock Text="Server URL" />
+    <TextBox Text="{Binding ServerUrl}"
+             PlaceholderText="http://localhost/mapguide/mapagent/mapagent.fcgi" />
+
+    <TextBlock Text="Username" />
+    <TextBox Text="{Binding Username}"
+             PlaceholderText="Administrator" />
+
+    <TextBlock Text="Password" />
+    <TextBox Text="{Binding Password}"
+             PasswordChar="●"
+             PlaceholderText="Enter password" />
+
+    <!-- Error message -->
+    <TextBlock Text="{Binding ErrorMessage}"
+               Foreground="Red"
+               IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+               TextWrapping="Wrap" />
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,0">
+      <Button Content="Cancel"
+              Click="OnCancelClick"
+              Width="90" />
+      <Button Content="Connect"
+              Command="{Binding ConnectCommand}"
+              Classes="accent"
+              Width="90" />
+    </StackPanel>
+
+    <!-- Progress indicator -->
+    <ProgressBar IsIndeterminate="True"
+                 IsVisible="{Binding IsConnecting}" />
+  </StackPanel>
+</Window>

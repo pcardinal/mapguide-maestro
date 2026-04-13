@@ -4,7 +4,7 @@
 
 This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 to .NET 10 using a bottom-up (dependency-first) strategy. Foundation libraries will be upgraded first, progressing through 8 dependency tiers to the main application.
 
-**Progress**: 2/13 tasks complete (15%) ![0%](https://progress-bar.xyz/15)
+**Progress**: 3/13 tasks complete (23%) ![0%](https://progress-bar.xyz/23)
 
 ---
 
@@ -38,21 +38,21 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 
 ---
 
-### [▶] TASK-003: Upgrade Tier 2 core API layer
+### [✓] TASK-003: Upgrade Tier 2 core API layer *(Completed: 2026-04-13 04:05)*
 **References**: Plan §Tier 2
 
-- [▶] (1) Update target framework to `net10.0-windows` in ICSharpCode.Core.WinForms and LocalConfigure per Plan §Tier 2
-- [ ] (2) Framework updated in both projects (**Verify**)
-- [ ] (3) Build all Tier 2 projects
-- [ ] (4) All Tier 2 projects build with 0 errors (**Verify**)
-- [ ] (5) Commit changes with message: "TASK-003: Upgrade Tier 2 core API layer to net10.0"
+- [✓] (1) Update target framework to `net10.0-windows` in ICSharpCode.Core.WinForms and LocalConfigure per Plan §Tier 2
+- [✓] (2) Framework updated in both projects (**Verify**)
+- [✓] (3) Build all Tier 2 projects
+- [✓] (4) All Tier 2 projects build with 0 errors (**Verify**)
+- [✓] (5) Commit changes with message: "TASK-003: Upgrade Tier 2 core API layer to net10.0"
 
 ---
 
-### [ ] TASK-004: Upgrade Tier 3 services and utilities
+### [▶] TASK-004: Upgrade Tier 3 services and utilities
 **References**: Plan §Tier 3, Plan §Package Update Reference
 
-- [ ] (1) Update target framework to `net10.0-windows` in Maestro.AddInManager, Maestro.Login, Maestro.Packaging, OSGeo.MapGuide.MaestroAPI.FxBridge per Plan §Tier 3
+- [▶] (1) Update target framework to `net10.0-windows` in Maestro.AddInManager, Maestro.Login, Maestro.Packaging, OSGeo.MapGuide.MaestroAPI.FxBridge per Plan §Tier 3
 - [ ] (2) Update target framework to `net10.0` in MgTileSeeder per Plan §Tier 3
 - [ ] (3) Framework updated in all 5 projects (**Verify**)
 - [ ] (4) Update `System.Drawing.Common` from 6.0.0 to 10.0.5 in OSGeo.MapGuide.MaestroAPI.FxBridge per Plan §Tier 3
@@ -183,6 +183,8 @@ This document tracks the execution of the MapGuide Maestro upgrade from .NET 6 t
 - [ ] (7) Commit final validation with message: "TASK-013: Complete .NET 10 upgrade - all tests passing"
 
 ---
+
+
 
 
 

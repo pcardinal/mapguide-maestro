@@ -26,3 +26,17 @@ Status: Complete.
 
 Success - All Tier 1 foundation libraries upgraded to net10.0/net10.0-windows.
 
+
+## [2026-04-13 00:05] TASK-003: Upgrade Tier 2 core API layer
+
+Status: Complete.
+
+- **Verified**: ICSharpCode.Core.WinForms and LocalConfigure TFMs updated to net10.0-windows
+- **Verified**: OSGeo.MapGuide.MaestroAPI (netstandard2.0) — no changes needed, builds cleanly
+- **Verified**: All 3 Tier 2 projects build with 0 errors
+- **Commits**: 4cd99b78: "TASK-003: Upgrade Tier 2 core API layer to net10.0"
+- **Files Modified**: Thirdparty/SharpDevelop/ICSharpCode.Core.WinForms/ICSharpCode.Core.WinForms.csproj, LocalConfigure/LocalConfigure.csproj
+- **Build Status**: Successful — 0 errors
+
+Success - Tier 2 core API layer upgraded to net10.0/net10.0-windows.
+

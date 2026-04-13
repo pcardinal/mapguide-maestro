@@ -141,3 +141,17 @@ Status: Complete.
 
 Success - All Tier 6 composite UI components upgraded to net10.0-windows.
 
+
+## [2026-04-13 10:12] TASK-011: Upgrade Tier 7 application shell
+
+Status: Complete.
+
+- **Verified**: No AppDomain.CreateDomain usage found in Maestro.Base or ICSharpCode.Core
+- **Verified**: TFM updated to net10.0-windows in Maestro.Base.csproj
+- **Code Changes**: Maestro.Base also used TreeViewAdv (transitively via Maestro.Editors). Full replacement performed: RepositoryTreeModel.cs — removed TreeModelBase/IToolTipProvider/TreePath/ITreeModel; added PopulateTree(TreeView), LoadChildren(TreeNode), FindTreeNode(), InvalidateItem(), InvalidateSubTree(); SiteExplorer.cs — replaced Model binding with PopulateTree(), SelectionChanged→AfterSelect, Expanding/Expanded→BeforeExpand, SelectedNodes→SelectedNode, FindNode→FindTreeNode, ScrollTo→EnsureVisible, GetNodeAt(Point)→GetNodeAt(x,y), removed OnNodeDrawText; SiteExplorer.Designer.cs — TreeViewAdv→TreeView, removed NodeIcon/NodeTextBox; Themes.cs — Apply(TreeViewAdv)→Apply(TreeView); SiteExplorerDragDropHandler.cs — TreeNodeAdv→TreeNode; NewFolderCommand.cs — replaced GetPath/RaiseStructureChanged with InvalidateSubTree
+- **Verified**: Maestro.Base builds with 0 errors, 5 pre-existing warnings
+- **Commits**: 5954e626: "TASK-011: Upgrade Maestro.Base application shell to net10.0"
+- **Build Status**: Successful — 0 errors
+
+Success - Maestro.Base upgraded to net10.0-windows, all TreeViewAdv replaced.
+

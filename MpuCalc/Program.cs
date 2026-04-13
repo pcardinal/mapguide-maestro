@@ -20,51 +20,51 @@
 
 #endregion Disclaimer / License
 
-using OSGeo.MapGuide;
+using ProjNet.CoordinateSystems;
 using System;
-using System.IO;
-using System.Reflection;
 
 namespace MpuCalc
 {
     internal class Program
     {
+        // Meters per degree for geographic coordinate systems.
+        // This matches the constant used in OSGeo.MapGuide.MaestroAPI's DegreeBasedCoordinateSystem:
+        //   10_000_000 / 90  ≈  111_111.11 m/degree
+        private const double DegreesToMeters = 10_000_000.0 / 90.0;
+
         private static void Main(string[] args)
         {
             if (args.Length == 1)
             {
-                if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("MENTOR_DICTIONARY_PATH")))
-                {
-                    var currentDir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-                    var dictionaryDir = Path.Combine(currentDir, "Dictionaries");
-                    if (Directory.Exists(dictionaryDir))
-                        Environment.SetEnvironmentVariable("MENTOR_DICTIONARY_PATH", dictionaryDir, EnvironmentVariableTarget.Process);
-                    else
-                        Console.WriteLine("Error: Could not find CS-Map dictionary path");
-                }
-
-                MgCoordinateSystemFactory csFact = null;
-                MgCoordinateSystem cs = null;
                 try
                 {
-                    csFact = new MgCoordinateSystemFactory();
-                    cs = csFact.Create(args[0]);
-                    double mpu = cs.ConvertCoordinateSystemUnitsToMeters(1.0);
+                    var csFact = new CoordinateSystemFactory();
+                    var cs = csFact.CreateFromWkt(args[0]);
+
+                    double mpu;
+                    var unit = cs.GetUnits(0);
+
+                    if (unit is AngularUnit)
+                    {
+                        // Geographic (lat/lon) coordinate system — unit is degrees
+                        mpu = DegreesToMeters;
+                    }
+                    else if (unit is LinearUnit lu)
+                    {
+                        // Projected coordinate system — unit carries the m/unit conversion factor
+                        mpu = lu.MetersPerUnit;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: Unsupported coordinate system unit type");
+                        return;
+                    }
+
                     Console.WriteLine(mpu);
-                    cs.Dispose();
-                    csFact.Dispose();
                 }
-                catch (MgException ex)
+                catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
-                    ex.Dispose();
-                }
-                finally
-                {
-                    if (cs != null)
-                        cs.Dispose();
-                    if (csFact != null)
-                        csFact.Dispose();
+                    Console.WriteLine($"Error: {ex.Message}");
                 }
             }
             else

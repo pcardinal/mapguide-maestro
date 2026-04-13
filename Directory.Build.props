@@ -1,0 +1,11 @@
+<Project>
+  <!--
+    WFO1000: WinForms designer serialization diagnostic introduced in .NET 10.
+    Suppressed globally for the MapGuide Maestro 6.0 final WinForms release.
+    This codebase (including third-party SharpDevelop components) was written
+    before this diagnostic existed. The Avalonia rebuild will not use WinForms.
+  -->
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
+  </PropertyGroup>
+</Project>

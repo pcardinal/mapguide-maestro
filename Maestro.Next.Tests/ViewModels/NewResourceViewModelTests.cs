@@ -89,7 +89,7 @@ public class NewResourceViewModelTests
     }
 }
 
-internal class StubNewResourceService : Maestro.Next.Services.INewResourceService
+internal sealed class StubNewResourceService : Maestro.Next.Services.INewResourceService
 {
     public Task<string> CreateFolderAsync(string p, string n) => Task.FromResult($"{p}{n}/");
     public Task<string> CreateFeatureSourceAsync(string p, string n, string pr) => Task.FromResult($"{p}{n}.FeatureSource");
@@ -98,7 +98,7 @@ internal class StubNewResourceService : Maestro.Next.Services.INewResourceServic
     public Task<string> CreateWebLayoutAsync(string p, string n, string m) => Task.FromResult($"{p}{n}.WebLayout");
 }
 
-internal class StubNotificationService : Maestro.Next.Services.INotificationService
+internal sealed class StubNotificationService : Maestro.Next.Services.INotificationService
 {
     public System.Collections.ObjectModel.ObservableCollection<Maestro.Next.Services.Notification> Recent { get; } = new();
     public void Success(string msg) { }

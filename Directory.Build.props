@@ -1,11 +1,29 @@
 <Project>
   <!--
+    Roslyn Analyzers configuration — applied to all projects in the solution.
+
+    AnalysisLevel: latest-Recommended enables the recommended set of CA/IDE rules
+    that ship with the current .NET SDK (10.0). This catches:
+      - CA1xxx: Design, naming, performance, security, reliability
+      - CA2xxx: Usage, globalization
+      - IDE0xxx: Code style (enforced at build time via EnforceCodeStyleInBuild)
+
     WFO1000: WinForms designer serialization diagnostic introduced in .NET 10.
-    Suppressed globally for the MapGuide Maestro 6.0 final WinForms release.
-    This codebase (including third-party SharpDevelop components) was written
-    before this diagnostic existed. The Avalonia rebuild will not use WinForms.
+    Suppressed globally for the legacy WinForms projects.
   -->
   <PropertyGroup>
     <NoWarn>$(NoWarn);WFO1000</NoWarn>
+  </PropertyGroup>
+
+  <!-- New Maestro.Next projects: strict analysis -->
+  <PropertyGroup Condition="'$(AssemblyName)' == 'MaestroNext' Or '$(AssemblyName)' == 'Maestro.Next.Tests'">
+    <AnalysisLevel>latest-Recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <!-- Legacy projects: keep default analysis to avoid thousands of warnings -->
+  <PropertyGroup Condition="'$(AssemblyName)' != 'MaestroNext' And '$(AssemblyName)' != 'Maestro.Next.Tests'">
+    <AnalysisLevel>latest-Default</AnalysisLevel>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
   </PropertyGroup>
 </Project>

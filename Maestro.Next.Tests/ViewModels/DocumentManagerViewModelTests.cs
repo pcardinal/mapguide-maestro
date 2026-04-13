@@ -86,7 +86,7 @@ public class DocumentManagerViewModelTests
 }
 
 /// <summary>Test double for DocumentViewModel</summary>
-internal class TestDocumentViewModel : DocumentViewModel
+internal sealed class TestDocumentViewModel : DocumentViewModel
 {
     public override string IconKey => "Test";
     public bool SaveWasCalled { get; private set; }

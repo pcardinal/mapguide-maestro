@@ -68,6 +68,6 @@ public class ResourceEditorFactoryTests
             nameof(ResourceTypes.MapDefinition));
 
         Assert.NotNull(editor);
-        Assert.Contains("MyMap", editor!.Title);
+        Assert.Contains("MyMap", editor!.Title, StringComparison.Ordinal);
     }
 }

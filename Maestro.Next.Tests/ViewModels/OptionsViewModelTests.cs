@@ -44,7 +44,7 @@ public class OptionsViewModelTests
     }
 }
 
-internal class StubPreferencesService : IPreferencesService
+internal sealed class StubPreferencesService : IPreferencesService
 {
     public AppTheme Theme { get; set; } = AppTheme.Dark;
     public string LastServerUrl { get; set; } = "";

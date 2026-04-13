@@ -6,7 +6,10 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <NoWarn>NU1903</NoWarn>
+    <!-- CA1707: Underscores in test method names (convention) 
+         CA1716: 'Next' conflicts with VB keyword (acceptable for namespace)
+         MA0048: File name must match type name (test stubs in same file) -->
+    <NoWarn>NU1903;CA1707;CA1716;MA0048</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +20,14 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NSubstitute" Version="5.*" />
+    <PackageReference Include="Meziantou.Analyzer" Version="2.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="xunit.analyzers" Version="1.*">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

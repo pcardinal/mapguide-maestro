@@ -109,6 +109,8 @@
           <MenuItem Header="Open"
                     Command="{Binding OpenResourceCommand}"
                     CommandParameter="{Binding SelectedNode}" />
+          <MenuItem Header="Edit as XML"
+                    Command="{Binding OpenAsXmlCommand}" />
           <Separator />
           <MenuItem Header="New Resource..."
                     Command="{Binding NewResourceCommand}" />

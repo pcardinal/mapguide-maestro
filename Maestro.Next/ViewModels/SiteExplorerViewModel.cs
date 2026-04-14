@@ -117,6 +117,18 @@ public partial class SiteExplorerViewModel : ViewModelBase
             _documentManager.OpenDocument(doc);
     }
 
+    [RelayCommand(CanExecute = nameof(HasSelectedNonFolder))]
+    private void OpenAsXml()
+    {
+        if (SelectedNode is null || SelectedNode.IsFolder) return;
+
+        var doc = new XmlEditorViewModel(SelectedNode.ResourceId);
+        _documentManager.OpenDocument(doc);
+    }
+
+    private bool HasSelectedNonFolder() =>
+        SelectedNode is { IsFolder: false, IsPlaceholder: false };
+
     [RelayCommand]
     private async Task RefreshAsync()
     {

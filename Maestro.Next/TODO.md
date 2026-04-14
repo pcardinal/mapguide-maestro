@@ -2,9 +2,8 @@
 
 > **Mis à jour le** : 2025-07-15 (Phase 8)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 64 fichiers source (59 app + 5 tests), 4 860 lignes, 39 tests, 16 commits, build ✅
+> **État actuel** : 70 fichiers source (62 app + 8 tests), 5 313 lignes, 56 tests, 18 commits, build ✅
 
----
 
 ## Légende
 

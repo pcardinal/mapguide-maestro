@@ -73,6 +73,9 @@
               <DataTemplate DataType="vm:GenericResourceEditorViewModel">
                 <editors:GenericResourceEditorView />
               </DataTemplate>
+              <DataTemplate DataType="vm:XmlEditorViewModel">
+                <editors:XmlEditorView />
+              </DataTemplate>
             </ContentControl.DataTemplates>
           </ContentControl>
         </DataTemplate>

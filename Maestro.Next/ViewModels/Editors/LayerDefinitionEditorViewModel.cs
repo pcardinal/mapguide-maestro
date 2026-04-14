@@ -251,6 +251,7 @@ public partial class StyleRuleViewModel : ViewModelBase
         _onChanged = onChanged;
         LegendLabel = rule.LegendLabel ?? "";
         Filter = rule.Filter ?? "";
+        LoadColorFromRule();
     }
 
     public string GeometryType { get; }
@@ -292,4 +293,78 @@ public partial class StyleRuleViewModel : ViewModelBase
     };
 
     public string DisplayName => $"{Icon} {GeometryType} Rule #{Index}: {LegendLabel}";
+
+    // ── Color extraction/editing ────────────────────────────────
+    [ObservableProperty] private string _foregroundColor = "ff000000";
+
+    private bool _suppressColorApply;
+
+    partial void OnForegroundColorChanged(string value)
+    {
+        if (!_suppressColorApply)
+        {
+            ApplyColorToRule(value);
+            _onChanged?.Invoke();
+        }
+    }
+
+    /// <summary>Extract the primary fill/stroke color from the rule</summary>
+    public void LoadColorFromRule()
+    {
+        var color = ExtractColor();
+        if (color != null)
+        {
+            _suppressColorApply = true;
+            ForegroundColor = color;
+            _suppressColorApply = false;
+        }
+    }
+
+    private string? ExtractColor()
+    {
+        if (_rule is IPointRule pr)
+        {
+            var sym = pr.PointSymbolization2D?.Symbol;
+            if (sym is IMarkSymbol mk && mk.Fill != null)
+                return mk.Fill.ForegroundColor;
+        }
+        else if (_rule is ILineRule lr)
+        {
+            var strokes = lr.Strokes;
+            if (strokes != null)
+            {
+                foreach (var stroke in strokes)
+                    return stroke.Color;
+            }
+        }
+        else if (_rule is IAreaRule ar)
+        {
+            var fill = ar.AreaSymbolization2D?.Fill?.ForegroundColor;
+            if (fill != null) return fill;
+        }
+        return null;
+    }
+
+    private void ApplyColorToRule(string hexColor)
+    {
+        if (_rule is IPointRule pr)
+        {
+            var sym = pr.PointSymbolization2D?.Symbol;
+            if (sym is IMarkSymbol mk && mk.Fill != null)
+                mk.Fill.ForegroundColor = hexColor;
+        }
+        else if (_rule is ILineRule lr)
+        {
+            foreach (var stroke in lr.Strokes)
+            {
+                stroke.Color = hexColor;
+                break;
+            }
+        }
+        else if (_rule is IAreaRule ar)
+        {
+            if (ar.AreaSymbolization2D?.Fill != null)
+                ar.AreaSymbolization2D.Fill.ForegroundColor = hexColor;
+        }
+    }
 }

@@ -90,8 +90,8 @@
                           <DataTemplate DataType="vm:StyleRuleViewModel">
                             <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                                     CornerRadius="3" Padding="8,6" Margin="0,2">
-                              <Grid ColumnDefinitions="30,*" RowDefinitions="Auto,Auto" Margin="0,2">
-                                <TextBlock Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                              <Grid ColumnDefinitions="30,*" RowDefinitions="Auto,Auto,Auto" Margin="0,2">
+                                <TextBlock Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"
                                            Text="{Binding Icon}" FontSize="18"
                                            VerticalAlignment="Center" HorizontalAlignment="Center" />
 
@@ -123,6 +123,23 @@
                                           ToolTip.Tip="Expression Builder"
                                           Padding="6,2" Margin="4,0,0,0"
                                           FontSize="11" MinWidth="28" />
+                                </Grid>
+
+                                <!-- Color (hex ARGB) -->
+                                <Grid Grid.Row="2" Grid.Column="1"
+                                      ColumnDefinitions="80,24,*" Margin="0,1">
+                                  <TextBlock Grid.Column="0" Text="Color:"
+                                             FontSize="11" Foreground="Gray"
+                                             VerticalAlignment="Center" />
+                                  <Border Grid.Column="1" Width="18" Height="18"
+                                          CornerRadius="3" BorderBrush="Gray" BorderThickness="1"
+                                          ToolTip.Tip="{Binding ForegroundColor}" />
+                                  <TextBox Grid.Column="2"
+                                           Text="{Binding ForegroundColor}"
+                                           FontFamily="Consolas,Monospace"
+                                           FontSize="11" Padding="4,2"
+                                           MinHeight="24" Margin="4,0,0,0"
+                                           Watermark="AARRGGBB hex" />
                                 </Grid>
                               </Grid>
                             </Border>

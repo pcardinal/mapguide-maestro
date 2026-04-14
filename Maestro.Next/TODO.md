@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-15 (Phase 16)
+> **Mis à jour le** : 2025-07-16 (Phase 17)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 89 fichiers source (74 app + 15 tests), 6 673 lignes, 86 tests, 29 commits, build ✅
+> **État actuel** : 95 fichiers source (77 app + 18 tests), 7 067 lignes, 101 tests, 32 commits, build ✅
 
 ---
 
@@ -84,7 +84,7 @@
 - [ ] B.3.3 — Color picker intégré pour la symbologie
 - [✓] B.3.4 — Bouton "..." Expression Builder sur chaque filtre de règle
 - [ ] B.3.5 — Theme generation wizard (création automatique de règles par valeur)
-- [ ] B.3.6 — Ajout/suppression de scale ranges et de rules
+- [✓] B.3.6 — Ajout/suppression de scale ranges (via ObjectFactory + AddVectorScaleRange/RemoveVectorScaleRange)
 
 ### [ ] B.4 — MapDefinition : fonctionnalités avancées
 
@@ -120,7 +120,7 @@
 
 ### [~] C.1 — Packaging (créer/charger/éditer des .mgp)
 
-- [ ] C.1.1 — Dialog "Create Package" — sélection de ressources → fichier .mgp
+- [✓] C.1.1 — Dialog "Create Package" — `CreatePackageViewModel` + browse resources + ZIP export avec progress
 - [✓] C.1.2 — Dialog "Load Package" — `LoadPackageViewModel` + browse + upload avec progress bar
 - [ ] C.1.3 — Dialog "Edit Package" — modifier un .mgp existant
 - [✓] C.1.4 — Barre de progression (ProgressBar liée au callback `StreamCopyProgressDelegate`)
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (86 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (101 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -200,11 +200,19 @@
 - [✓] E.1.6 — ClipboardService (5 tests) — Phase 9
 - [✓] E.1.7 — ExpressionBuilderViewModel (9 tests) — Phase 9
 - [✓] E.1.8 — ResourcePropertiesViewModel (3 tests) — Phase 9
-- [ ] E.1.9 — XmlEditorViewModel
+- [✓] E.1.9 — XmlEditorViewModel (4 tests) — Phase 12
 - [ ] E.1.10 — SiteExplorerViewModel (load, search, open, refresh)
 - [ ] E.1.11 — MainWindowViewModel (connect, disconnect, save, close)
 - [ ] E.1.12 — LoginViewModel (validation, connection)
 - [✓] E.1.13 — PreferencesService (5 tests) — Phase 13
+- [✓] E.1.14 — FindReplaceViewModel (7 tests) — Phase 14
+- [✓] E.1.15 — LoadPackageViewModel (2 tests) — Phase 12
+- [✓] E.1.16 — CreatePackageViewModel (2+2 tests) — Phase 17
+- [✓] E.1.17 — MapDefinitionEditorViewModel (3+2 tests) — Phase 16
+- [✓] E.1.18 — FeatureSourceEditorViewModel (3+2 tests) — Phase 16
+- [✓] E.1.19 — LayerDefinitionEditorViewModel (2 tests) — Phase 16
+- [✓] E.1.20 — Editor VMs (WebLayout, Symbol, AppDef, Generic — 4 tests) — Phase 17
+- [✓] E.1.21 — StringExtensions (4 tests) — Phase 17
 
 ### [ ] E.2 — Tests d'intégration
 
@@ -285,8 +293,8 @@
 | ~~🟡 Moyenne~~ | ~~C.3 Edit as XML~~ | ~~1 jour~~ | ~~Dev workflow~~ | ✅ Fait |
 | ~~🟡 Moyenne~~ | ~~C.4 View XML Changes~~ | — | ~~Diff~~ | ✅ Fait |
 | ~~🟠 Haute~~ | ~~D.4 Plugins~~ | ~~2-3 jours~~ | ~~Intégration~~ | ✅ ~80% |
-| 🔴 Critique | B.3 LayerDef style rules (édition) | 2-3 jours | Fonctionnalité #1 | ~70% |
-| ~~🟠 Haute~~ | ~~C.1 Packaging (Load)~~ | ~~2 jours~~ | ~~Workflow~~ | ✅ ~50% |
+| ~~🔴 Critique~~ | ~~B.3 LayerDef style rules~~ | ~~2-3 jours~~ | ~~Fonctionnalité #1~~ | ✅ ~85% |
+| ~~🟠 Haute~~ | ~~C.1 Packaging (Create+Load)~~ | ~~2 jours~~ | ~~Workflow~~ | ✅ ~75% |
 | 🟡 Moyenne | B.1 FeatureSource extensions | 1 jour | Fonctionnel avancé | À faire |
 | 🟡 Moyenne | B.4 MapDef avancé | 2 jours | Preview, watermarks | À faire |
 | 🟡 Moyenne | E.1 Tests supplémentaires | 1 jour | Qualité | À faire |
@@ -296,6 +304,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~8-12 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~6-10 jours-développeur** pour la parité fonctionnelle complète.
 
-**MVP atteint à ~92%** — prochaines étapes : B.3 color picker, C.1 create package, B.5 éditeurs restants.
+**MVP atteint à ~95%** — 101 tests, 7k+ lignes. Prochaines étapes : B.3 color picker, B.5 éditeurs spécialisés, G.1 i18n, B.7 preview.

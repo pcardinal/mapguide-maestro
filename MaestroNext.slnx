@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Maestro.Next.Tests/Maestro.Next.Tests.csproj" />
+  <Project Path="Maestro.Next/Maestro.Next.csproj" />
+  <Project Path="OSGeo.FDO.Expressions/OSGeo.FDO.Expressions.csproj" />
+  <Project Path="OSGeo.MapGuide.MaestroAPI/OSGeo.MapGuide.MaestroAPI.csproj" />
+  <Project Path="OSGeo.MapGuide.ObjectModels/OSGeo.MapGuide.ObjectModels.csproj" />
+</Solution>

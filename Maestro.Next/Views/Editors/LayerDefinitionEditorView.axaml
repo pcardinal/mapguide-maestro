@@ -70,16 +70,38 @@
           <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
                   CornerRadius="4" Padding="12">
             <StackPanel Spacing="8">
-              <TextBlock Text="Scale Ranges" FontWeight="SemiBold" />
+              <TextBlock Text="Scale Ranges &amp; Style Rules" FontWeight="SemiBold" />
               <ItemsControl ItemsSource="{Binding ScaleRanges}">
                 <ItemsControl.ItemTemplate>
                   <DataTemplate DataType="vm:ScaleRangeSummaryViewModel">
-                    <Border BorderThickness="0,0,0,1"
-                            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                            Padding="0,4">
-                      <TextBlock Text="{Binding Summary}"
-                                 FontFamily="Consolas,Monospace" FontSize="12" />
-                    </Border>
+                    <Expander IsExpanded="{Binding IsExpanded}" Margin="0,2">
+                      <Expander.Header>
+                        <TextBlock Text="{Binding Summary}"
+                                   FontFamily="Consolas,Monospace" FontSize="12" />
+                      </Expander.Header>
+                      <ItemsControl ItemsSource="{Binding Rules}" Margin="16,4,0,8">
+                        <ItemsControl.ItemTemplate>
+                          <DataTemplate DataType="vm:StyleRuleViewModel">
+                            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                                    CornerRadius="3" Padding="8,6" Margin="0,2">
+                              <Grid ColumnDefinitions="Auto,140,*" RowDefinitions="Auto,Auto">
+                                <TextBlock Grid.Row="0" Grid.Column="0"
+                                           Text="{Binding Icon}" FontSize="14"
+                                           VerticalAlignment="Center" Margin="0,0,8,0" />
+                                <TextBlock Grid.Row="0" Grid.Column="1"
+                                           Text="{Binding LegendLabel}"
+                                           FontWeight="Medium" VerticalAlignment="Center" />
+                                <TextBlock Grid.Row="0" Grid.Column="2"
+                                           Text="{Binding Filter}"
+                                           FontFamily="Consolas,Monospace" FontSize="11"
+                                           Foreground="Gray" VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis" />
+                              </Grid>
+                            </Border>
+                          </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                      </ItemsControl>
+                    </Expander>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>

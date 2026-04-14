@@ -113,8 +113,20 @@
                     Command="{Binding NewResourceCommand}" />
           <MenuItem Header="Rename..."
                     Command="{Binding RenameSelectedCommand}" />
-          <MenuItem Header="Copy..."
+          <MenuItem Header="Duplicate..."
                     Command="{Binding CopySelectedCommand}" />
+          <Separator />
+          <MenuItem Header="Cut"
+                    Command="{Binding CutSelectedCommand}"
+                    InputGesture="Ctrl+X" />
+          <MenuItem Header="Copy"
+                    Command="{Binding CopyToClipboardCommand}"
+                    InputGesture="Ctrl+C" />
+          <MenuItem Header="Paste"
+                    Command="{Binding PasteCommand}"
+                    InputGesture="Ctrl+V" />
+          <MenuItem Header="Copy Resource ID"
+                    Command="{Binding CopyResourceIdCommand}" />
           <Separator />
           <MenuItem Header="Refresh" Command="{Binding RefreshCommand}" />
           <Separator />

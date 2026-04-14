@@ -239,6 +239,81 @@ public partial class SiteExplorerViewModel : ViewModelBase
     }
 
     private bool CanCopy() => SelectedNode is { IsPlaceholder: false };
+
+    // ── Clipboard: Cut / Copy to clipboard / Paste ──────────────
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNode))]
+    private void CutSelected()
+    {
+        if (SelectedNode is null) return;
+        var clip = Program.Services!.GetRequiredService<IClipboardService>();
+        clip.SetCut(SelectedNode.ResourceId);
+        _notifications.Info($"Cut: {SelectedNode.Name}");
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNode))]
+    private void CopyToClipboard()
+    {
+        if (SelectedNode is null) return;
+        var clip = Program.Services!.GetRequiredService<IClipboardService>();
+        clip.SetCopy(SelectedNode.ResourceId);
+        _notifications.Info($"Copied: {SelectedNode.Name}");
+    }
+
+    [RelayCommand]
+    private async Task PasteAsync()
+    {
+        var clip = Program.Services!.GetRequiredService<IClipboardService>();
+        if (!clip.HasContent) return;
+
+        var targetFolder = SelectedNode?.IsFolder == true
+            ? SelectedNode.ResourceId
+            : "Library://";
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+            var srcId = clip.ResourceId!;
+
+            // Build destination ID: same name in target folder
+            var name = srcId.TrimEnd('/').Split('/').Last();
+            var destId = targetFolder.TrimEnd('/') + "/" + name;
+            if (srcId.EndsWith("/", StringComparison.Ordinal))
+                destId += "/";
+
+            if (clip.Operation == ClipboardOperation.Cut)
+            {
+                await Task.Run(() => conn.ResourceService.MoveResource(srcId, destId, false));
+                clip.Clear();
+                _notifications.Success($"Moved to {targetFolder}");
+            }
+            else
+            {
+                await Task.Run(() => conn.ResourceService.CopyResource(srcId, destId, false));
+                _notifications.Success($"Pasted to {targetFolder}");
+            }
+
+            await RefreshAsync();
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Paste failed: {ex.Message}");
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNode))]
+    private void CopyResourceId()
+    {
+        if (SelectedNode is null) return;
+        // Store ResourceId in internal clipboard — system clipboard
+        // requires a TopLevel reference, so we use notification instead
+        var clip = Program.Services!.GetRequiredService<IClipboardService>();
+        clip.SetCopy(SelectedNode.ResourceId);
+        _notifications.Info($"Resource ID: {SelectedNode.ResourceId}");
+    }
+
+    private bool HasSelectedNode() => SelectedNode is { IsPlaceholder: false };
 }
 
 /// <summary>

@@ -10,6 +10,7 @@
 
   <Window.KeyBindings>
     <KeyBinding Gesture="Ctrl+S" Command="{Binding SaveActiveDocumentCommand}" />
+    <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveAllDocumentsCommand}" />
     <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseActiveDocumentCommand}" />
     <KeyBinding Gesture="Ctrl+Q" Command="{Binding ExitCommand}" />
   </Window.KeyBindings>
@@ -30,6 +31,9 @@
         <MenuItem Header="_Save"
                   Command="{Binding SaveActiveDocumentCommand}"
                   InputGesture="Ctrl+S" />
+        <MenuItem Header="Save _All"
+                  Command="{Binding SaveAllDocumentsCommand}"
+                  InputGesture="Ctrl+Shift+S" />
         <MenuItem Header="_Close Tab"
                   Command="{Binding CloseActiveDocumentCommand}"
                   InputGesture="Ctrl+W" />

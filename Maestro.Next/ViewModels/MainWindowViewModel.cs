@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2025, Jackie Ng
+// Copyright (C) 2025, Jackie Ng
 // https://github.com/jumpinjackie/mapguide-maestro
 //
 // This library is free software; you can redistribute it and/or
@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Maestro.Next.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Maestro.Next.ViewModels;
 
@@ -105,6 +106,19 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (Documents.ActiveDocument is { IsDirty: true } doc)
             await doc.SaveCommand.ExecuteAsync(null);
+    }
+
+    /// <summary>Save all dirty documents (Ctrl+Shift+S)</summary>
+    [RelayCommand]
+    private async Task SaveAllDocumentsAsync()
+    {
+        var dirtyDocs = Documents.OpenDocuments.Where(d => d.IsDirty).ToList();
+        foreach (var doc in dirtyDocs)
+            await doc.SaveCommand.ExecuteAsync(null);
+
+        if (dirtyDocs.Count > 0)
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Success($"Saved {dirtyDocs.Count} document(s).");
     }
 
     /// <summary>Close the active tab (Ctrl+W)</summary>

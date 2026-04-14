@@ -142,11 +142,14 @@ public partial class LayerDefinitionEditorViewModel : DocumentViewModel
     }
 }
 
-/// <summary>Summary row for a vector scale range</summary>
+/// <summary>Summary row for a vector scale range with expandable style rules</summary>
 public partial class ScaleRangeSummaryViewModel : ViewModelBase
 {
+    private readonly IVectorScaleRange _sr;
+
     public ScaleRangeSummaryViewModel(IVectorScaleRange sr)
     {
+        _sr = sr;
         MinScale = sr.MinScale.HasValue
             ? $"1:{sr.MinScale.Value:N0}"
             : "0 (always)";
@@ -154,16 +157,70 @@ public partial class ScaleRangeSummaryViewModel : ViewModelBase
             ? $"1:{sr.MaxScale.Value:N0}"
             : "∞ (always)";
 
-        // Count non-null styles
-        int count = 0;
-        if (sr.PointStyle  != null) count++;
-        if (sr.LineStyle   != null) count++;
-        if (sr.AreaStyle   != null) count++;
-        StyleCount = count;
+        // Populate style rules
+        if (sr.PointStyle != null)
+        {
+            for (int i = 0; i < sr.PointStyle.RuleCount; i++)
+            {
+                var rule = sr.PointStyle.GetRuleAt(i);
+                Rules.Add(new StyleRuleViewModel("Point", i,
+                    rule.LegendLabel ?? "",
+                    rule.Filter ?? "(no filter)"));
+            }
+        }
+        if (sr.LineStyle != null)
+        {
+            for (int i = 0; i < sr.LineStyle.RuleCount; i++)
+            {
+                var rule = sr.LineStyle.GetRuleAt(i);
+                Rules.Add(new StyleRuleViewModel("Line", i,
+                    rule.LegendLabel ?? "",
+                    rule.Filter ?? "(no filter)"));
+            }
+        }
+        if (sr.AreaStyle != null)
+        {
+            for (int i = 0; i < sr.AreaStyle.RuleCount; i++)
+            {
+                var rule = sr.AreaStyle.GetRuleAt(i);
+                Rules.Add(new StyleRuleViewModel("Area", i,
+                    rule.LegendLabel ?? "",
+                    rule.Filter ?? "(no filter)"));
+            }
+        }
     }
 
-    public string MinScale  { get; }
-    public string MaxScale  { get; }
-    public int    StyleCount { get; }
-    public string Summary   => $"{MinScale} → {MaxScale}  ({StyleCount} styles)";
+    public string MinScale { get; }
+    public string MaxScale { get; }
+    public string Summary => $"{MinScale} → {MaxScale}  ({Rules.Count} rule(s))";
+    public ObservableCollection<StyleRuleViewModel> Rules { get; } = new();
+
+    [ObservableProperty] private bool _isExpanded;
+}
+
+public partial class StyleRuleViewModel : ViewModelBase
+{
+    public StyleRuleViewModel(string geometryType, int index, string legendLabel, string filter)
+    {
+        GeometryType = geometryType;
+        Index = index;
+        LegendLabel = legendLabel;
+        Filter = filter;
+    }
+
+    public string GeometryType { get; }
+    public int Index { get; }
+
+    [ObservableProperty] private string _legendLabel;
+    [ObservableProperty] private string _filter;
+
+    public string Icon => GeometryType switch
+    {
+        "Point" => "📍",
+        "Line"  => "📏",
+        "Area"  => "🔲",
+        _       => "❔"
+    };
+
+    public string DisplayName => $"{Icon} {GeometryType} Rule #{Index}: {LegendLabel}";
 }

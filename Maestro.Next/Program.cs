@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 using Maestro.Next.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,6 +35,7 @@ internal static class Program
         services.AddSingleton<INotificationService, NotificationService>();
         services.AddSingleton<INewResourceService, NewResourceService>();
         services.AddSingleton<IPreferencesService, PreferencesService>();
+        services.AddSingleton<IClipboardService, ClipboardService>();
 
         // Workbench-level singletons
         services.AddSingleton<ViewModels.DocumentManagerViewModel>();

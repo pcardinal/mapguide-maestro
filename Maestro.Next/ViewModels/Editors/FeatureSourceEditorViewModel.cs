@@ -372,6 +372,24 @@ public partial class FeatureSourceEditorViewModel : DocumentViewModel
         }
         finally { IsBusy = false; BusyMessage = null; }
     }
+
+    // ── Extensions (joins + calculated properties) ──────────────
+    public ObservableCollection<ExtensionSummaryItem> Extensions { get; } = new();
+
+    [RelayCommand]
+    private void LoadExtensions()
+    {
+        Extensions.Clear();
+        if (_featureSource == null) return;
+
+        foreach (var ext in _featureSource.Extension)
+        {
+            var calcProps = ext.CalculatedProperty.Select(cp => $"{cp.Name} = {cp.Expression}").ToList();
+            var joins = ext.AttributeRelate.Select(ar => $"Join: {ar.Name} → {ar.RelateType}").ToList();
+            Extensions.Add(new ExtensionSummaryItem(
+                ext.Name, ext.FeatureClass, calcProps, joins));
+        }
+    }
 }
 
 public partial class SpatialContextOverrideItem : ViewModelBase
@@ -407,6 +425,18 @@ public partial class SchemaClassViewModel : ViewModelBase
 public record SchemaPropertyViewModel(string Name, string Type, bool IsKey)
 {
     public string Icon => IsKey ? "🔑" : Type == "Geometry" ? "📐" : "📋";
+}
+
+/// <summary>
+/// Summary of a FeatureSource extension (calculated properties + joins)
+/// </summary>
+public record ExtensionSummaryItem(
+    string Name,
+    string FeatureClass,
+    List<string> CalculatedProperties,
+    List<string> Joins)
+{
+    public string Summary => $"{Name} ({FeatureClass}) — {CalculatedProperties.Count} calc, {Joins.Count} join(s)";
 }
 
 /// <summary>

@@ -50,6 +50,8 @@
       <MenuItem Header="_Tools">
         <MenuItem Header="Load _Package..."
                   Click="OnLoadPackageClick" />
+        <MenuItem Header="Setup _Folder Structure"
+                  Command="{Binding SiteExplorer.SetupFolderStructureCommand}" />
         <Separator />
         <MenuItem Header="_Options..."
                   Command="{Binding ShowOptionsCommand}" />

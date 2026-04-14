@@ -20,10 +20,23 @@ public partial class App : Application
         {
             var vm = Program.Services!.GetRequiredService<MainWindowViewModel>();
 
-            desktop.MainWindow = new MainWindow
+            var main = new MainWindow { DataContext = vm };
+
+            // Show splash briefly, then switch to main window
+            var splash = new SplashWindow();
+            desktop.MainWindow = splash;
+            splash.Show();
+
+            // Use a timer to close splash after a short delay
+            var timer = new System.Threading.Timer(_ =>
             {
-                DataContext = vm,
-            };
+                Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+                {
+                    desktop.MainWindow = main;
+                    main.Show();
+                    splash.Close();
+                });
+            }, null, 1200, System.Threading.Timeout.Infinite);
         }
 
         base.OnFrameworkInitializationCompleted();

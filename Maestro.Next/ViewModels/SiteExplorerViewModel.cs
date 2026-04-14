@@ -434,6 +434,32 @@ public partial class SiteExplorerViewModel : ViewModelBase
             _notifications.Error($"Failed to get dependencies: {ex.Message}");
         }
     }
+
+    // ── Setup Folder Structure ──────────────────────────────────
+    [RelayCommand]
+    private async Task SetupFolderStructureAsync()
+    {
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>().CurrentConnection!;
+            var folders = new[] { "Data/", "Layers/", "Maps/", "Layouts/", "Symbols/", "Templates/" };
+            foreach (var f in folders)
+            {
+                var folderId = $"Library://{f}";
+                if (!await Task.Run(() => conn.ResourceService.ResourceExists(folderId)))
+                {
+                    await Task.Run(() =>
+                        conn.ResourceService.SetResourceXmlData(folderId, null!));
+                }
+            }
+            _notifications.Success("Standard folder structure created.");
+            await RefreshCommand.ExecuteAsync(null);
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Setup failed: {ex.Message}");
+        }
+    }
 }
 
 /// <summary>

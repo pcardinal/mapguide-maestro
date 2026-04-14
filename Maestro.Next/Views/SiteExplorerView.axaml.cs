@@ -265,10 +265,15 @@ public partial class SiteExplorerView : UserControl
 
     private void OnDragOver(object? sender, DragEventArgs e)
     {
-        // Accept drops on folder nodes
+        // Accept drops on folder nodes; Ctrl = copy, otherwise move
         e.DragEffects = DragDropEffects.None;
-        if (DataContext is SiteExplorerViewModel vm && vm.SelectedNode is { IsFolder: true })
-            e.DragEffects = DragDropEffects.Move;
+        if (_dragSource != null && DataContext is SiteExplorerViewModel vm
+            && vm.SelectedNode is { IsFolder: true })
+        {
+            e.DragEffects = e.KeyModifiers.HasFlag(KeyModifiers.Control)
+                ? DragDropEffects.Copy
+                : DragDropEffects.Move;
+        }
     }
 
     private async void OnDrop(object? sender, DragEventArgs e)
@@ -286,14 +291,24 @@ public partial class SiteExplorerView : UserControl
         if (srcId.EndsWith("/", StringComparison.Ordinal))
             destId += "/";
 
+        var isCopy = e.KeyModifiers.HasFlag(KeyModifiers.Control);
+
         try
         {
             var conn = Program.Services!.GetRequiredService<IConnectionService>()
                               .CurrentConnection!;
             var notif = Program.Services!.GetRequiredService<INotificationService>();
 
-            await Task.Run(() => conn.ResourceService.MoveResource(srcId, destId, false));
-            notif.Success($"Moved to {targetFolder}");
+            if (isCopy)
+            {
+                await Task.Run(() => conn.ResourceService.CopyResource(srcId, destId, false));
+                notif.Success($"Copied to {targetFolder}");
+            }
+            else
+            {
+                await Task.Run(() => conn.ResourceService.MoveResource(srcId, destId, false));
+                notif.Success($"Moved to {targetFolder}");
+            }
 
             await vm.RefreshCommand.ExecuteAsync(null);
         }

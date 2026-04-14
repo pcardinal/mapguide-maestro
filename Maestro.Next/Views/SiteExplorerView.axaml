@@ -141,6 +141,8 @@
                     Command="{Binding RepointCommand}" />
           <MenuItem Header="View Header XML..."
                     Command="{Binding EditHeaderCommand}" />
+          <MenuItem Header="Validate Resource"
+                    Command="{Binding ValidateResourceCommand}" />
           <MenuItem Header="Dependencies..."
                     Command="{Binding ShowDependenciesCommand}" />
           <Separator />

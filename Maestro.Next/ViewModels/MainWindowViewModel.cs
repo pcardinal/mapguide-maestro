@@ -59,6 +59,9 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string _statusMessage = "Not connected";
 
+    [ObservableProperty]
+    private string _connectionInfo = string.Empty;
+
     /// <summary>
     /// Raised when the UI should show the Login dialog
     /// </summary>
@@ -151,11 +154,13 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             var conn = _connectionService.CurrentConnection!;
             StatusMessage = $"Connected to MapGuide {conn.SiteVersion}";
+            ConnectionInfo = $"{conn.ProviderName} | v{conn.SiteVersion}";
             _ = ServerInfo.RefreshCommand.ExecuteAsync(null);
         }
         else
         {
             StatusMessage = "Not connected";
+            ConnectionInfo = string.Empty;
         }
         UpdateTitle();
     }

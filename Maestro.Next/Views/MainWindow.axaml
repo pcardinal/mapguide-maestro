@@ -75,10 +75,13 @@
     <Border DockPanel.Dock="Bottom"
             Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
             Padding="8,3">
-      <Grid ColumnDefinitions="*,Auto">
+      <Grid ColumnDefinitions="*,Auto,Auto">
         <TextBlock Grid.Column="0" Text="{Binding StatusMessage}" FontSize="12" />
         <TextBlock Grid.Column="1"
-                   Text="MapGuide Maestro (Next) — .NET 10 + Avalonia"
+                   Text="{Binding ConnectionInfo}"
+                   FontSize="11" Foreground="Gray" Margin="16,0" />
+        <TextBlock Grid.Column="2"
+                   Text="MapGuide Maestro (Next)"
                    FontSize="11" Foreground="Gray" />
       </Grid>
     </Border>

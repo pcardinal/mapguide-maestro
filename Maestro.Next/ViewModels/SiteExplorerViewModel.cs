@@ -568,6 +568,42 @@ public partial class SiteExplorerViewModel : ViewModelBase
             _notifications.Error($"View header failed: {ex.Message}");
         }
     }
+
+    // ── Validate Resource ───────────────────────────────────────
+    [RelayCommand(CanExecute = nameof(HasSelectedNonFolder))]
+    private async Task ValidateResourceAsync()
+    {
+        if (SelectedNode is null) return;
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>().CurrentConnection!;
+            var resId = SelectedNode.ResourceId;
+
+            // Load the resource and run validation
+            var resource = await Task.Run(() => conn.ResourceService.GetResource(resId));
+
+            var context = new OSGeo.MapGuide.MaestroAPI.Resource.Validation.ResourceValidationContext(conn);
+            var issues = await Task.Run(() =>
+                OSGeo.MapGuide.MaestroAPI.Resource.Validation.ResourceValidatorSet.Validate(context, resource, false));
+
+            if (issues.Length == 0)
+            {
+                _notifications.Success($"✅ {SelectedNode.Name}: No issues found.");
+            }
+            else
+            {
+                var summary = string.Join("\n", issues.Take(10).Select(i => $"[{i.Status}] {i.Message}"));
+                if (issues.Length > 10)
+                    summary += $"\n... and {issues.Length - 10} more";
+                _notifications.Info($"Validation: {issues.Length} issue(s):\n{summary}");
+            }
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Validation failed: {ex.Message}");
+        }
+    }
 }
 
 /// <summary>

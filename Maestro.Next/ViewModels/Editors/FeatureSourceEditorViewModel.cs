@@ -228,6 +228,8 @@ public partial class FeatureSourceEditorViewModel : DocumentViewModel
             }
 
             SchemaLoaded = true;
+            if (SchemaClasses.Count > 0)
+                SelectedClassName = SchemaClasses[0].QualifiedName;
 
             Program.Services!.GetRequiredService<INotificationService>()
                    .Success($"Schema loaded: {SchemaClasses.Count} class(es)");
@@ -236,6 +238,70 @@ public partial class FeatureSourceEditorViewModel : DocumentViewModel
         {
             Program.Services!.GetRequiredService<INotificationService>()
                    .Error($"Schema load failed: {ex.Message}");
+        }
+        finally { IsBusy = false; BusyMessage = null; }
+    }
+
+    // ── Data Preview ────────────────────────────────────────────
+    [ObservableProperty] private string _dataPreview = string.Empty;
+    [ObservableProperty] private string? _selectedClassName;
+
+    [RelayCommand]
+    private async Task PreviewDataAsync()
+    {
+        if (ResourceId is null || string.IsNullOrEmpty(SelectedClassName)) return;
+        try
+        {
+            IsBusy = true;
+            BusyMessage = "Loading data preview...";
+
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+
+            var reader = await Task.Run(() =>
+                conn.FeatureService.QueryFeatureSource(ResourceId, SelectedClassName));
+
+            var sb = new System.Text.StringBuilder();
+            int count = 0;
+            const int maxRows = 100;
+
+            // Header
+            var colNames = new List<string>();
+            for (int i = 0; i < reader.FieldCount; i++)
+                colNames.Add(reader.GetName(i));
+            sb.AppendLine(string.Join("\t", colNames));
+            sb.AppendLine(new string('─', Math.Min(colNames.Count * 15, 120)));
+
+            while (reader.ReadNext() && count < maxRows)
+            {
+                var vals = new List<string>();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    try
+                    {
+                        if (reader.IsNull(i))
+                            vals.Add("NULL");
+                        else if (reader[i] is byte[])
+                            vals.Add("[binary]");
+                        else
+                            vals.Add(reader[i]?.ToString()?.Truncate(50) ?? "");
+                    }
+                    catch
+                    {
+                        vals.Add("[error]");
+                    }
+                }
+                sb.AppendLine(string.Join("\t", vals));
+                count++;
+            }
+            reader.Close();
+
+            sb.Insert(0, $"Showing {count} of {(count >= maxRows ? maxRows + "+" : count.ToString())} rows\n\n");
+            DataPreview = sb.ToString();
+        }
+        catch (Exception ex)
+        {
+            DataPreview = $"Preview failed: {ex.Message}";
         }
         finally { IsBusy = false; BusyMessage = null; }
     }

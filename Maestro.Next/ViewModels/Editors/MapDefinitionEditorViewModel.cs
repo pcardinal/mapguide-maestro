@@ -29,6 +29,24 @@ public partial class MapDefinitionEditorViewModel : DocumentViewModel
     [ObservableProperty] private string _extents = string.Empty;
     [ObservableProperty] private MapLayerTreeNode? _selectedNode;
 
+    // ── Extent editing fields ──
+    [ObservableProperty] private double _minX;
+    [ObservableProperty] private double _minY;
+    [ObservableProperty] private double _maxX;
+    [ObservableProperty] private double _maxY;
+
+    partial void OnMinXChanged(double value) => UpdateExtentsDisplay();
+    partial void OnMinYChanged(double value) => UpdateExtentsDisplay();
+    partial void OnMaxXChanged(double value) => UpdateExtentsDisplay();
+    partial void OnMaxYChanged(double value) => UpdateExtentsDisplay();
+
+    private bool _suppressExtentDirty;
+    private void UpdateExtentsDisplay()
+    {
+        Extents = $"({MinX:F4}, {MinY:F4}) — ({MaxX:F4}, {MaxY:F4})";
+        if (!_suppressExtentDirty && IsLoaded) IsDirty = true;
+    }
+
     /// <summary>Flat tree: groups at root, layers nested under their group</summary>
     public ObservableCollection<MapLayerTreeNode> LayerTree { get; } = new();
 
@@ -50,9 +68,16 @@ public partial class MapDefinitionEditorViewModel : DocumentViewModel
             CoordinateSystem = _mapDef.CoordinateSystem ?? string.Empty;
 
             var ext = _mapDef.Extents;
-            Extents = ext != null
-                ? $"({ext.MinX:F4}, {ext.MinY:F4}) — ({ext.MaxX:F4}, {ext.MaxY:F4})"
-                : "(not set)";
+            _suppressExtentDirty = true;
+            if (ext != null)
+            {
+                MinX = ext.MinX;
+                MinY = ext.MinY;
+                MaxX = ext.MaxX;
+                MaxY = ext.MaxY;
+            }
+            _suppressExtentDirty = false;
+            UpdateExtentsDisplay();
 
             BuildLayerTree();
             IsLoaded = true;
@@ -149,6 +174,15 @@ public partial class MapDefinitionEditorViewModel : DocumentViewModel
 
             _mapDef.Name             = MapName;
             _mapDef.CoordinateSystem = CoordinateSystem;
+
+            // Write back extents
+            if (_mapDef.Extents != null)
+            {
+                _mapDef.Extents.MinX = MinX;
+                _mapDef.Extents.MinY = MinY;
+                _mapDef.Extents.MaxX = MaxX;
+                _mapDef.Extents.MaxY = MaxY;
+            }
 
             var conn = Program.Services!.GetRequiredService<IConnectionService>()
                               .CurrentConnection!;

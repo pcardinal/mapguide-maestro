@@ -68,11 +68,26 @@
                            Margin="8,2,0,2" />
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Extents"
-                           VerticalAlignment="Center" />
-                <TextBlock Grid.Row="2" Grid.Column="1"
-                           Text="{Binding Extents}"
-                           FontFamily="Consolas,Monospace" FontSize="11"
-                           Margin="8,4,0,2" />
+                           VerticalAlignment="Top" Margin="0,6,0,0" />
+                <StackPanel Grid.Row="2" Grid.Column="1" Margin="8,2,0,2" Spacing="4">
+                  <TextBlock Text="{Binding Extents}"
+                             FontFamily="Consolas,Monospace" FontSize="11"
+                             Foreground="Gray" />
+                  <Grid ColumnDefinitions="50,*,10,50,*" RowDefinitions="Auto,Auto" RowSpacing="4">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Min X:" FontSize="11" VerticalAlignment="Center" />
+                    <NumericUpDown Grid.Row="0" Grid.Column="1" Value="{Binding MinX}"
+                                   FormatString="F4" FontSize="11" Minimum="-1E15" Maximum="1E15" />
+                    <TextBlock Grid.Row="0" Grid.Column="3" Text="Min Y:" FontSize="11" VerticalAlignment="Center" />
+                    <NumericUpDown Grid.Row="0" Grid.Column="4" Value="{Binding MinY}"
+                                   FormatString="F4" FontSize="11" Minimum="-1E15" Maximum="1E15" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Max X:" FontSize="11" VerticalAlignment="Center" />
+                    <NumericUpDown Grid.Row="1" Grid.Column="1" Value="{Binding MaxX}"
+                                   FormatString="F4" FontSize="11" Minimum="-1E15" Maximum="1E15" />
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="Max Y:" FontSize="11" VerticalAlignment="Center" />
+                    <NumericUpDown Grid.Row="1" Grid.Column="4" Value="{Binding MaxY}"
+                                   FormatString="F4" FontSize="11" Minimum="-1E15" Maximum="1E15" />
+                  </Grid>
+                </StackPanel>
               </Grid>
             </StackPanel>
           </Border>

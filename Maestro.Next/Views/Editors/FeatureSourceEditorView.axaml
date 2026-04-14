@@ -123,6 +123,31 @@
             </ItemsControl>
           </StackPanel>
         </Border>
+
+        <!-- Data Preview section -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12"
+                IsVisible="{Binding SchemaLoaded}">
+          <StackPanel Spacing="8">
+            <TextBlock Text="Data Preview" FontWeight="SemiBold" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBox Text="{Binding SelectedClassName}"
+                       Watermark="Schema:ClassName"
+                       Width="280" FontFamily="Consolas,Monospace" FontSize="11" />
+              <Button Content="▶ Preview"
+                      Command="{Binding PreviewDataCommand}" />
+            </StackPanel>
+            <TextBox Text="{Binding DataPreview}"
+                     IsReadOnly="True"
+                     AcceptsReturn="True"
+                     TextWrapping="NoWrap"
+                     FontFamily="Consolas,Monospace"
+                     FontSize="11"
+                     MaxHeight="300"
+                     IsVisible="{Binding DataPreview,
+                                 Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          </StackPanel>
+        </Border>
       </ScrollViewer>
     </Grid>
 

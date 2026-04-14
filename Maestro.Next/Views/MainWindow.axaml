@@ -66,6 +66,9 @@
                   Command="{Binding ShowOptionsCommand}" />
       </MenuItem>
       <MenuItem Header="_Help">
+        <MenuItem Header="_Tip of the Day..."
+                  Click="OnTipOfTheDayClick" />
+        <Separator />
         <MenuItem Header="_About MapGuide Maestro"
                   Command="{Binding ShowAboutCommand}" />
       </MenuItem>

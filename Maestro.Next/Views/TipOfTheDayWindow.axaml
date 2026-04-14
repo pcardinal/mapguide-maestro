@@ -1,0 +1,41 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        x:Class="Maestro.Next.Views.TipOfTheDayWindow"
+        x:DataType="vm:TipOfTheDayViewModel"
+        Title="Tip of the Day"
+        Width="450" Height="250"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+
+  <Grid RowDefinitions="*,Auto,Auto" Margin="20">
+
+    <!-- Tip content -->
+    <StackPanel Grid.Row="0" Spacing="8">
+      <TextBlock Text="💡 Did you know?" FontWeight="Bold" FontSize="14" />
+      <TextBlock Text="{Binding CurrentTip}"
+                 TextWrapping="Wrap" FontSize="13"
+                 Margin="0,4,0,0" />
+      <TextBlock Text="{Binding TipNumber}"
+                 FontSize="11" Foreground="Gray"
+                 Margin="0,8,0,0" />
+    </StackPanel>
+
+    <!-- Show on startup -->
+    <CheckBox Grid.Row="1" Content="Show tips on startup"
+              IsChecked="{Binding ShowOnStartup}"
+              Margin="0,12,0,0" />
+
+    <!-- Navigation buttons -->
+    <StackPanel Grid.Row="2" Orientation="Horizontal"
+                HorizontalAlignment="Right" Spacing="8" Margin="0,12,0,0">
+      <Button Content="← Previous"
+              Command="{Binding PreviousTipCommand}" Width="90" />
+      <Button Content="Next →"
+              Command="{Binding NextTipCommand}" Width="90" />
+      <Button Content="Close" Click="OnCloseClick"
+              Classes="accent" Width="80" />
+    </StackPanel>
+  </Grid>
+</Window>

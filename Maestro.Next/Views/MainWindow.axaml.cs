@@ -93,6 +93,13 @@ public partial class MainWindow : Window
         await dialog.ShowDialog(this);
     }
 
+    private async void OnTipOfTheDayClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var vm = new TipOfTheDayViewModel();
+        var dialog = new TipOfTheDayWindow { DataContext = vm };
+        await dialog.ShowDialog(this);
+    }
+
     private async void OnWindowClosing(object? sender, WindowClosingEventArgs e)
     {
         if (DataContext is not MainWindowViewModel mainVm) return;

@@ -13,6 +13,10 @@
     <KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveAllDocumentsCommand}" />
     <KeyBinding Gesture="Ctrl+W" Command="{Binding CloseActiveDocumentCommand}" />
     <KeyBinding Gesture="Ctrl+Q" Command="{Binding ExitCommand}" />
+    <KeyBinding Gesture="Ctrl+N" Command="{Binding SiteExplorer.NewResourceCommand}" />
+    <KeyBinding Gesture="F5" Command="{Binding SiteExplorer.RefreshCommand}" />
+    <KeyBinding Gesture="Delete" Command="{Binding SiteExplorer.DeleteSelectedCommand}" />
+    <KeyBinding Gesture="F2" Command="{Binding SiteExplorer.RenameSelectedCommand}" />
   </Window.KeyBindings>
 
   <!-- Panel wraps DockPanel so the notification overlay can float on top -->

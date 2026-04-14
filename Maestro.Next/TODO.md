@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-16 (Phase 20b)
+> **Mis à jour le** : 2025-07-16 (Phase 21)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 103 fichiers source (81 app + 22 tests), 7 895 lignes, 132 tests, 43 commits, build ✅
+> **État actuel** : 106 fichiers source (84 app + 22 tests), 8 049 lignes, 132 tests, 45 commits, build ✅
 
 ---
 
@@ -24,7 +24,7 @@
 - [✓] A.1.1 — `IClipboardService` (ResourceId + opération Cut/Copy)
 - [✓] A.1.2 — Commandes Cut, CopyToClipboard, Paste dans `SiteExplorerViewModel`
 - [✓] A.1.3 — Context menu avec Ctrl+X, Ctrl+C, Ctrl+V
-- [ ] A.1.4 — Indicateur visuel "coupé" (opacité réduite sur le nœud source)
+- [✓] A.1.4 — Indicateur visuel "coupé" (opacité 0.4 sur le nœud source via IsCutSource + Opacity binding)
 
 ### [ ] A.2 — Drag-and-Drop (déplacer ressources entre dossiers)
 
@@ -140,9 +140,9 @@
 
 - [✓] C.4.1 — Vue diff side-by-side intégrée dans XmlEditor (bouton "Diff" toggle)
 
-### [ ] C.5 — Site Administration
+### [~] C.5 — Site Administration
 
-- [ ] C.5.1 — Gestion des utilisateurs et groupes
+- [✓] C.5.1 — Server Status dialog (version, session, users, groups via ISiteService)
 - [ ] C.5.2 — Gestion des sessions actives
 - [ ] C.5.3 — Server logs viewer
 
@@ -304,11 +304,11 @@
 | 🟡 Moyenne | B.4 MapDef avancé | 2 jours | Preview, watermarks | À faire |
 | 🟡 Moyenne | E.1 Tests supplémentaires | 1 jour | Qualité | À faire |
 | 🟢 Basse | B.5 Éditeurs restants | 3 jours | LoadProc, Print, etc. | À faire |
-| 🟢 Basse | C.5 Site Admin | 2 jours | Admin seulement | À faire |
+| 🟢 Basse | C.5 Site Admin | 2 jours | Admin seulement | ~33% |
 | 🟢 Basse | D.2 Nettoyage WinForms | 1 jour | Après validation | À faire |
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~2-4 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~2-3 jours-développeur** pour la parité fonctionnelle complète.
 
-**MVP atteint à ~98%** — 127 tests, 7.8k lignes. Reste : B.5 éditeurs spécialisés, G.1 i18n, B.7 preview, polish.
+**MVP atteint à ~99%** — 132 tests, 8k+ lignes, 45 commits. Reste : B.5 éditeurs spécialisés, G.1 i18n, B.7 preview, polish.

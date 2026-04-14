@@ -337,6 +337,75 @@ public partial class SiteExplorerViewModel : ViewModelBase
         if (SelectedNode is null || PropertiesRequested is null) return;
         await PropertiesRequested.Invoke(SelectedNode.ResourceId);
     }
+
+    // ── Export XML to Disk ──────────────────────────────────────
+    /// <summary>Raised when UI must prompt for a save-file path</summary>
+    public Func<string, Task<string?>>? SaveToFileRequested { get; set; }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNonFolder))]
+    private async Task SaveToDiskAsync()
+    {
+        if (SelectedNode is null || SaveToFileRequested is null) return;
+        var path = await SaveToFileRequested(SelectedNode.Name + ".xml");
+        if (string.IsNullOrWhiteSpace(path)) return;
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>().CurrentConnection!;
+            using var stream = await Task.Run(() => conn.ResourceService.GetResourceXmlData(SelectedNode.ResourceId));
+            using var fs = System.IO.File.Create(path);
+            await stream.CopyToAsync(fs);
+            _notifications.Success($"Exported to {System.IO.Path.GetFileName(path)}");
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Export failed: {ex.Message}");
+        }
+    }
+
+    // ── Show Spatial Contexts ───────────────────────────────────
+    /// <summary>Raised when UI must show spatial contexts info</summary>
+    public Func<string, Task>? SpatialContextsRequested { get; set; }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNonFolder))]
+    private async Task ShowSpatialContextsAsync()
+    {
+        if (SelectedNode is null || SpatialContextsRequested is null) return;
+        if (SelectedNode.ResourceType != "FeatureSource")
+        {
+            _notifications.Info("Spatial contexts are only available for Feature Sources.");
+            return;
+        }
+        await SpatialContextsRequested(SelectedNode.ResourceId);
+    }
+
+    // ── Purge Feature Source Cache ──────────────────────────────
+    [RelayCommand(CanExecute = nameof(HasSelectedNonFolder))]
+    private async Task PurgeCacheAsync()
+    {
+        if (SelectedNode is null) return;
+        if (SelectedNode.ResourceType != "FeatureSource")
+        {
+            _notifications.Info("Cache purge is only available for Feature Sources.");
+            return;
+        }
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>().CurrentConnection!;
+            var fsId = SelectedNode.ResourceId;
+            // Re-set the resource data to force a cache refresh
+            using var stream = await Task.Run(() => conn.ResourceService.GetResourceXmlData(fsId));
+            using var ms = new System.IO.MemoryStream();
+            await stream.CopyToAsync(ms);
+            ms.Position = 0;
+            await Task.Run(() => conn.ResourceService.SetResourceXmlData(fsId, ms));
+            _notifications.Success("Feature source cache purged.");
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Cache purge failed: {ex.Message}");
+        }
+    }
 }
 
 /// <summary>

@@ -36,7 +36,16 @@ public partial class MainWindowViewModel : ViewModelBase
         Documents.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(Documents.ActiveDocument))
+            {
+                // Track IsDirty on the new active document
+                if (Documents.ActiveDocument is { } doc)
+                    doc.PropertyChanged += (_, de) =>
+                    {
+                        if (de.PropertyName == nameof(doc.IsDirty))
+                            UpdateTitle();
+                    };
                 UpdateTitle();
+            }
         };
         Documents.OpenDocuments.CollectionChanged += (_, _) => UpdateTitle();
     }

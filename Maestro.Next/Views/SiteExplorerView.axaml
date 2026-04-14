@@ -130,6 +130,12 @@
                     InputGesture="Ctrl+V" />
           <MenuItem Header="Copy Resource ID"
                     Command="{Binding CopyResourceIdCommand}" />
+          <MenuItem Header="Save to Disk..."
+                    Command="{Binding SaveToDiskCommand}" />
+          <MenuItem Header="Spatial Contexts..."
+                    Command="{Binding ShowSpatialContextsCommand}" />
+          <MenuItem Header="Purge Cache"
+                    Command="{Binding PurgeCacheCommand}" />
           <Separator />
           <MenuItem Header="Refresh" Command="{Binding RefreshCommand}" />
           <Separator />

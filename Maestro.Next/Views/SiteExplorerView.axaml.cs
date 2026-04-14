@@ -46,6 +46,8 @@ public partial class SiteExplorerView : UserControl
             vm.DeleteConfirmRequested  = ShowDeleteConfirmAsync;
             vm.RenameRequested         = ShowRenameDialogAsync;
             vm.PropertiesRequested     = ShowPropertiesDialogAsync;
+            vm.SaveToFileRequested     = ShowSaveToFileDialogAsync;
+            vm.SpatialContextsRequested = ShowSpatialContextsAsync;
         }
     }
 
@@ -171,6 +173,74 @@ public partial class SiteExplorerView : UserControl
         var vm = new ResourcePropertiesViewModel(resourceId);
         var dialog = new ResourcePropertiesWindow { DataContext = vm };
         await dialog.ShowDialog(window);
+    }
+
+    private async Task<string?> ShowSaveToFileDialogAsync(string suggestedName)
+    {
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel?.StorageProvider is null) return null;
+
+        var file = await topLevel.StorageProvider.SaveFilePickerAsync(
+            new Avalonia.Platform.Storage.FilePickerSaveOptions
+            {
+                SuggestedFileName = suggestedName,
+                DefaultExtension = "xml",
+                FileTypeChoices =
+                [
+                    new Avalonia.Platform.Storage.FilePickerFileType("XML") { Patterns = ["*.xml"] },
+                    new Avalonia.Platform.Storage.FilePickerFileType("All files") { Patterns = ["*"] }
+                ]
+            });
+        return file?.Path.LocalPath;
+    }
+
+    private async Task ShowSpatialContextsAsync(string resourceId)
+    {
+        var window = VisualRoot as Window;
+        if (window is null) return;
+
+        string info;
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>().CurrentConnection!;
+            var feature = conn.FeatureService;
+            var contexts = await Task.Run(() => feature.GetSpatialContextInfo(resourceId, false));
+            if (contexts.SpatialContext.Count == 0)
+            {
+                info = "No spatial contexts found.";
+            }
+            else
+            {
+                var lines = contexts.SpatialContext.Select(sc =>
+                    $"• {sc.Name}\n  CS: {sc.CoordinateSystemName}\n  WKT: {(sc.CoordinateSystemWkt?.Length > 80 ? sc.CoordinateSystemWkt[..80] + "..." : sc.CoordinateSystemWkt)}\n  Extent: ({sc.Extent?.LowerLeftCoordinate?.X}, {sc.Extent?.LowerLeftCoordinate?.Y}) → ({sc.Extent?.UpperRightCoordinate?.X}, {sc.Extent?.UpperRightCoordinate?.Y})");
+                info = string.Join("\n\n", lines);
+            }
+        }
+        catch (Exception ex)
+        {
+            info = $"Error: {ex.Message}";
+        }
+
+        var box = new Window
+        {
+            Title = "Spatial Contexts",
+            Width = 500, Height = 350,
+            CanResize = true,
+            ShowInTaskbar = false,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            Content = new ScrollViewer
+            {
+                Content = new TextBlock
+                {
+                    Text = info,
+                    TextWrapping = Avalonia.Media.TextWrapping.Wrap,
+                    FontFamily = new Avalonia.Media.FontFamily("Consolas,Monospace"),
+                    FontSize = 12,
+                    Margin = new Avalonia.Thickness(16)
+                }
+            }
+        };
+        await box.ShowDialog(window);
     }
 
     private ResourceTreeNode? _dragSource;

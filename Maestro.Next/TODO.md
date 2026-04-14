@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-16 (Phase 17)
+> **Mis à jour le** : 2025-07-16 (Phase 18)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 95 fichiers source (77 app + 18 tests), 7 067 lignes, 101 tests, 32 commits, build ✅
+> **État actuel** : 97 fichiers source (78 app + 19 tests), 7 220 lignes, 113 tests, 34 commits, build ✅
 
 ---
 
@@ -81,7 +81,7 @@
 
 - [✓] B.3.1 — Affichage des Scale Ranges avec détail des règles Point/Line/Area (label, filtre, icône)
 - [✓] B.3.2 — Édition inline des LegendLabel et Filter de chaque règle (two-way binding → IVectorRule)
-- [ ] B.3.3 — Color picker intégré pour la symbologie
+- [✓] B.3.3 — Color picker hex (ForegroundColor extrait/appliqué sur Fill/Stroke, editable inline)
 - [✓] B.3.4 — Bouton "..." Expression Builder sur chaque filtre de règle
 - [ ] B.3.5 — Theme generation wizard (création automatique de règles par valeur)
 - [✓] B.3.6 — Ajout/suppression de scale ranges (via ObjectFactory + AddVectorScaleRange/RemoveVectorScaleRange)
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (101 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (113 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -213,6 +213,7 @@
 - [✓] E.1.19 — LayerDefinitionEditorViewModel (2 tests) — Phase 16
 - [✓] E.1.20 — Editor VMs (WebLayout, Symbol, AppDef, Generic — 4 tests) — Phase 17
 - [✓] E.1.21 — StringExtensions (4 tests) — Phase 17
+- [✓] E.1.22 — ResourceIcons (12 tests) — Phase 18
 
 ### [ ] E.2 — Tests d'intégration
 
@@ -304,6 +305,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~6-10 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~5-8 jours-développeur** pour la parité fonctionnelle complète.
 
-**MVP atteint à ~95%** — 101 tests, 7k+ lignes. Prochaines étapes : B.3 color picker, B.5 éditeurs spécialisés, G.1 i18n, B.7 preview.
+**MVP atteint à ~96%** — 113 tests, 7.2k lignes. Prochaines étapes : B.3.5 theme wizard, B.5 éditeurs spécialisés, G.1 i18n, B.7 preview.

@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-16 (Phase 20)
+> **Mis à jour le** : 2025-07-16 (Phase 20b)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 102 fichiers source (81 app + 21 tests), 7 789 lignes, 127 tests, 41 commits, build ✅
+> **État actuel** : 103 fichiers source (81 app + 22 tests), 7 895 lignes, 132 tests, 43 commits, build ✅
 
 ---
 
@@ -61,7 +61,7 @@
 - [ ] A.7.6 — `TestResourceCompatibility` — tester la compatibilité avec une autre version
 - [✓] A.7.7 — `RepointCommand` — re-pointer les références FeatureSource (replace XML dans tous les dépendants)
 - [ ] A.7.8 — `MigrateResourceCommand` — migrer une ressource vers un autre serveur
-- [ ] A.7.9 — `EditResourceHeader` — éditer le XML header directement
+- [✓] A.7.9 — `EditResourceHeader` — voir le XML header via dialog (lecture seule)
 
 ---
 
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (127 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (132 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -217,6 +217,7 @@
 - [✓] E.1.23 — ExpressionBuilder validation (4 tests) — Phase 19
 - [✓] E.1.24 — ThemeWizardViewModel (4+2 tests) — Phase 19
 - [✓] E.1.25 — SpatialContextOverrideItem + ConnectionPropertyVM (4 tests) — Phase 20
+- [✓] E.1.26 — DocumentViewModel base, XmlEditor, LoadPackage extras (5 tests) — Phase 20b
 
 ### [ ] E.2 — Tests d'intégration
 

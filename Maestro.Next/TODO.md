@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-15 (Phase 15)
+> **Mis à jour le** : 2025-07-15 (Phase 16)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 85 fichiers source (73 app + 12 tests), 6 394 lignes, 74 tests, 27 commits, build ✅
+> **État actuel** : 89 fichiers source (74 app + 15 tests), 6 673 lignes, 86 tests, 29 commits, build ✅
 
 ---
 
@@ -71,7 +71,7 @@
 
 - [ ] B.1.1 — Onglet Extensions (FDO joins, calculated properties)
 - [ ] B.1.2 — Dialog de configuration des extensions
-- [ ] B.1.3 — Preview des données (data grid avec FeatureReader)
+- [✓] B.1.3 — Preview des données (data grid text via FeatureReader, max 100 rows)
 
 ### [ ] B.2 — FeatureSource : Coordinate System Override
 
@@ -88,7 +88,7 @@
 
 ### [ ] B.4 — MapDefinition : fonctionnalités avancées
 
-- [ ] B.4.1 — Extent editor (saisie/calcul des bornes)
+- [✓] B.4.1 — Extent editor (MinX/MinY/MaxX/MaxY avec NumericUpDown, two-way binding)
 - [ ] B.4.2 — Watermark configuration
 - [ ] B.4.3 — Tile set configuration (base map groups)
 - [ ] B.4.4 — Preview carte (rendu serveur via RuntimeMap)
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (74 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (86 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -296,6 +296,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~10-14 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~8-12 jours-développeur** pour la parité fonctionnelle complète.
 
-**MVP atteint à ~90%** — prochaines étapes : B.3 color picker/theme wizard, C.1 create package, B.1 FeatureSource extensions.
+**MVP atteint à ~92%** — prochaines étapes : B.3 color picker, C.1 create package, B.5 éditeurs restants.

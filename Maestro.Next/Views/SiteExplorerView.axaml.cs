@@ -21,7 +21,16 @@ public partial class SiteExplorerView : UserControl
         base.OnLoaded(e);
 
         var tree = this.FindControl<TreeView>("ResourceTree");
-        if (tree != null) tree.DoubleTapped += OnDoubleTapped;
+        if (tree != null)
+        {
+            tree.DoubleTapped += OnDoubleTapped;
+
+            // Drag-and-drop
+            tree.PointerPressed += OnTreePointerPressed;
+            DragDrop.SetAllowDrop(tree, true);
+            tree.AddHandler(DragDrop.DragOverEvent, OnDragOver);
+            tree.AddHandler(DragDrop.DropEvent, OnDrop);
+        }
 
         var list = this.FindControl<ListBox>("SearchResultsList");
         if (list != null) list.DoubleTapped += OnDoubleTapped;
@@ -36,6 +45,7 @@ public partial class SiteExplorerView : UserControl
             vm.NewResourceRequested    = ShowNewResourceDialogAsync;
             vm.DeleteConfirmRequested  = ShowDeleteConfirmAsync;
             vm.RenameRequested         = ShowRenameDialogAsync;
+            vm.PropertiesRequested     = ShowPropertiesDialogAsync;
         }
     }
 
@@ -149,5 +159,79 @@ public partial class SiteExplorerView : UserControl
         };
 
         return new StackPanel { Children = { lbl, btnRow } };
+    }
+
+    // ── Drag-and-Drop ─────────────────────────────────────────────
+
+    private async Task ShowPropertiesDialogAsync(string resourceId)
+    {
+        var window = VisualRoot as Window;
+        if (window is null) return;
+
+        var vm = new ResourcePropertiesViewModel(resourceId);
+        var dialog = new ResourcePropertiesWindow { DataContext = vm };
+        await dialog.ShowDialog(window);
+    }
+
+    private ResourceTreeNode? _dragSource;
+
+    private async void OnTreePointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        // Drag-and-drop initiation — Avalonia 12 uses a different API.
+        // For now, we use Cut/Copy/Paste via the clipboard service (A.1).
+        // Full DnD will be implemented when Avalonia 12's DataTransfer API stabilizes.
+        // This handler captures the drag source for potential future use.
+        if (DataContext is not SiteExplorerViewModel vm) return;
+        if (vm.SelectedNode is null or { IsPlaceholder: true }) return;
+
+        var point = e.GetCurrentPoint(sender as Avalonia.Visual);
+        if (!point.Properties.IsLeftButtonPressed) return;
+
+        _dragSource = vm.SelectedNode;
+    }
+
+    private void OnDragOver(object? sender, DragEventArgs e)
+    {
+        // Accept drops on folder nodes
+        e.DragEffects = DragDropEffects.None;
+        if (DataContext is SiteExplorerViewModel vm && vm.SelectedNode is { IsFolder: true })
+            e.DragEffects = DragDropEffects.Move;
+    }
+
+    private async void OnDrop(object? sender, DragEventArgs e)
+    {
+        if (DataContext is not SiteExplorerViewModel vm) return;
+        if (_dragSource is null) return;
+
+        var targetFolder = vm.SelectedNode?.IsFolder == true
+            ? vm.SelectedNode.ResourceId
+            : "Library://";
+
+        var srcId = _dragSource.ResourceId;
+        var name = srcId.TrimEnd('/').Split('/').Last();
+        var destId = targetFolder.TrimEnd('/') + "/" + name;
+        if (srcId.EndsWith("/", StringComparison.Ordinal))
+            destId += "/";
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+            var notif = Program.Services!.GetRequiredService<INotificationService>();
+
+            await Task.Run(() => conn.ResourceService.MoveResource(srcId, destId, false));
+            notif.Success($"Moved to {targetFolder}");
+
+            await vm.RefreshCommand.ExecuteAsync(null);
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"Drop failed: {ex.Message}");
+        }
+        finally
+        {
+            _dragSource = null;
+        }
     }
 }

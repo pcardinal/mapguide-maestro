@@ -83,7 +83,8 @@
               IsVisible="{Binding !IsSearchActive}"
               ItemsSource="{Binding RootNodes}"
               SelectedItem="{Binding SelectedNode}"
-              Margin="2">
+              Margin="2"
+              DragDrop.AllowDrop="True">
 
       <TreeView.ItemTemplate>
         <TreeDataTemplate ItemsSource="{Binding Children}"
@@ -130,6 +131,8 @@
           <Separator />
           <MenuItem Header="Refresh" Command="{Binding RefreshCommand}" />
           <Separator />
+          <MenuItem Header="Properties..."
+                    Command="{Binding ShowPropertiesCommand}" />
           <MenuItem Header="Delete"
                     Command="{Binding DeleteSelectedCommand}" />
         </ContextMenu>

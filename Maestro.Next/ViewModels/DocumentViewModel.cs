@@ -50,6 +50,49 @@ public abstract partial class DocumentViewModel : ViewModelBase
     protected abstract Task SaveAsync();
 
     /// <summary>
+    /// Callback to prompt user for a new ResourceId. Set by the view layer.
+    /// </summary>
+    public Func<string, Task<string?>>? SaveAsRequested { get; set; }
+
+    /// <summary>
+    /// Save As — saves under a different ResourceId
+    /// </summary>
+    [RelayCommand]
+    protected virtual async Task SaveAsAsync()
+    {
+        if (ResourceId is null || SaveAsRequested is null) return;
+        var newId = await SaveAsRequested(ResourceId);
+        if (string.IsNullOrWhiteSpace(newId) || newId == ResourceId) return;
+
+        try
+        {
+            IsBusy = true;
+            BusyMessage = "Saving As...";
+
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+
+            // Copy the resource to the new ID, then re-point this editor
+            await Task.Run(() =>
+                conn.ResourceService.CopyResource(ResourceId, newId, true));
+
+            ResourceId = newId;
+            var name = newId.TrimEnd('/').Split('/').Last();
+            Title = $"{System.IO.Path.GetFileNameWithoutExtension(name)} [{IconKey}]";
+            IsDirty = false;
+
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Success($"Saved as {newId}");
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"Save As failed: {ex.Message}");
+        }
+        finally { IsBusy = false; BusyMessage = null; }
+    }
+
+    /// <summary>
     /// Called when the document is closed
     /// </summary>
     public virtual void OnClose() { }

@@ -314,6 +314,17 @@ public partial class SiteExplorerViewModel : ViewModelBase
     }
 
     private bool HasSelectedNode() => SelectedNode is { IsPlaceholder: false };
+
+    // ── Resource Properties ─────────────────────────────────────
+    /// <summary>Raised when UI must show the Properties dialog</summary>
+    public Func<string, Task>? PropertiesRequested { get; set; }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNode))]
+    private async Task ShowPropertiesAsync()
+    {
+        if (SelectedNode is null || PropertiesRequested is null) return;
+        await PropertiesRequested.Invoke(SelectedNode.ResourceId);
+    }
 }
 
 /// <summary>

@@ -1,0 +1,81 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        x:Class="Maestro.Next.Views.ResourcePropertiesWindow"
+        x:DataType="vm:ResourcePropertiesViewModel"
+        Title="Resource Properties"
+        Width="550" Height="480"
+        WindowStartupLocation="CenterOwner"
+        CanResize="True"
+        ShowInTaskbar="False">
+
+  <Grid RowDefinitions="*,Auto" Margin="16">
+    <ScrollViewer Grid.Row="0">
+      <StackPanel Spacing="14">
+
+        <!-- Identity -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12">
+          <StackPanel Spacing="6">
+            <TextBlock Text="Identity" FontWeight="SemiBold" FontSize="13" />
+            <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,Auto,Auto,Auto">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" FontWeight="Medium" />
+              <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Name}" />
+
+              <TextBlock Grid.Row="1" Grid.Column="0" Text="Type" FontWeight="Medium" />
+              <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ResourceType}" />
+
+              <TextBlock Grid.Row="2" Grid.Column="0" Text="Resource ID" FontWeight="Medium" />
+              <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ResourceId}"
+                         FontFamily="Consolas,Monospace" FontSize="11"
+                         TextWrapping="Wrap" />
+
+              <TextBlock Grid.Row="3" Grid.Column="0" Text="Referenced By" FontWeight="Medium" />
+              <TextBlock Grid.Row="3" Grid.Column="1"
+                         Text="{Binding ReferenceCount, StringFormat='{}{0} resource(s)'}" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- Dates -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12"
+                IsVisible="{Binding !IsFolder}">
+          <StackPanel Spacing="6">
+            <TextBlock Text="Dates" FontWeight="SemiBold" FontSize="13" />
+            <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,Auto">
+              <TextBlock Grid.Row="0" Grid.Column="0" Text="Created" FontWeight="Medium" />
+              <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CreatedDate}" />
+
+              <TextBlock Grid.Row="1" Grid.Column="0" Text="Modified" FontWeight="Medium" />
+              <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ModifiedDate}" />
+            </Grid>
+          </StackPanel>
+        </Border>
+
+        <!-- XML Preview -->
+        <Border Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                CornerRadius="4" Padding="12"
+                IsVisible="{Binding !IsFolder}">
+          <StackPanel Spacing="6">
+            <TextBlock Text="XML Content" FontWeight="SemiBold" FontSize="13" />
+            <TextBox Text="{Binding XmlPreview}"
+                     IsReadOnly="True"
+                     AcceptsReturn="True"
+                     MaxHeight="200"
+                     FontFamily="Consolas,Monospace"
+                     FontSize="11" />
+          </StackPanel>
+        </Border>
+
+      </StackPanel>
+    </ScrollViewer>
+
+    <Button Grid.Row="1"
+            Content="Close"
+            HorizontalAlignment="Right"
+            Margin="0,10,0,0"
+            Width="90"
+            Click="OnCloseClick" />
+  </Grid>
+</Window>

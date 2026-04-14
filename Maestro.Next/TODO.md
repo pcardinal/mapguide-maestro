@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-16 (Phase 18)
+> **Mis à jour le** : 2025-07-16 (Phase 19)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 97 fichiers source (78 app + 19 tests), 7 220 lignes, 113 tests, 34 commits, build ✅
+> **État actuel** : 97 fichiers source (78 app + 19 tests), 7 396 lignes, 117 tests, 36 commits, build ✅
 
 ---
 
@@ -59,7 +59,7 @@
 - [✓] A.7.4 — `ShowSpatialContexts` — dialog affichant CS, WKT, extent
 - [✓] A.7.5 — `PurgeFeatureSourceCache` — re-set XML pour forcer refresh
 - [ ] A.7.6 — `TestResourceCompatibility` — tester la compatibilité avec une autre version
-- [ ] A.7.7 — `RepointCommand` — re-pointer les références d'un FeatureSource
+- [✓] A.7.7 — `RepointCommand` — re-pointer les références FeatureSource (replace XML dans tous les dépendants)
 - [ ] A.7.8 — `MigrateResourceCommand` — migrer une ressource vers un autre serveur
 - [ ] A.7.9 — `EditResourceHeader` — éditer le XML header directement
 
@@ -106,7 +106,7 @@
 - [✓] B.6.1 — Dialog modale avec liste des propriétés de classe (auto-insert)
 - [✓] B.6.2 — Fonctions FDO depuis les capabilities du provider
 - [✓] B.6.3 — Opérateurs (=, <>, AND, OR, LIKE, IN, NULL, arithmétique)
-- [ ] B.6.4 — Validation de syntaxe en temps réel
+- [✓] B.6.4 — Validation de syntaxe via FdoFilter.Parse / FdoExpression.Parse (bouton "✓ Validate")
 
 ### [ ] B.7 — Preview de ressources
 
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (113 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (117 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -305,6 +305,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~5-8 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~4-7 jours-développeur** pour la parité fonctionnelle complète.
 
-**MVP atteint à ~96%** — 113 tests, 7.2k lignes. Prochaines étapes : B.3.5 theme wizard, B.5 éditeurs spécialisés, G.1 i18n, B.7 preview.
+**MVP atteint à ~97%** — 117 tests, 7.4k lignes. Reste : B.3.5 theme wizard, B.5 éditeurs spécialisés, G.1 i18n, B.7 preview.

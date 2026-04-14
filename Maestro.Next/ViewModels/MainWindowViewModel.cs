@@ -33,6 +33,12 @@ public partial class MainWindowViewModel : ViewModelBase
         ServerInfo = new ServerInfoViewModel();
 
         _connectionService.ConnectionStateChanged += OnConnectionStateChanged;
+        Documents.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(Documents.ActiveDocument))
+                UpdateTitle();
+        };
+        Documents.OpenDocuments.CollectionChanged += (_, _) => UpdateTitle();
     }
 
     [ObservableProperty]
@@ -136,14 +142,31 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             var conn = _connectionService.CurrentConnection!;
             StatusMessage = $"Connected to MapGuide {conn.SiteVersion}";
-            Title = $"MapGuide Maestro (Next) — {conn.DisplayName}";
             _ = ServerInfo.RefreshCommand.ExecuteAsync(null);
         }
         else
         {
             StatusMessage = "Not connected";
-            Title = "MapGuide Maestro (Next)";
-            _ = ServerInfo.RefreshCommand.ExecuteAsync(null);
+        }
+        UpdateTitle();
+    }
+
+    private void UpdateTitle()
+    {
+        var baseName = "MapGuide Maestro (Next)";
+        if (IsConnected)
+            baseName += $" — {_connectionService.CurrentConnection?.DisplayName}";
+
+        var active = Documents.ActiveDocument;
+        if (active != null)
+        {
+            var dirty = active.IsDirty ? " ●" : "";
+            Title = $"{active.Title}{dirty} — {baseName}";
+        }
+        else
+        {
+            var hasDirty = Documents.OpenDocuments.Any(d => d.IsDirty);
+            Title = hasDirty ? $"{baseName} ●" : baseName;
         }
     }
 }

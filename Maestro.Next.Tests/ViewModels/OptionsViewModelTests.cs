@@ -49,7 +49,9 @@ internal sealed class StubPreferencesService : IPreferencesService
     public AppTheme Theme { get; set; } = AppTheme.Dark;
     public string LastServerUrl { get; set; } = "";
     public string LastUsername { get; set; } = "";
+    public List<string> RecentConnections { get; } = new();
     public bool SaveCalled { get; private set; }
+    public void AddRecentConnection(string url) => RecentConnections.Add(url);
     public void Save() => SaveCalled = true;
     public void Load() { }
 }

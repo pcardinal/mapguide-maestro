@@ -13,6 +13,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        Closing += OnWindowClosing;
     }
 
     protected override void OnOpened(EventArgs e)
@@ -75,5 +76,60 @@ public partial class MainWindow : Window
         // Refresh the site explorer after upload
         if (vm.Completed && DataContext is MainWindowViewModel mainVm)
             await mainVm.SiteExplorer.RefreshCommand.ExecuteAsync(null);
+    }
+
+    private async void OnWindowClosing(object? sender, WindowClosingEventArgs e)
+    {
+        if (DataContext is not MainWindowViewModel mainVm) return;
+
+        var dirtyDocs = mainVm.Documents.OpenDocuments.Where(d => d.IsDirty).ToList();
+        if (dirtyDocs.Count == 0) return;
+
+        // Cancel the close, show confirmation
+        e.Cancel = true;
+
+        var names = string.Join("\n", dirtyDocs.Select(d => $"  • {d.Title}"));
+        var msg = new TextBlock
+        {
+            Text = $"You have {dirtyDocs.Count} unsaved document(s):\n{names}\n\nDiscard changes and close?",
+            TextWrapping = Avalonia.Media.TextWrapping.Wrap,
+            Margin = new Avalonia.Thickness(20, 20, 20, 12)
+        };
+
+        var discardBtn = new Button { Content = "Discard & Close", Width = 130 };
+        discardBtn.Classes.Add("accent");
+        var cancelBtn = new Button { Content = "Cancel", Width = 90 };
+
+        var btnRow = new StackPanel
+        {
+            Orientation = Avalonia.Layout.Orientation.Horizontal,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right,
+            Spacing = 8,
+            Margin = new Avalonia.Thickness(0, 0, 20, 0),
+            Children = { cancelBtn, discardBtn }
+        };
+
+        var box = new Window
+        {
+            Title = "Unsaved Changes",
+            Width = 420, Height = 200,
+            CanResize = false,
+            ShowInTaskbar = false,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            Content = new StackPanel { Children = { msg, btnRow } }
+        };
+
+        bool discard = false;
+        discardBtn.Click += (_, _) => { discard = true; box.Close(); };
+        cancelBtn.Click += (_, _) => box.Close();
+
+        await box.ShowDialog(this);
+
+        if (discard)
+        {
+            // Unsubscribe to avoid re-entrancy, then close
+            Closing -= OnWindowClosing;
+            Close();
+        }
     }
 }

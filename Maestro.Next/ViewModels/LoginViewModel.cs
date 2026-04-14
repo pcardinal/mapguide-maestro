@@ -9,6 +9,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Maestro.Next.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Maestro.Next.ViewModels;
 
@@ -58,6 +59,13 @@ public partial class LoginViewModel : ViewModelBase
 
             await _connectionService.ConnectAsync(ServerUrl, Username, Password);
             ConnectionSucceeded = true;
+
+            // Persist to recent connections
+            var prefs = Program.Services!.GetRequiredService<Services.IPreferencesService>();
+            prefs.AddRecentConnection(ServerUrl);
+            prefs.LastServerUrl = ServerUrl;
+            prefs.LastUsername = Username;
+            prefs.Save();
         }
         catch (Exception ex)
         {

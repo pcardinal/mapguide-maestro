@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-15 (Phase 10)
+> **Mis à jour le** : 2025-07-15 (Phase 11)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 73 fichiers source (65 app + 8 tests), 5 490 lignes, 56 tests, 20 commits, build ✅
+> **État actuel** : 76 fichiers source (68 app + 8 tests), 5 666 lignes, 56 tests, 21 commits, build ✅
 
 ---
 
@@ -80,9 +80,9 @@
 ### [~] B.3 — LayerDefinition : Style Rules complet
 
 - [✓] B.3.1 — Affichage des Scale Ranges avec détail des règles Point/Line/Area (label, filtre, icône)
-- [ ] B.3.2 — Édition inline des LegendLabel et Filter de chaque règle
+- [✓] B.3.2 — Édition inline des LegendLabel et Filter de chaque règle (two-way binding → IVectorRule)
 - [ ] B.3.3 — Color picker intégré pour la symbologie
-- [ ] B.3.4 — Intégration de l'Expression Builder pour les filtres
+- [✓] B.3.4 — Bouton "..." Expression Builder sur chaque filtre de règle
 - [ ] B.3.5 — Theme generation wizard (création automatique de règles par valeur)
 - [ ] B.3.6 — Ajout/suppression de scale ranges et de rules
 
@@ -118,12 +118,12 @@
 
 ## Phase C — Commandes globales de l'application
 
-### [ ] C.1 — Packaging (créer/charger/éditer des .mgp)
+### [~] C.1 — Packaging (créer/charger/éditer des .mgp)
 
 - [ ] C.1.1 — Dialog "Create Package" — sélection de ressources → fichier .mgp
-- [ ] C.1.2 — Dialog "Load Package" — charger un .mgp vers le serveur
+- [✓] C.1.2 — Dialog "Load Package" — `LoadPackageViewModel` + browse + upload avec progress bar
 - [ ] C.1.3 — Dialog "Edit Package" — modifier un .mgp existant
-- [ ] C.1.4 — Barre de progression avec annulation
+- [✓] C.1.4 — Barre de progression (ProgressBar liée au callback `StreamCopyProgressDelegate`)
 
 ### [✓] C.2 — Save As / Save All
 
@@ -223,19 +223,19 @@
 
 ## Phase F — Packaging & Distribution
 
-### [~] F.1 — Publish profiles
+### [✓] F.1 — Publish profiles
 
 - [✓] F.1.1 — win-x64 (single-file, self-contained)
 - [✓] F.1.2 — linux-x64
 - [✓] F.1.3 — osx-x64
-- [ ] F.1.4 — win-arm64
-- [ ] F.1.5 — linux-arm64
-- [ ] F.1.6 — osx-arm64
+- [✓] F.1.4 — win-arm64
+- [✓] F.1.5 — linux-arm64
+- [✓] F.1.6 — osx-arm64
 
 ### [~] F.2 — CI/CD GitHub Actions
 
 - [✓] F.2.1 — Build multi-plateforme
-- [ ] F.2.2 — Exécution des tests dans le CI
+- [✓] F.2.2 — Exécution des tests dans le CI (step `dotnet test` ajouté au workflow)
 - [ ] F.2.3 — Upload des artifacts (publish output)
 - [ ] F.2.4 — Release automatique sur tag
 
@@ -285,8 +285,8 @@
 | ~~🟡 Moyenne~~ | ~~C.3 Edit as XML~~ | ~~1 jour~~ | ~~Dev workflow~~ | ✅ Fait |
 | ~~🟡 Moyenne~~ | ~~C.4 View XML Changes~~ | — | ~~Diff~~ | ✅ Fait |
 | ~~🟠 Haute~~ | ~~D.4 Plugins~~ | ~~2-3 jours~~ | ~~Intégration~~ | ✅ ~80% |
-| 🔴 Critique | B.3 LayerDef style rules (édition) | 3-4 jours | Fonctionnalité #1 | ~50% |
-| 🟠 Haute | C.1 Packaging | 2 jours | Workflow principal | À faire |
+| 🔴 Critique | B.3 LayerDef style rules (édition) | 2-3 jours | Fonctionnalité #1 | ~70% |
+| ~~🟠 Haute~~ | ~~C.1 Packaging (Load)~~ | ~~2 jours~~ | ~~Workflow~~ | ✅ ~50% |
 | 🟡 Moyenne | B.1 FeatureSource extensions | 1 jour | Fonctionnel avancé | À faire |
 | 🟡 Moyenne | B.4 MapDef avancé | 2 jours | Preview, watermarks | À faire |
 | 🟡 Moyenne | E.1 Tests supplémentaires | 1 jour | Qualité | À faire |
@@ -296,6 +296,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~18-24 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~15-20 jours-développeur** pour la parité fonctionnelle complète.
 
-**Effort MVP restant : ~3-4 jours** (B.3 édition rules, C.1 packaging).
+**Effort MVP restant : ~2-3 jours** (B.3 color picker + theme wizard, C.1 create package, G.3.5 close confirmation).

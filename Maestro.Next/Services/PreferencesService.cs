@@ -15,7 +15,9 @@ public interface IPreferencesService
     AppTheme Theme { get; set; }
     string LastServerUrl { get; set; }
     string LastUsername { get; set; }
+    List<string> RecentConnections { get; }
 
+    void AddRecentConnection(string url);
     void Save();
     void Load();
 }
@@ -51,6 +53,16 @@ public class PreferencesService : ObservableObject, IPreferencesService
         set { _lastUsername = value; OnPropertyChanged(); }
     }
 
+    public List<string> RecentConnections { get; } = new();
+
+    public void AddRecentConnection(string url)
+    {
+        RecentConnections.Remove(url);
+        RecentConnections.Insert(0, url);
+        if (RecentConnections.Count > 10)
+            RecentConnections.RemoveRange(10, RecentConnections.Count - 10);
+    }
+
     public void Load()
     {
         try
@@ -66,6 +78,18 @@ public class PreferencesService : ObservableObject, IPreferencesService
                 _lastServerUrl = u.GetString() ?? _lastServerUrl;
             if (root.TryGetProperty("lastUsername", out var n))
                 _lastUsername = n.GetString() ?? _lastUsername;
+
+            if (root.TryGetProperty("recentConnections", out var rc) &&
+                rc.ValueKind == System.Text.Json.JsonValueKind.Array)
+            {
+                RecentConnections.Clear();
+                foreach (var item in rc.EnumerateArray())
+                {
+                    var s = item.GetString();
+                    if (!string.IsNullOrWhiteSpace(s))
+                        RecentConnections.Add(s);
+                }
+            }
 
             ApplyTheme(_theme);
         }
@@ -85,6 +109,7 @@ public class PreferencesService : ObservableObject, IPreferencesService
                 theme = _theme.ToString(),
                 lastServerUrl = _lastServerUrl,
                 lastUsername = _lastUsername,
+                recentConnections = RecentConnections,
             });
             System.IO.File.WriteAllText(_settingsPath, json);
         }

@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        x:Class="Maestro.Next.Views.FindReplaceWindow"
+        x:DataType="vm:FindReplaceViewModel"
+        Title="Find &amp; Replace"
+        Width="440" Height="280"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False">
+
+  <StackPanel Margin="16" Spacing="10">
+
+    <Grid ColumnDefinitions="70,*" RowDefinitions="Auto,Auto" RowSpacing="6">
+      <TextBlock Grid.Row="0" Grid.Column="0" Text="Find:" VerticalAlignment="Center" />
+      <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding SearchText}" />
+
+      <TextBlock Grid.Row="1" Grid.Column="0" Text="Replace:" VerticalAlignment="Center" />
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ReplaceText}" />
+    </Grid>
+
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <CheckBox Content="Regex" IsChecked="{Binding UseRegex}" />
+      <CheckBox Content="Case sensitive" IsChecked="{Binding CaseSensitive}" />
+    </StackPanel>
+
+    <TextBlock Text="{Binding StatusMessage}" FontSize="11" Foreground="Gray" />
+
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Count" Command="{Binding CountMatchesCommand}" Width="80" />
+      <Button Content="Replace All" Command="{Binding ReplaceAllCommand}"
+              Classes="accent" Width="100" />
+      <Button Content="Close" Click="OnCloseClick" Width="80" />
+    </StackPanel>
+
+  </StackPanel>
+</Window>

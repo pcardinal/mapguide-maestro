@@ -406,6 +406,34 @@ public partial class SiteExplorerViewModel : ViewModelBase
             _notifications.Error($"Cache purge failed: {ex.Message}");
         }
     }
+
+    // ── Dependency List ─────────────────────────────────────────
+    /// <summary>Raised when UI must display dependency info</summary>
+    public Func<string, string, Task>? DependencyListRequested { get; set; }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNode))]
+    private async Task ShowDependenciesAsync()
+    {
+        if (SelectedNode is null || DependencyListRequested is null) return;
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>().CurrentConnection!;
+            var refs = await Task.Run(() =>
+                conn.ResourceService.EnumerateResourceReferences(SelectedNode.ResourceId));
+
+            string info;
+            if (refs?.ResourceId == null || refs.ResourceId.Count == 0)
+                info = "No resources reference this resource.";
+            else
+                info = string.Join("\n", refs.ResourceId.Select(r => $"• {r}"));
+
+            await DependencyListRequested(SelectedNode.ResourceId, info);
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Failed to get dependencies: {ex.Message}");
+        }
+    }
 }
 
 /// <summary>

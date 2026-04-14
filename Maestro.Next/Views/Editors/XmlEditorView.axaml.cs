@@ -16,4 +16,18 @@ public partial class XmlEditorView : UserControl
         if (DataContext is XmlEditorViewModel vm && !vm.IsLoaded)
             await vm.LoadCommand.ExecuteAsync(null);
     }
+
+    private async void OnFindReplaceClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (DataContext is not XmlEditorViewModel xmlVm) return;
+        var topLevel = TopLevel.GetTopLevel(this);
+        if (topLevel is not Window window) return;
+
+        var frVm = new FindReplaceViewModel(
+            () => xmlVm.XmlContent,
+            text => xmlVm.XmlContent = text);
+
+        var dialog = new FindReplaceWindow { DataContext = frVm };
+        await dialog.ShowDialog(window);
+    }
 }

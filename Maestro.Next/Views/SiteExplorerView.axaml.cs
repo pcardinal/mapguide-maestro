@@ -48,6 +48,7 @@ public partial class SiteExplorerView : UserControl
             vm.PropertiesRequested     = ShowPropertiesDialogAsync;
             vm.SaveToFileRequested     = ShowSaveToFileDialogAsync;
             vm.SpatialContextsRequested = ShowSpatialContextsAsync;
+            vm.DependencyListRequested  = ShowDependencyListAsync;
         }
     }
 
@@ -303,5 +304,32 @@ public partial class SiteExplorerView : UserControl
         {
             _dragSource = null;
         }
+    }
+
+    private async Task ShowDependencyListAsync(string resourceId, string info)
+    {
+        var window = VisualRoot as Window;
+        if (window is null) return;
+
+        var box = new Window
+        {
+            Title = $"Dependencies — {resourceId}",
+            Width = 500, Height = 350,
+            CanResize = true,
+            ShowInTaskbar = false,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            Content = new ScrollViewer
+            {
+                Content = new TextBlock
+                {
+                    Text = info,
+                    TextWrapping = Avalonia.Media.TextWrapping.Wrap,
+                    FontFamily = new Avalonia.Media.FontFamily("Consolas,Monospace"),
+                    FontSize = 12,
+                    Margin = new Avalonia.Thickness(16)
+                }
+            }
+        };
+        await box.ShowDialog(window);
     }
 }

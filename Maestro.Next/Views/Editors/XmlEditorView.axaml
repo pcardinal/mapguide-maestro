@@ -15,6 +15,8 @@
               Command="{Binding LoadCommand}" />
       <Button Content="📊 Diff"
               Command="{Binding ToggleDiffCommand}" />
+      <Button Content="🔍 Find/Replace"
+              Click="OnFindReplaceClick" />
       <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsBusy}"
                    Width="80" Height="8" VerticalAlignment="Center" />
     </StackPanel>

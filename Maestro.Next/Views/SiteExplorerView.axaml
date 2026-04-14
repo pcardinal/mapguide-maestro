@@ -136,6 +136,8 @@
                     Command="{Binding ShowSpatialContextsCommand}" />
           <MenuItem Header="Purge Cache"
                     Command="{Binding PurgeCacheCommand}" />
+          <MenuItem Header="Dependencies..."
+                    Command="{Binding ShowDependenciesCommand}" />
           <Separator />
           <MenuItem Header="Refresh" Command="{Binding RefreshCommand}" />
           <Separator />

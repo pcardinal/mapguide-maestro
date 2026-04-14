@@ -460,6 +460,66 @@ public partial class SiteExplorerViewModel : ViewModelBase
             _notifications.Error($"Setup failed: {ex.Message}");
         }
     }
+
+    // ── Repoint FeatureSource References ────────────────────────
+    /// <summary>Raised when UI should prompt for a new FeatureSource target</summary>
+    public Func<string, Task<string?>>? RepointRequested { get; set; }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNonFolder))]
+    private async Task RepointAsync()
+    {
+        if (SelectedNode is null || RepointRequested is null) return;
+        if (SelectedNode.ResourceType != "FeatureSource")
+        {
+            _notifications.Info("Repoint is only available for Feature Sources.");
+            return;
+        }
+
+        var newTarget = await RepointRequested(SelectedNode.ResourceId);
+        if (string.IsNullOrWhiteSpace(newTarget)) return;
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>().CurrentConnection!;
+            var oldId = SelectedNode.ResourceId;
+
+            // Find all resources that reference this FeatureSource
+            var refs = await Task.Run(() =>
+                conn.ResourceService.EnumerateResourceReferences(oldId));
+
+            if (refs?.ResourceId == null || refs.ResourceId.Count == 0)
+            {
+                _notifications.Info("No resources reference this Feature Source.");
+                return;
+            }
+
+            int updated = 0;
+            foreach (var refId in refs.ResourceId)
+            {
+                try
+                {
+                    using var stream = await Task.Run(() => conn.ResourceService.GetResourceXmlData(refId));
+                    using var reader = new System.IO.StreamReader(stream);
+                    var xml = await reader.ReadToEndAsync();
+
+                    if (xml.Contains(oldId, StringComparison.Ordinal))
+                    {
+                        var newXml = xml.Replace(oldId, newTarget, StringComparison.Ordinal);
+                        using var ms = new System.IO.MemoryStream(System.Text.Encoding.UTF8.GetBytes(newXml));
+                        await Task.Run(() => conn.ResourceService.SetResourceXmlData(refId, ms));
+                        updated++;
+                    }
+                }
+                catch { /* skip resources that can't be updated */ }
+            }
+
+            _notifications.Success($"Repointed {updated} resource(s) from {oldId} → {newTarget}");
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"Repoint failed: {ex.Message}");
+        }
+    }
 }
 
 /// <summary>

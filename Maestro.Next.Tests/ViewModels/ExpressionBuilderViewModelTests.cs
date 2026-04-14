@@ -100,4 +100,52 @@ public sealed class ExpressionBuilderViewModelTests
         Assert.Equal("📐", geom.Icon);
         Assert.Equal("📋", data.Icon);
     }
+
+    [Fact]
+    public void Validate_ValidFilter_IsValid()
+    {
+        var vm = new ExpressionBuilderViewModel("Library://FS.FeatureSource", "S:C");
+        vm.ExpressionText = "Name = 'Paris'";
+
+        vm.ValidateCommand.Execute(null);
+
+        Assert.True(vm.IsValid);
+        Assert.Contains("Valid", vm.ValidationResult);
+    }
+
+    [Fact]
+    public void Validate_ValidExpression_IsValid()
+    {
+        var vm = new ExpressionBuilderViewModel("Library://FS.FeatureSource", "S:C");
+        vm.ExpressionText = "Name LIKE 'Paris%'";
+
+        vm.ValidateCommand.Execute(null);
+
+        Assert.True(vm.IsValid);
+        Assert.Contains("Valid", vm.ValidationResult);
+    }
+
+    [Fact]
+    public void Validate_InvalidSyntax_NotValid()
+    {
+        var vm = new ExpressionBuilderViewModel("Library://FS.FeatureSource", "S:C");
+        vm.ExpressionText = "= = = INVALID {{{}}}";
+
+        vm.ValidateCommand.Execute(null);
+
+        Assert.False(vm.IsValid);
+        Assert.Contains("error", vm.ValidationResult, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Validate_Empty_NullResult()
+    {
+        var vm = new ExpressionBuilderViewModel("Library://FS.FeatureSource", "S:C");
+        vm.ExpressionText = "";
+
+        vm.ValidateCommand.Execute(null);
+
+        Assert.Null(vm.ValidationResult);
+        Assert.False(vm.IsValid);
+    }
 }

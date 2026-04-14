@@ -131,6 +131,40 @@ public partial class ExpressionBuilderViewModel : ViewModelBase
     {
         Confirmed = true;
     }
+
+    [RelayCommand]
+    private void Validate()
+    {
+        if (string.IsNullOrWhiteSpace(ExpressionText))
+        {
+            ValidationResult = null;
+            IsValid = false;
+            return;
+        }
+
+        try
+        {
+            // Try parsing as a filter first
+            OSGeo.FDO.Expressions.FdoFilter.Parse(ExpressionText);
+            IsValid = true;
+            ValidationResult = "✅ Valid filter expression.";
+        }
+        catch
+        {
+            try
+            {
+                // Try as an expression
+                OSGeo.FDO.Expressions.FdoExpression.Parse(ExpressionText);
+                IsValid = true;
+                ValidationResult = "✅ Valid expression.";
+            }
+            catch (Exception ex)
+            {
+                IsValid = false;
+                ValidationResult = $"❌ Syntax error: {ex.Message}";
+            }
+        }
+    }
 }
 
 public record ExpressionPropertyItem(string Name, string PropertyType, string DataType)

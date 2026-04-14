@@ -100,6 +100,16 @@
                  FontSize="12"
                  MinHeight="80"
                  MaxHeight="120" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Content="✓ Validate"
+                  Command="{Binding ValidateCommand}"
+                  Padding="8,3" FontSize="11" />
+          <TextBlock Text="{Binding ValidationResult}"
+                     FontSize="11"
+                     VerticalAlignment="Center"
+                     IsVisible="{Binding ValidationResult,
+                                 Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        </StackPanel>
       </StackPanel>
     </Border>
 

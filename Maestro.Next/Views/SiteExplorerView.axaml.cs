@@ -49,6 +49,7 @@ public partial class SiteExplorerView : UserControl
             vm.SaveToFileRequested     = ShowSaveToFileDialogAsync;
             vm.SpatialContextsRequested = ShowSpatialContextsAsync;
             vm.DependencyListRequested  = ShowDependencyListAsync;
+            vm.RepointRequested         = ShowRepointDialogAsync;
         }
     }
 
@@ -331,5 +332,57 @@ public partial class SiteExplorerView : UserControl
             }
         };
         await box.ShowDialog(window);
+    }
+
+    private async Task<string?> ShowRepointDialogAsync(string currentFeatureSourceId)
+    {
+        var window = VisualRoot as Window;
+        if (window is null) return null;
+
+        string? result = null;
+        var inputBox = new TextBox
+        {
+            Text = currentFeatureSourceId,
+            Watermark = "Library://Data/NewFeatureSource.FeatureSource",
+            FontFamily = new Avalonia.Media.FontFamily("Consolas,Monospace"),
+            FontSize = 11,
+            Margin = new Avalonia.Thickness(16, 8, 16, 4)
+        };
+
+        var label = new TextBlock
+        {
+            Text = $"Repoint all references from:\n  {currentFeatureSourceId}\n\nNew FeatureSource ID:",
+            TextWrapping = Avalonia.Media.TextWrapping.Wrap,
+            Margin = new Avalonia.Thickness(16, 12, 16, 0)
+        };
+
+        var okBtn = new Button { Content = "Repoint", Width = 90 };
+        okBtn.Classes.Add("accent");
+        var cancelBtn = new Button { Content = "Cancel", Width = 90 };
+
+        var btnRow = new StackPanel
+        {
+            Orientation = Avalonia.Layout.Orientation.Horizontal,
+            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right,
+            Spacing = 8,
+            Margin = new Avalonia.Thickness(0, 8, 16, 0),
+            Children = { cancelBtn, okBtn }
+        };
+
+        var dialog = new Window
+        {
+            Title = "Repoint Feature Source",
+            Width = 500, Height = 220,
+            CanResize = false,
+            ShowInTaskbar = false,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            Content = new StackPanel { Children = { label, inputBox, btnRow } }
+        };
+
+        okBtn.Click += (_, _) => { result = inputBox.Text; dialog.Close(); };
+        cancelBtn.Click += (_, _) => dialog.Close();
+
+        await dialog.ShowDialog(window);
+        return result;
     }
 }

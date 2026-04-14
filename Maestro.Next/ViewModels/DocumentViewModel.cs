@@ -228,6 +228,15 @@ public partial class DocumentManagerViewModel : ViewModelBase
         ActiveDocument = doc;
     }
 
+    /// <summary>
+    /// Activates an already-open document tab
+    /// </summary>
+    public void ActivateDocument(DocumentViewModel doc)
+    {
+        if (OpenDocuments.Contains(doc))
+            ActiveDocument = doc;
+    }
+
     [RelayCommand]
     private void CloseDocument(DocumentViewModel doc)
     {

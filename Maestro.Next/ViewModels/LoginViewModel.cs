@@ -24,7 +24,7 @@ public partial class LoginViewModel : ViewModelBase
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ConnectCommand))]
-    private string _serverUrl = "http://localhost/mapguide/mapagent/mapagent.fcgi";
+    private string _serverUrl = "http://localhost:8058/mapguide/mapagent/mapagent.fcgi";
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ConnectCommand))]

@@ -27,7 +27,6 @@ public class ResourceEditorFactoryTests
     [Theory]
     [InlineData(nameof(ResourceTypes.PrintLayout))]
     [InlineData(nameof(ResourceTypes.LoadProcedure))]
-    [InlineData(nameof(ResourceTypes.WatermarkDefinition))]
     public void CreateEditor_GenericType_ReturnsGenericEditor(string resourceType)
     {
         var editor = ResourceEditorFactory.CreateEditor("Library://Test." + resourceType, resourceType);

@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Maestro.Next.Services;
+using Maestro.Next.ViewModels.Editors;
 using Microsoft.Extensions.DependencyInjection;
 using OSGeo.MapGuide.ObjectModels;
 
@@ -112,6 +113,26 @@ public partial class SiteExplorerViewModel : ViewModelBase
     {
         if (node is null || node.IsFolder) return;
 
+        // Check if already open as XML — warn about conflict
+        var existingXml = _documentManager.OpenDocuments
+            .OfType<XmlEditorViewModel>()
+            .FirstOrDefault(d => d.ResourceId == node.ResourceId);
+        if (existingXml != null)
+        {
+            _notifications.Info($"⚠️ '{node.Name}' is already open as XML. Close the XML tab first to avoid conflicts.");
+            _documentManager.ActivateDocument(existingXml);
+            return;
+        }
+
+        // Check if already open as native editor — activate it
+        var existingNative = _documentManager.OpenDocuments
+            .FirstOrDefault(d => d.ResourceId == node.ResourceId);
+        if (existingNative != null)
+        {
+            _documentManager.ActivateDocument(existingNative);
+            return;
+        }
+
         var doc = ResourceEditorFactory.CreateEditor(node.ResourceId, node.ResourceType);
         if (doc != null)
             _documentManager.OpenDocument(doc);
@@ -121,6 +142,26 @@ public partial class SiteExplorerViewModel : ViewModelBase
     private void OpenAsXml()
     {
         if (SelectedNode is null || SelectedNode.IsFolder) return;
+
+        // Check if already open as native editor — warn about conflict
+        var existingNative = _documentManager.OpenDocuments
+            .FirstOrDefault(d => d is not XmlEditorViewModel && d.ResourceId == SelectedNode.ResourceId);
+        if (existingNative != null)
+        {
+            _notifications.Info($"⚠️ '{SelectedNode.Name}' is already open in a native editor. Close it first to avoid conflicts.");
+            _documentManager.ActivateDocument(existingNative);
+            return;
+        }
+
+        // Check if already open as XML — activate it
+        var existingXml = _documentManager.OpenDocuments
+            .OfType<XmlEditorViewModel>()
+            .FirstOrDefault(d => d.ResourceId == SelectedNode.ResourceId);
+        if (existingXml != null)
+        {
+            _documentManager.ActivateDocument(existingXml);
+            return;
+        }
 
         var doc = new XmlEditorViewModel(SelectedNode.ResourceId);
         _documentManager.OpenDocument(doc);
@@ -621,9 +662,11 @@ public static class ResourceEditorFactory
             nameof(ResourceTypes.WebLayout)             => new WebLayoutEditorViewModel(resourceId),
             nameof(ResourceTypes.ApplicationDefinition) => new ApplicationDefinitionEditorViewModel(resourceId),
             nameof(ResourceTypes.SymbolDefinition)      => new SymbolDefinitionEditorViewModel(resourceId),
+            nameof(ResourceTypes.DrawingSource)         => new DrawingSourceEditorViewModel(resourceId),
+            nameof(ResourceTypes.WatermarkDefinition)   => new WatermarkEditorViewModel(resourceId),
+            "TileSetDefinition"                         => new TileSetEditorViewModel(resourceId),
             nameof(ResourceTypes.PrintLayout)           => new GenericResourceEditorViewModel(resourceId, resourceType),
             nameof(ResourceTypes.LoadProcedure)         => new GenericResourceEditorViewModel(resourceId, resourceType),
-            nameof(ResourceTypes.WatermarkDefinition)   => new GenericResourceEditorViewModel(resourceId, resourceType),
             _ => null
         };
     }

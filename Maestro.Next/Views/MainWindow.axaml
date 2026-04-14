@@ -17,7 +17,8 @@
     <KeyBinding Gesture="F5" Command="{Binding SiteExplorer.RefreshCommand}" />
     <KeyBinding Gesture="Delete" Command="{Binding SiteExplorer.DeleteSelectedCommand}" />
     <KeyBinding Gesture="F2" Command="{Binding SiteExplorer.RenameSelectedCommand}" />
-  </Window.KeyBindings>
+    <KeyBinding Gesture="Ctrl+P" Command="{Binding QuickSearch.ToggleCommand}" />
+    </Window.KeyBindings>
 
   <!-- Panel wraps DockPanel so the notification overlay can float on top -->
   <Panel>

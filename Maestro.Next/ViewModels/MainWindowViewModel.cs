@@ -62,6 +62,8 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private string _connectionInfo = string.Empty;
 
+    public QuickSearchViewModel QuickSearch { get; } = new();
+
     /// <summary>
     /// Raised when the UI should show the Login dialog
     /// </summary>

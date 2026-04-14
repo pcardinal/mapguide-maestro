@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-16 (Phase 19)
+> **Mis à jour le** : 2025-07-16 (Phase 20)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 101 fichiers source (81 app + 20 tests), 7 674 lignes, 123 tests, 39 commits, build ✅
+> **État actuel** : 102 fichiers source (81 app + 21 tests), 7 789 lignes, 127 tests, 41 commits, build ✅
 
 ---
 
@@ -75,7 +75,7 @@
 
 ### [ ] B.2 — FeatureSource : Coordinate System Override
 
-- [ ] B.2.1 — Onglet CS Override pour surcharger le système de coordonnées
+- [✓] B.2.1 — Onglet CS Override (LoadSpatialContextOverrides + ApplyOverrides, SpatialContextOverrideItem)
 
 ### [~] B.3 — LayerDefinition : Style Rules complet
 
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (123 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (127 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -216,6 +216,7 @@
 - [✓] E.1.22 — ResourceIcons (12 tests) — Phase 18
 - [✓] E.1.23 — ExpressionBuilder validation (4 tests) — Phase 19
 - [✓] E.1.24 — ThemeWizardViewModel (4+2 tests) — Phase 19
+- [✓] E.1.25 — SpatialContextOverrideItem + ConnectionPropertyVM (4 tests) — Phase 20
 
 ### [ ] E.2 — Tests d'intégration
 
@@ -307,6 +308,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~3-5 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~2-4 jours-développeur** pour la parité fonctionnelle complète.
 
-**MVP atteint à ~98%** — 123 tests, 7.7k lignes. Reste : B.5 éditeurs spécialisés, G.1 i18n, B.7 preview, polish.
+**MVP atteint à ~98%** — 127 tests, 7.8k lignes. Reste : B.5 éditeurs spécialisés, G.1 i18n, B.7 preview, polish.

@@ -2,7 +2,7 @@
 
 > **Mis à jour le** : 2025-07-16 (Phase 22)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 107 fichiers source (84 app + 23 tests), 8 210 lignes, 140 tests, 49 commits, build ✅
+> **État actuel** : 108 fichiers source (84 app + 24 tests), 8 288 lignes, 150 tests, 51 commits, build ✅
 
 ---
 
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (140 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (150 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -219,6 +219,7 @@
 - [✓] E.1.25 — SpatialContextOverrideItem + ConnectionPropertyVM (4 tests) — Phase 20
 - [✓] E.1.26 — DocumentViewModel base, XmlEditor, LoadPackage extras (5 tests) — Phase 20b
 - [✓] E.1.27 — ServerStatusVM, ExtensionSummaryItem, SchemaPropertyVM (8 tests) — Phase 21
+- [✓] E.1.28 — ResourceTreeNode, IsCutSource, Opacity, ResourceTypeIconMap (10 tests) — Phase 22
 
 ### [ ] E.2 — Tests d'intégration
 
@@ -310,6 +311,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~1-2 jours-développeur** pour le polish final.
+**Effort restant estimé : ~1 jour-développeur** pour le polish final.
 
-**MVP atteint à ~99%** — 140 tests, 8.2k lignes, 47 commits. L'application est fonctionnelle. Reste : B.5 éditeurs spécialisés (low priority), polish, packaging.
+**MVP atteint à ~99%** — 🎯 150 tests, 8.3k lignes, 51 commits. L'application Avalonia est pleinement fonctionnelle.

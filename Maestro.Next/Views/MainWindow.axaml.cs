@@ -65,4 +65,15 @@ public partial class MainWindow : Window
         var dialog = new OptionsWindow { DataContext = vm };
         await dialog.ShowDialog(this);
     }
+
+    private async void OnLoadPackageClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var vm = new LoadPackageViewModel();
+        var dialog = new LoadPackageWindow { DataContext = vm };
+        await dialog.ShowDialog(this);
+
+        // Refresh the site explorer after upload
+        if (vm.Completed && DataContext is MainWindowViewModel mainVm)
+            await mainVm.SiteExplorer.RefreshCommand.ExecuteAsync(null);
+    }
 }

@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        x:Class="Maestro.Next.Views.LoadPackageWindow"
+        x:DataType="vm:LoadPackageViewModel"
+        Title="Load Package"
+        Width="520" Height="260"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False">
+
+  <StackPanel Margin="20" Spacing="12">
+    <TextBlock Text="Upload a MapGuide Package (.mgp) to the server"
+               FontWeight="SemiBold" />
+
+    <Grid ColumnDefinitions="*,Auto">
+      <TextBox Grid.Column="0"
+               Text="{Binding PackageFilePath}"
+               Watermark="Path to .mgp file..."
+               IsReadOnly="True" />
+      <Button Grid.Column="1" Content="Browse..."
+              Click="OnBrowseClick"
+              Margin="8,0,0,0" />
+    </Grid>
+
+    <ProgressBar Minimum="0" Maximum="100"
+                 Value="{Binding Progress}"
+                 IsVisible="{Binding IsUploading}"
+                 Height="12" />
+
+    <TextBlock Text="{Binding StatusMessage}"
+               Foreground="Gray" FontSize="11"
+               TextWrapping="Wrap" />
+
+    <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Right" Spacing="8">
+      <Button Content="Close" Click="OnCloseClick" Width="90" />
+      <Button Content="Upload"
+              Command="{Binding UploadCommand}"
+              Classes="accent" Width="90" />
+    </StackPanel>
+  </StackPanel>
+</Window>

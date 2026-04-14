@@ -5,6 +5,7 @@ on:
     branches: [ "upgrade-to-NET10", "main" ]
     paths:
       - 'Maestro.Next/**'
+      - 'Maestro.Next.Tests/**'
       - 'OSGeo.MapGuide.ObjectModels/**'
       - 'OSGeo.MapGuide.MaestroAPI/**'
       - 'OSGeo.FDO.Expressions/**'
@@ -33,10 +34,15 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore Maestro.Next/Maestro.Next.csproj
+        run: |
+          dotnet restore Maestro.Next/Maestro.Next.csproj
+          dotnet restore Maestro.Next.Tests/Maestro.Next.Tests.csproj
 
       - name: Build
         run: dotnet build Maestro.Next/Maestro.Next.csproj --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test Maestro.Next.Tests/Maestro.Next.Tests.csproj --no-restore --configuration Release --verbosity normal
 
       - name: Publish (self-contained)
         run: |

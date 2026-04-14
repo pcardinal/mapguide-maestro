@@ -78,7 +78,7 @@ public partial class LayerDefinitionEditorViewModel : DocumentViewModel
 
                 ScaleRanges.Clear();
                 foreach (var sr in vld.VectorScaleRange)
-                    ScaleRanges.Add(new ScaleRangeSummaryViewModel(sr));
+                    ScaleRanges.Add(new ScaleRangeSummaryViewModel(sr, () => IsDirty = true));
             }
             else if (sub is IRasterLayerDefinition rld)
             {
@@ -147,7 +147,7 @@ public partial class ScaleRangeSummaryViewModel : ViewModelBase
 {
     private readonly IVectorScaleRange _sr;
 
-    public ScaleRangeSummaryViewModel(IVectorScaleRange sr)
+    public ScaleRangeSummaryViewModel(IVectorScaleRange sr, Action? onChanged = null)
     {
         _sr = sr;
         MinScale = sr.MinScale.HasValue
@@ -163,9 +163,7 @@ public partial class ScaleRangeSummaryViewModel : ViewModelBase
             for (int i = 0; i < sr.PointStyle.RuleCount; i++)
             {
                 var rule = sr.PointStyle.GetRuleAt(i);
-                Rules.Add(new StyleRuleViewModel("Point", i,
-                    rule.LegendLabel ?? "",
-                    rule.Filter ?? "(no filter)"));
+                Rules.Add(new StyleRuleViewModel("Point", i, rule, onChanged));
             }
         }
         if (sr.LineStyle != null)
@@ -173,9 +171,7 @@ public partial class ScaleRangeSummaryViewModel : ViewModelBase
             for (int i = 0; i < sr.LineStyle.RuleCount; i++)
             {
                 var rule = sr.LineStyle.GetRuleAt(i);
-                Rules.Add(new StyleRuleViewModel("Line", i,
-                    rule.LegendLabel ?? "",
-                    rule.Filter ?? "(no filter)"));
+                Rules.Add(new StyleRuleViewModel("Line", i, rule, onChanged));
             }
         }
         if (sr.AreaStyle != null)
@@ -183,9 +179,7 @@ public partial class ScaleRangeSummaryViewModel : ViewModelBase
             for (int i = 0; i < sr.AreaStyle.RuleCount; i++)
             {
                 var rule = sr.AreaStyle.GetRuleAt(i);
-                Rules.Add(new StyleRuleViewModel("Area", i,
-                    rule.LegendLabel ?? "",
-                    rule.Filter ?? "(no filter)"));
+                Rules.Add(new StyleRuleViewModel("Area", i, rule, onChanged));
             }
         }
     }
@@ -200,12 +194,17 @@ public partial class ScaleRangeSummaryViewModel : ViewModelBase
 
 public partial class StyleRuleViewModel : ViewModelBase
 {
-    public StyleRuleViewModel(string geometryType, int index, string legendLabel, string filter)
+    private readonly IVectorRule _rule;
+    private readonly Action? _onChanged;
+
+    public StyleRuleViewModel(string geometryType, int index, IVectorRule rule, Action? onChanged = null)
     {
         GeometryType = geometryType;
         Index = index;
-        LegendLabel = legendLabel;
-        Filter = filter;
+        _rule = rule;
+        _onChanged = onChanged;
+        LegendLabel = rule.LegendLabel ?? "";
+        Filter = rule.Filter ?? "";
     }
 
     public string GeometryType { get; }
@@ -213,6 +212,30 @@ public partial class StyleRuleViewModel : ViewModelBase
 
     [ObservableProperty] private string _legendLabel;
     [ObservableProperty] private string _filter;
+
+    partial void OnLegendLabelChanged(string value)
+    {
+        _rule.LegendLabel = value;
+        _onChanged?.Invoke();
+    }
+
+    partial void OnFilterChanged(string value)
+    {
+        _rule.Filter = value;
+        _onChanged?.Invoke();
+    }
+
+    /// <summary>Raised when UI requests the expression builder for the filter</summary>
+    public Func<string, string, string?, Task<string?>>? EditFilterRequested { get; set; }
+
+    [RelayCommand]
+    private async Task EditFilterAsync()
+    {
+        if (EditFilterRequested is null) return;
+        var result = await EditFilterRequested(string.Empty, string.Empty, Filter);
+        if (result != null)
+            Filter = result;
+    }
 
     public string Icon => GeometryType switch
     {

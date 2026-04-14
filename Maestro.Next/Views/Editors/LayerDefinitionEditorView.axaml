@@ -79,23 +79,45 @@
                         <TextBlock Text="{Binding Summary}"
                                    FontFamily="Consolas,Monospace" FontSize="12" />
                       </Expander.Header>
-                      <ItemsControl ItemsSource="{Binding Rules}" Margin="16,4,0,8">
+                        <ItemsControl ItemsSource="{Binding Rules}" Margin="16,4,0,8">
                         <ItemsControl.ItemTemplate>
                           <DataTemplate DataType="vm:StyleRuleViewModel">
                             <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                                     CornerRadius="3" Padding="8,6" Margin="0,2">
-                              <Grid ColumnDefinitions="Auto,140,*" RowDefinitions="Auto,Auto">
-                                <TextBlock Grid.Row="0" Grid.Column="0"
-                                           Text="{Binding Icon}" FontSize="14"
-                                           VerticalAlignment="Center" Margin="0,0,8,0" />
-                                <TextBlock Grid.Row="0" Grid.Column="1"
+                              <Grid ColumnDefinitions="30,*" RowDefinitions="Auto,Auto" Margin="0,2">
+                                <TextBlock Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                                           Text="{Binding Icon}" FontSize="18"
+                                           VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+                                <!-- Legend label (editable) -->
+                                <Grid Grid.Row="0" Grid.Column="1"
+                                      ColumnDefinitions="80,*" Margin="0,1">
+                                  <TextBlock Grid.Column="0" Text="Label:"
+                                             FontSize="11" Foreground="Gray"
+                                             VerticalAlignment="Center" />
+                                  <TextBox Grid.Column="1"
                                            Text="{Binding LegendLabel}"
-                                           FontWeight="Medium" VerticalAlignment="Center" />
-                                <TextBlock Grid.Row="0" Grid.Column="2"
+                                           FontSize="11" Padding="4,2"
+                                           MinHeight="24" />
+                                </Grid>
+
+                                <!-- Filter (editable with expression builder button) -->
+                                <Grid Grid.Row="1" Grid.Column="1"
+                                      ColumnDefinitions="80,*,Auto" Margin="0,1">
+                                  <TextBlock Grid.Column="0" Text="Filter:"
+                                             FontSize="11" Foreground="Gray"
+                                             VerticalAlignment="Center" />
+                                  <TextBox Grid.Column="1"
                                            Text="{Binding Filter}"
-                                           FontFamily="Consolas,Monospace" FontSize="11"
-                                           Foreground="Gray" VerticalAlignment="Center"
-                                           TextTrimming="CharacterEllipsis" />
+                                           FontFamily="Consolas,Monospace"
+                                           FontSize="11" Padding="4,2"
+                                           MinHeight="24" />
+                                  <Button Grid.Column="2" Content="..."
+                                          Command="{Binding EditFilterCommand}"
+                                          ToolTip.Tip="Expression Builder"
+                                          Padding="6,2" Margin="4,0,0,0"
+                                          FontSize="11" MinWidth="28" />
+                                </Grid>
                               </Grid>
                             </Border>
                           </DataTemplate>

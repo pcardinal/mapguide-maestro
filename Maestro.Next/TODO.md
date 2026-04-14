@@ -1,9 +1,10 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-15 (Phase 8)
+> **Mis à jour le** : 2025-07-15 (Phase 10)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 70 fichiers source (62 app + 8 tests), 5 313 lignes, 56 tests, 18 commits, build ✅
+> **État actuel** : 73 fichiers source (65 app + 8 tests), 5 490 lignes, 56 tests, 20 commits, build ✅
 
+---
 
 ## Légende
 
@@ -124,19 +125,20 @@
 - [ ] C.1.3 — Dialog "Edit Package" — modifier un .mgp existant
 - [ ] C.1.4 — Barre de progression avec annulation
 
-### [~] C.2 — Save As / Save All
+### [✓] C.2 — Save As / Save All
 
-- [ ] C.2.1 — "Save As" — sauvegarder sous un autre ResourceId
+- [✓] C.2.1 — "Save As" — `DocumentViewModel.SaveAsAsync()` avec Copy + re-point
 - [✓] C.2.2 — "Save All" — Ctrl+Shift+S, menu File > Save All
 
-### [ ] C.3 — Edit as XML (vue XML de n'importe quelle ressource)
+### [✓] C.3 — Edit as XML (vue XML de n'importe quelle ressource)
 
-- [ ] C.3.1 — Commande "Edit as XML" qui ouvre un second onglet XML brut
-- [ ] C.3.2 — Détection de conflit si l'éditeur natif et l'XML sont ouverts simultanément
+- [✓] C.3.1 — `XmlEditorViewModel` + `XmlEditorView` — chargement/sauvegarde XML brut
+- [✓] C.3.2 — Commande "Edit as XML" dans context menu Site Explorer
+- [ ] C.3.3 — Détection de conflit si l'éditeur natif et l'XML sont ouverts simultanément
 
-### [ ] C.4 — View XML Changes (diff avant/après)
+### [✓] C.4 — View XML Changes (diff avant/après)
 
-- [ ] C.4.1 — Dialog diff side-by-side entre la version serveur et les modifications locales
+- [✓] C.4.1 — Vue diff side-by-side intégrée dans XmlEditor (bouton "Diff" toggle)
 
 ### [ ] C.5 — Site Administration
 
@@ -177,30 +179,32 @@
 - [ ] D.3.2 — L'ajouter comme référence dans `Maestro.Next.csproj`
 - [ ] D.3.3 — Créer les ViewModels de packaging (Phase C.1)
 
-### [ ] D.4 — Système de plugins (remplacer ICSharpCode.Core)
+### [~] D.4 — Système de plugins (remplacer ICSharpCode.Core)
 
-- [ ] D.4.1 — Décider : plugins .NET ou intégration directe ?
-- [ ] D.4.2 — Migrer `Maestro.AddIn.ExtendedObjectModels` (enregistrement des sérialiseurs)
-- [ ] D.4.3 — Migrer `Maestro.AddIn.Rest` (connexion REST)
+- [✓] D.4.1 — Décision : **intégration directe** (pas de système AddIn)
+- [✓] D.4.2 — ExtendedObjectModels : non nécessaire — `ResourceEditorFactory` gère toutes les versions
+- [ ] D.4.3 — Migrer `Maestro.AddIn.Rest` (connexion REST) — basse priorité, outil spécialisé
 - [ ] D.4.4 — Migrer `Maestro.AddIn.Scripting` (IronPython)
 
 ---
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (39 existants, objectif ~100+)
+### [~] E.1 — Tests unitaires (56 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
 - [✓] E.1.3 — OptionsViewModel (3 tests)
 - [✓] E.1.4 — ResourceEditorFactory (8 tests)
 - [✓] E.1.5 — ValidationIssueViewModel (4 tests)
-- [ ] E.1.6 — SiteExplorerViewModel (load, search, open, refresh)
-- [ ] E.1.7 — MainWindowViewModel (connect, disconnect, save, close)
-- [ ] E.1.8 — LoginViewModel (validation, connection)
-- [ ] E.1.9 — ExpressionBuilderViewModel
-- [ ] E.1.10 — ClipboardService
-- [ ] E.1.11 — PreferencesService (load, save, theme apply)
+- [✓] E.1.6 — ClipboardService (5 tests) — Phase 9
+- [✓] E.1.7 — ExpressionBuilderViewModel (9 tests) — Phase 9
+- [✓] E.1.8 — ResourcePropertiesViewModel (3 tests) — Phase 9
+- [ ] E.1.9 — XmlEditorViewModel
+- [ ] E.1.10 — SiteExplorerViewModel (load, search, open, refresh)
+- [ ] E.1.11 — MainWindowViewModel (connect, disconnect, save, close)
+- [ ] E.1.12 — LoginViewModel (validation, connection)
+- [ ] E.1.13 — PreferencesService (load, save, theme apply)
 
 ### [ ] E.2 — Tests d'intégration
 
@@ -275,16 +279,16 @@
 | ~~🔴 Critique~~ | ~~D.1 Fichier .sln~~ | ~~30 min~~ | ~~Bloquant~~ | ✅ Fait |
 | ~~🔴 Critique~~ | ~~B.6 Expression builder~~ | ~~2 jours~~ | ~~Utilisé partout~~ | ✅ Fait |
 | ~~🟠 Haute~~ | ~~A.1 Clipboard~~ | ~~2h~~ | ~~UX de base~~ | ✅ Fait |
-| ~~🟠 Haute~~ | ~~C.2 Save All~~ | ~~1h~~ | ~~UX de base~~ | ✅ Fait |
+| ~~🟠 Haute~~ | ~~C.2 Save As/All~~ | ~~2h~~ | ~~UX de base~~ | ✅ Fait |
+| ~~🟠 Haute~~ | ~~A.2 Drag-drop~~ | ~~3h~~ | ~~UX de base~~ | ✅ ~90% |
+| ~~🟡 Moyenne~~ | ~~A.5 Resource Properties~~ | ~~3h~~ | ~~Info~~ | ✅ Fait |
+| ~~🟡 Moyenne~~ | ~~C.3 Edit as XML~~ | ~~1 jour~~ | ~~Dev workflow~~ | ✅ Fait |
+| ~~🟡 Moyenne~~ | ~~C.4 View XML Changes~~ | — | ~~Diff~~ | ✅ Fait |
+| ~~🟠 Haute~~ | ~~D.4 Plugins~~ | ~~2-3 jours~~ | ~~Intégration~~ | ✅ ~80% |
 | 🔴 Critique | B.3 LayerDef style rules (édition) | 3-4 jours | Fonctionnalité #1 | ~50% |
-| 🟠 Haute | A.2 Drag-and-drop | 3h | UX de base | À faire |
 | 🟠 Haute | C.1 Packaging | 2 jours | Workflow principal | À faire |
-| 🟠 Haute | C.2.1 Save As | 1h | UX de base | À faire |
-| 🟠 Haute | D.4 Plugins / intégration | 2-3 jours | ExtendedObjectModels, REST | À faire |
-| 🟡 Moyenne | A.5 Resource Properties | 3h | Info/permissions | À faire |
 | 🟡 Moyenne | B.1 FeatureSource extensions | 1 jour | Fonctionnel avancé | À faire |
 | 🟡 Moyenne | B.4 MapDef avancé | 2 jours | Preview, watermarks | À faire |
-| 🟡 Moyenne | C.3-C.4 XML edit/diff | 1 jour | Dev workflow | À faire |
 | 🟡 Moyenne | E.1 Tests supplémentaires | 1 jour | Qualité | À faire |
 | 🟢 Basse | B.5 Éditeurs restants | 3 jours | LoadProc, Print, etc. | À faire |
 | 🟢 Basse | C.5 Site Admin | 2 jours | Admin seulement | À faire |
@@ -292,6 +296,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~25-32 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~18-24 jours-développeur** pour la parité fonctionnelle complète.
 
-**Effort MVP restant : ~5-6 jours** (A.2, B.3 édition, C.1, C.2.1, D.4 ExtendedObjectModels).
+**Effort MVP restant : ~3-4 jours** (B.3 édition rules, C.1 packaging).

@@ -48,6 +48,9 @@
                   IsEnabled="{Binding Documents.HasOpenDocuments}" />
       </MenuItem>
       <MenuItem Header="_Tools">
+        <MenuItem Header="Load _Package..."
+                  Click="OnLoadPackageClick" />
+        <Separator />
         <MenuItem Header="_Options..."
                   Command="{Binding ShowOptionsCommand}" />
       </MenuItem>

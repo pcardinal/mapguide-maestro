@@ -520,6 +520,40 @@ public partial class SiteExplorerViewModel : ViewModelBase
             _notifications.Error($"Repoint failed: {ex.Message}");
         }
     }
+
+    // ── Edit Resource Header ────────────────────────────────────
+    /// <summary>Raised when UI should show the header XML (resourceId, xml)</summary>
+    public Func<string, string, Task>? EditHeaderRequested { get; set; }
+
+    [RelayCommand(CanExecute = nameof(HasSelectedNode))]
+    private async Task EditHeaderAsync()
+    {
+        if (SelectedNode is null || EditHeaderRequested is null) return;
+
+        try
+        {
+            var conn = Program.Services!.GetRequiredService<IConnectionService>().CurrentConnection!;
+            var resId = SelectedNode.ResourceId;
+
+            string headerXml;
+            if (SelectedNode.IsFolder)
+            {
+                var header = conn.ResourceService.GetFolderHeader(resId);
+                headerXml = header.Serialize();
+            }
+            else
+            {
+                var header = conn.ResourceService.GetResourceHeader(resId);
+                headerXml = header.Serialize();
+            }
+
+            await EditHeaderRequested(resId, headerXml);
+        }
+        catch (Exception ex)
+        {
+            _notifications.Error($"View header failed: {ex.Message}");
+        }
+    }
 }
 
 /// <summary>

@@ -138,6 +138,8 @@
                     Command="{Binding PurgeCacheCommand}" />
           <MenuItem Header="Repoint..."
                     Command="{Binding RepointCommand}" />
+          <MenuItem Header="View Header XML..."
+                    Command="{Binding EditHeaderCommand}" />
           <MenuItem Header="Dependencies..."
                     Command="{Binding ShowDependenciesCommand}" />
           <Separator />

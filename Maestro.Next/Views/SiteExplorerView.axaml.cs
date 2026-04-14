@@ -50,6 +50,7 @@ public partial class SiteExplorerView : UserControl
             vm.SpatialContextsRequested = ShowSpatialContextsAsync;
             vm.DependencyListRequested  = ShowDependencyListAsync;
             vm.RepointRequested         = ShowRepointDialogAsync;
+            vm.EditHeaderRequested      = ShowHeaderDialogAsync;
         }
     }
 
@@ -384,5 +385,33 @@ public partial class SiteExplorerView : UserControl
 
         await dialog.ShowDialog(window);
         return result;
+    }
+
+    private async Task ShowHeaderDialogAsync(string resourceId, string headerXml)
+    {
+        var window = VisualRoot as Window;
+        if (window is null) return;
+
+        var box = new Window
+        {
+            Title = $"Resource Header — {resourceId}",
+            Width = 550, Height = 400,
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            ShowInTaskbar = false,
+            Content = new ScrollViewer
+            {
+                Content = new TextBox
+                {
+                    Text = headerXml,
+                    IsReadOnly = true,
+                    AcceptsReturn = true,
+                    TextWrapping = Avalonia.Media.TextWrapping.NoWrap,
+                    FontFamily = new Avalonia.Media.FontFamily("Consolas,Monospace"),
+                    FontSize = 12,
+                    Margin = new Avalonia.Thickness(8)
+                }
+            }
+        };
+        await box.ShowDialog(window);
     }
 }

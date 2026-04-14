@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-15 (Phase 11)
+> **Mis à jour le** : 2025-07-15 (Phase 13)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 76 fichiers source (68 app + 8 tests), 5 666 lignes, 56 tests, 21 commits, build ✅
+> **État actuel** : 79 fichiers source (68 app + 11 tests), 6 031 lignes, 67 tests, 24 commits, build ✅
 
 ---
 
@@ -41,10 +41,10 @@
 
 - [✓] A.4.1 — Commande "Duplicate..." dans le context menu (implémentée comme `CopySelectedCommand`)
 
-### [ ] A.5 — Resource Properties dialog
+### [✓] A.5 — Resource Properties dialog
 
-- [ ] A.5.1 — Dialog affichant : ResourceId, type, date création/modification, taille, header XML
-- [ ] A.5.2 — Édition des permissions (header resource)
+- [✓] A.5.1 — Dialog affichant ResourceId, type, références, header, XML preview
+- [ ] A.5.2 — Édition des permissions (header resource) — basse priorité
 
 ### [ ] A.6 — Find & Replace dans le XML
 
@@ -54,10 +54,10 @@
 ### [ ] A.7 — Commandes additionnelles du Site Explorer
 
 - [ ] A.7.1 — `CompileFullDependencyList` — afficher l'arbre de dépendances complet
-- [ ] A.7.2 — `SaveResourceContentToDisk` — exporter le XML vers un fichier local
+- [✓] A.7.2 — `SaveResourceContentToDisk` — "Save to Disk..." avec file picker
 - [ ] A.7.3 — `SetupFolderStructure` — créer la structure standard Library://
-- [ ] A.7.4 — `ShowSpatialContexts` — afficher les contextes spatiaux d'un FeatureSource
-- [ ] A.7.5 — `PurgeFeatureSourceCache` — vider le cache FDO
+- [✓] A.7.4 — `ShowSpatialContexts` — dialog affichant CS, WKT, extent
+- [✓] A.7.5 — `PurgeFeatureSourceCache` — re-set XML pour forcer refresh
 - [ ] A.7.6 — `TestResourceCompatibility` — tester la compatibilité avec une autre version
 - [ ] A.7.7 — `RepointCommand` — re-pointer les références d'un FeatureSource
 - [ ] A.7.8 — `MigrateResourceCommand` — migrer une ressource vers un autre serveur
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (56 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (67 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -204,7 +204,7 @@
 - [ ] E.1.10 — SiteExplorerViewModel (load, search, open, refresh)
 - [ ] E.1.11 — MainWindowViewModel (connect, disconnect, save, close)
 - [ ] E.1.12 — LoginViewModel (validation, connection)
-- [ ] E.1.13 — PreferencesService (load, save, theme apply)
+- [✓] E.1.13 — PreferencesService (5 tests) — Phase 13
 
 ### [ ] E.2 — Tests d'intégration
 
@@ -265,9 +265,9 @@
 
 - [ ] G.3.1 — Icônes SVG pour les types de ressources (remplacer les emoji)
 - [ ] G.3.2 — Splash screen au démarrage
-- [ ] G.3.3 — Recent connections (historique des serveurs)
-- [ ] G.3.4 — Dirty indicator dans le titre de la fenêtre
-- [ ] G.3.5 — Confirmation avant fermeture si documents non sauvegardés
+- [✓] G.3.3 — Recent connections (historique persisté dans settings.json, max 10)
+- [✓] G.3.4 — Dirty indicator ● dans le titre (doc actif + global)
+- [✓] G.3.5 — Confirmation "Discard & Close" avant fermeture si documents non sauvegardés
 - [ ] G.3.6 — Barre de recherche globale (Ctrl+P style VS Code)
 
 ---
@@ -296,6 +296,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~15-20 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~12-16 jours-développeur** pour la parité fonctionnelle complète.
 
-**Effort MVP restant : ~2-3 jours** (B.3 color picker + theme wizard, C.1 create package, G.3.5 close confirmation).
+**MVP atteint à ~85%** — prochaines étapes : B.3 color picker/theme wizard, C.1 create package, B.1 FeatureSource extensions.

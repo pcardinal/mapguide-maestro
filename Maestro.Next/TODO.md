@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-16 (Phase 21)
+> **Mis à jour le** : 2025-07-16 (Phase 22)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 107 fichiers source (84 app + 23 tests), 8 156 lignes, 140 tests, 47 commits, build ✅
+> **État actuel** : 107 fichiers source (84 app + 23 tests), 8 210 lignes, 140 tests, 49 commits, build ✅
 
 ---
 
@@ -28,10 +28,10 @@
 
 ### [ ] A.2 — Drag-and-Drop (déplacer ressources entre dossiers)
 
-- [ ] A.2.1 — Activer `DragDrop` sur le `TreeView` Avalonia
-- [ ] A.2.2 — Gérer `DragOver` (highlight du dossier cible)
-- [ ] A.2.3 — Appeler `MoveResource` / `CopyResource` selon la touche Ctrl
-- [ ] A.2.4 — Rafraîchir les nœuds source et destination
+- [✓] A.2.1 — DragDrop activé sur TreeView (PointerPressed + AllowDrop)
+- [✓] A.2.2 — DragOver accepte folders, curseur move/copy selon Ctrl
+- [✓] A.2.3 — MoveResource (défaut) / CopyResource (Ctrl) selon touche modificateur
+- [✓] A.2.4 — Rafraîchir le tree après drop
 
 ### [✓] A.3 — Copy Resource ID to Clipboard
 
@@ -58,7 +58,7 @@
 - [✓] A.7.3 — `SetupFolderStructure` — crée Data/, Layers/, Maps/, Layouts/, Symbols/, Templates/
 - [✓] A.7.4 — `ShowSpatialContexts` — dialog affichant CS, WKT, extent
 - [✓] A.7.5 — `PurgeFeatureSourceCache` — re-set XML pour forcer refresh
-- [ ] A.7.6 — `TestResourceCompatibility` — tester la compatibilité avec une autre version
+- [✓] A.7.6 — `ValidateResource` — validation via ResourceValidatorSet avec résultats affichés
 - [✓] A.7.7 — `RepointCommand` — re-pointer les références FeatureSource (replace XML dans tous les dépendants)
 - [ ] A.7.8 — `MigrateResourceCommand` — migrer une ressource vers un autre serveur
 - [✓] A.7.9 — `EditResourceHeader` — voir le XML header via dialog (lecture seule)

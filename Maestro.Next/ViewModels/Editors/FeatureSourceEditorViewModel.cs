@@ -305,6 +305,89 @@ public partial class FeatureSourceEditorViewModel : DocumentViewModel
         }
         finally { IsBusy = false; BusyMessage = null; }
     }
+
+    // ── Coordinate System Override ──────────────────────────────
+    public ObservableCollection<SpatialContextOverrideItem> SpatialContextOverrides { get; } = new();
+    [ObservableProperty] private bool _overridesLoaded;
+
+    [RelayCommand]
+    private async Task LoadSpatialContextOverridesAsync()
+    {
+        if (ResourceId is null) return;
+        SpatialContextOverrides.Clear();
+        try
+        {
+            IsBusy = true;
+            BusyMessage = "Loading spatial contexts...";
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+
+            var contexts = await Task.Run(() =>
+                conn.FeatureService.GetSpatialContextInfo(ResourceId, false));
+
+            foreach (var ctx in contexts.SpatialContext)
+            {
+                var sc = (OSGeo.MapGuide.ObjectModels.Common.IFdoSpatialContext)ctx;
+                SpatialContextOverrides.Add(new SpatialContextOverrideItem(
+                    sc.Name, sc.CoordinateSystemWkt ?? "", sc.CoordinateSystemName ?? ""));
+            }
+            OverridesLoaded = true;
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"Failed to load spatial contexts: {ex.Message}");
+        }
+        finally { IsBusy = false; BusyMessage = null; }
+    }
+
+    [RelayCommand]
+    private async Task ApplyOverridesAsync()
+    {
+        if (_featureSource == null || ResourceId == null) return;
+        try
+        {
+            IsBusy = true;
+            BusyMessage = "Applying overrides...";
+
+            var existing = _featureSource.SupplementalSpatialContextInfo.ToList();
+            foreach (var e in existing)
+                _featureSource.RemoveSpatialContextOverride(e);
+
+            foreach (var ovr in SpatialContextOverrides.Where(o => !string.IsNullOrEmpty(o.NewCoordSys)))
+                _featureSource.AddSpatialContextOverride(ovr.Name, ovr.NewCoordSys);
+
+            var conn = Program.Services!.GetRequiredService<IConnectionService>()
+                              .CurrentConnection!;
+            await Task.Run(() => conn.ResourceService.SaveResource(_featureSource));
+
+            IsDirty = false;
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Success("Coordinate system overrides applied.");
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"Override failed: {ex.Message}");
+        }
+        finally { IsBusy = false; BusyMessage = null; }
+    }
+}
+
+public partial class SpatialContextOverrideItem : ViewModelBase
+{
+    public SpatialContextOverrideItem(string name, string currentWkt, string currentCoordSys)
+    {
+        Name = name;
+        CurrentWkt = currentWkt.Truncate(80) ?? "";
+        CurrentCoordSys = currentCoordSys;
+        NewCoordSys = currentCoordSys;
+    }
+
+    public string Name { get; }
+    public string CurrentWkt { get; }
+    public string CurrentCoordSys { get; }
+    [ObservableProperty] private string _newCoordSys;
 }
 
 public partial class SchemaClassViewModel : ViewModelBase

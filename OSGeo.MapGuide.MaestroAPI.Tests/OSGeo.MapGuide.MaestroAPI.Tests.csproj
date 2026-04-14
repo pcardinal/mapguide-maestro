@@ -6,8 +6,12 @@
     <DebugType>portable</DebugType>
 	<SignAssembly>true</SignAssembly>
 	<AssemblyOriginatorKeyFile>$(MSBuildProjectDirectory)\..\Properties\maestroapi.key</AssemblyOriginatorKeyFile>
+	<Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>

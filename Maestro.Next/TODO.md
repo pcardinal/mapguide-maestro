@@ -26,7 +26,7 @@
 - [✓] A.1.3 — Context menu avec Ctrl+X, Ctrl+C, Ctrl+V
 - [✓] A.1.4 — Indicateur visuel "coupé" (opacité 0.4 sur le nœud source via IsCutSource + Opacity binding)
 
-### [ ] A.2 — Drag-and-Drop (déplacer ressources entre dossiers)
+### [✓] A.2 — Drag-and-Drop (déplacer ressources entre dossiers)
 
 - [✓] A.2.1 — DragDrop activé sur TreeView (PointerPressed + AllowDrop)
 - [✓] A.2.2 — DragOver accepte folders, curseur move/copy selon Ctrl
@@ -67,17 +67,17 @@
 
 ## Phase B — Éditeurs de ressources — fonctionnalités manquantes
 
-### [ ] B.1 — FeatureSource : Extensions & Joins
+### [~] B.1 — FeatureSource : Extensions & Joins
 
 - [✓] B.1.1 — Onglet Extensions (lecture: calculés + joins affichés via ExtensionSummaryItem)
 - [ ] B.1.2 — Dialog de configuration des extensions
 - [✓] B.1.3 — Preview des données (data grid text via FeatureReader, max 100 rows)
 
-### [ ] B.2 — FeatureSource : Coordinate System Override
+### [✓] B.2 — FeatureSource : Coordinate System Override
 
 - [✓] B.2.1 — Onglet CS Override (LoadSpatialContextOverrides + ApplyOverrides, SpatialContextOverrideItem)
 
-### [~] B.3 — LayerDefinition : Style Rules complet
+### [✓] B.3 — LayerDefinition : Style Rules complet
 
 - [✓] B.3.1 — Affichage des Scale Ranges avec détail des règles Point/Line/Area (label, filtre, icône)
 - [✓] B.3.2 — Édition inline des LegendLabel et Filter de chaque règle (two-way binding → IVectorRule)
@@ -86,7 +86,7 @@
 - [✓] B.3.5 — Theme generation wizard (golden-angle colors, distinct values, filter generation)
 - [✓] B.3.6 — Ajout/suppression de scale ranges (via ObjectFactory + AddVectorScaleRange/RemoveVectorScaleRange)
 
-### [ ] B.4 — MapDefinition : fonctionnalités avancées
+### [~] B.4 — MapDefinition : fonctionnalités avancées
 
 - [✓] B.4.1 — Extent editor (MinX/MinY/MaxX/MaxY avec NumericUpDown, two-way binding)
 - [ ] B.4.2 — Watermark configuration
@@ -108,7 +108,7 @@
 - [✓] B.6.3 — Opérateurs (=, <>, AND, OR, LIKE, IN, NULL, arithmétique)
 - [✓] B.6.4 — Validation de syntaxe via FdoFilter.Parse / FdoExpression.Parse (bouton "✓ Validate")
 
-### [ ] B.7 — Preview de ressources
+### [ ] B.7 — Preview de ressources (basse priorité)
 
 - [ ] B.7.1 — Rendu serveur pour MapDefinition (GetMapImage)
 - [ ] B.7.2 — Preview WMS pour LayerDefinition
@@ -162,7 +162,7 @@
 
 ## Phase D — Infrastructure & Architecture
 
-### [✓] D.1 — Fichier solution propre
+### [~] D.1 — Fichier solution propre
 
 - [✓] D.1.1 — `MaestroNext.slnx` créé (Maestro.Next, Tests, MaestroAPI, ObjectModels, FDO.Expressions)
 - [ ] D.1.2 — Solution folders pour organiser (Core, App, Tests)
@@ -271,13 +271,13 @@
 - [ ] G.1.2 — Support français
 - [ ] G.1.3 — Sélecteur de langue dans les Options
 
-### [ ] G.2 — Accessibilité
+### [~] G.2 — Accessibilité
 
 - [ ] G.2.1 — `AutomationProperties.Name` sur tous les contrôles interactifs
-- [ ] G.2.2 — Navigation clavier complète (Tab order)
+- [✓] G.2.2 — Navigation clavier partielle (F2/F5/Del/Ctrl+N/Ctrl+S/Ctrl+W/Ctrl+Q + KeyBindings MainWindow)
 - [ ] G.2.3 — Contraste suffisant dans les deux thèmes
 
-### [ ] G.3 — UX polish
+### [~] G.3 — UX polish
 
 - [ ] G.3.1 — Icônes SVG pour les types de ressources (remplacer les emoji)
 - [✓] G.3.2 — Splash screen au démarrage (SplashWindow, 1.2s, borderless)
@@ -294,23 +294,30 @@
 |---|---|---|---|---|
 | ~~🔴 Critique~~ | ~~D.1 Fichier .sln~~ | ~~30 min~~ | ~~Bloquant~~ | ✅ Fait |
 | ~~🔴 Critique~~ | ~~B.6 Expression builder~~ | ~~2 jours~~ | ~~Utilisé partout~~ | ✅ Fait |
+| ~~🔴 Critique~~ | ~~B.3 LayerDef style rules~~ | ~~2-3 jours~~ | ~~Fonctionnalité #1~~ | ✅ Fait |
 | ~~🟠 Haute~~ | ~~A.1 Clipboard~~ | ~~2h~~ | ~~UX de base~~ | ✅ Fait |
+| ~~🟠 Haute~~ | ~~A.2 Drag-drop~~ | ~~3h~~ | ~~UX de base~~ | ✅ Fait |
+| ~~🟠 Haute~~ | ~~C.1 Packaging (Create+Load)~~ | ~~2 jours~~ | ~~Workflow~~ | ✅ ~90% |
 | ~~🟠 Haute~~ | ~~C.2 Save As/All~~ | ~~2h~~ | ~~UX de base~~ | ✅ Fait |
-| ~~🟠 Haute~~ | ~~A.2 Drag-drop~~ | ~~3h~~ | ~~UX de base~~ | ✅ ~90% |
+| ~~🟠 Haute~~ | ~~D.4 Plugins~~ | ~~2-3 jours~~ | ~~Intégration~~ | ✅ ~80% |
 | ~~🟡 Moyenne~~ | ~~A.5 Resource Properties~~ | ~~3h~~ | ~~Info~~ | ✅ Fait |
+| ~~🟡 Moyenne~~ | ~~A.7 Commandes Site Explorer~~ | ~~1 jour~~ | ~~Outils~~ | ✅ ~90% |
+| ~~🟡 Moyenne~~ | ~~B.1 FeatureSource extensions~~ | ~~1 jour~~ | ~~Avancé~~ | ✅ ~66% |
+| ~~🟡 Moyenne~~ | ~~B.2 CS Override~~ | — | ~~Avancé~~ | ✅ Fait |
 | ~~🟡 Moyenne~~ | ~~C.3 Edit as XML~~ | ~~1 jour~~ | ~~Dev workflow~~ | ✅ Fait |
 | ~~🟡 Moyenne~~ | ~~C.4 View XML Changes~~ | — | ~~Diff~~ | ✅ Fait |
-| ~~🟠 Haute~~ | ~~D.4 Plugins~~ | ~~2-3 jours~~ | ~~Intégration~~ | ✅ ~80% |
-| ~~🔴 Critique~~ | ~~B.3 LayerDef style rules~~ | ~~2-3 jours~~ | ~~Fonctionnalité #1~~ | ✅ ~85% |
-| ~~🟠 Haute~~ | ~~C.1 Packaging (Create+Load)~~ | ~~2 jours~~ | ~~Workflow~~ | ✅ ~75% |
-| 🟡 Moyenne | B.1 FeatureSource extensions | 1 jour | Fonctionnel avancé | À faire |
-| 🟡 Moyenne | B.4 MapDef avancé | 2 jours | Preview, watermarks | À faire |
-| 🟡 Moyenne | E.1 Tests supplémentaires | 1 jour | Qualité | À faire |
+| ~~🟡 Moyenne~~ | ~~C.5 Site Admin~~ | ~~2 jours~~ | ~~Admin~~ | ✅ ~33% |
+| ~~🟡 Moyenne~~ | ~~C.8 Tip of the Day~~ | — | ~~UX~~ | ✅ Fait |
+| ~~🟡 Moyenne~~ | ~~E.1 Tests unitaires~~ | ~~1 jour~~ | ~~Qualité~~ | ✅ 155 tests |
+| ~~🟡 Moyenne~~ | ~~F.1 Publish profiles~~ | — | ~~Distribution~~ | ✅ Fait |
+| 🟡 Moyenne | B.4 MapDef avancé | 2 jours | Preview, watermarks | ~25% |
+| 🟡 Moyenne | G.2 Accessibilité | 1 jour | Clavier partiel | ~33% |
+| 🟡 Moyenne | G.3 UX polish | 1 jour | Splash etc. | ~66% |
 | 🟢 Basse | B.5 Éditeurs restants | 3 jours | LoadProc, Print, etc. | À faire |
-| 🟢 Basse | C.5 Site Admin | 2 jours | Admin seulement | ~33% |
+| 🟢 Basse | B.7 Previews | 2 jours | Rendu serveur | À faire |
 | 🟢 Basse | D.2 Nettoyage WinForms | 1 jour | Après validation | À faire |
-| 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
-| 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
+| 🟢 Basse | F.3 Packaging natif | 2 jours | MSI/AppImage/DMG | À faire |
+| 🟢 Basse | G.1 i18n | 2 jours | Localisation | À faire |
 
 **MVP COMPLET** — 🎯 155 tests, 8.4k lignes, 54 commits. Application Avalonia cross-platform pleinement fonctionnelle.
 

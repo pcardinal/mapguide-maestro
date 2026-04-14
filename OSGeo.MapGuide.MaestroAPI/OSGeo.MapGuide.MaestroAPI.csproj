@@ -16,6 +16,7 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <!-- Activate determinstic build for AppVeyor CI -->
@@ -30,6 +31,10 @@
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\OSGeo.MapGuide.MaestroAPI.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <DocumentationFile>bin\Release\netstandard2.0\OSGeo.MapGuide.MaestroAPI.xml</DocumentationFile>
   </PropertyGroup>
 

@@ -8,6 +8,7 @@
     <Authors>Jackie Ng</Authors>
     <LangVersion>latest</LangVersion>
     <Company />
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-16 (Phase 22)
+> **Mis à jour le** : 2025-07-16 (Phase 23)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 108 fichiers source (84 app + 24 tests), 8 288 lignes, 150 tests, 51 commits, build ✅
+> **État actuel** : 112 fichiers source (87 app + 25 tests), 8 440 lignes, 155 tests, 54 commits, build ✅
 
 ---
 
@@ -154,9 +154,9 @@
 
 - [ ] C.7.1 — Mesure de performance de rendu d'une MapDefinition
 
-### [ ] C.8 — Tip of the Day
+### [✓] C.8 — Tip of the Day
 
-- [ ] C.8.1 — Dialog au démarrage avec tips
+- [✓] C.8.1 — Dialog au démarrage avec 14 tips, navigation précédent/suivant, toggle show on startup
 
 ---
 
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (150 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (155 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -220,6 +220,7 @@
 - [✓] E.1.26 — DocumentViewModel base, XmlEditor, LoadPackage extras (5 tests) — Phase 20b
 - [✓] E.1.27 — ServerStatusVM, ExtensionSummaryItem, SchemaPropertyVM (8 tests) — Phase 21
 - [✓] E.1.28 — ResourceTreeNode, IsCutSource, Opacity, ResourceTypeIconMap (10 tests) — Phase 22
+- [✓] E.1.29 — TipOfTheDayViewModel (5 tests) — Phase 23
 
 ### [ ] E.2 — Tests d'intégration
 
@@ -311,6 +312,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~1 jour-développeur** pour le polish final.
+**MVP COMPLET** — 🎯 155 tests, 8.4k lignes, 54 commits. Application Avalonia cross-platform pleinement fonctionnelle.
 
-**MVP atteint à ~99%** — 🎯 150 tests, 8.3k lignes, 51 commits. L'application Avalonia est pleinement fonctionnelle.
+**Reste en low priority** : B.5 éditeurs spécialisés (DrawingSource, LoadProcedure, PrintLayout), B.7 previews, G.1 i18n.

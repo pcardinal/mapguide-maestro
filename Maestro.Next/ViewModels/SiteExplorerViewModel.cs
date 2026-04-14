@@ -258,9 +258,23 @@ public partial class SiteExplorerViewModel : ViewModelBase
     private void CutSelected()
     {
         if (SelectedNode is null) return;
+
+        // Clear previous cut indicator
+        ClearCutIndicators();
+
         var clip = Program.Services!.GetRequiredService<IClipboardService>();
         clip.SetCut(SelectedNode.ResourceId);
+        SelectedNode.IsCutSource = true;
         _notifications.Info($"Cut: {SelectedNode.Name}");
+    }
+
+    private void ClearCutIndicators()
+    {
+        if (_flatLeaves == null) return;
+        foreach (var node in _flatLeaves)
+        {
+            if (node.IsCutSource) node.IsCutSource = false;
+        }
     }
 
     [RelayCommand(CanExecute = nameof(HasSelectedNode))]
@@ -620,6 +634,12 @@ public partial class ResourceTreeNode : ViewModelBase
 
     [ObservableProperty] private bool _isExpanded;
     [ObservableProperty] private bool _isSelected;
+    [ObservableProperty] private bool _isCutSource;
+
+    /// <summary>Opacity for the node - reduced when it's a cut source</summary>
+    public double Opacity => IsCutSource ? 0.4 : 1.0;
+
+    partial void OnIsCutSourceChanged(bool value) => OnPropertyChanged(nameof(Opacity));
 
     public ObservableCollection<ResourceTreeNode> Children { get; } = new();
 

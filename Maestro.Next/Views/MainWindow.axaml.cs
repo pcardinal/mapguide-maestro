@@ -85,6 +85,14 @@ public partial class MainWindow : Window
         await dialog.ShowDialog(this);
     }
 
+    private async void OnServerStatusClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var vm = new ServerStatusViewModel();
+        var dialog = new ServerStatusWindow { DataContext = vm };
+        _ = vm.LoadAsync();
+        await dialog.ShowDialog(this);
+    }
+
     private async void OnWindowClosing(object? sender, WindowClosingEventArgs e)
     {
         if (DataContext is not MainWindowViewModel mainVm) return;

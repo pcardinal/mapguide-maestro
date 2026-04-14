@@ -59,6 +59,9 @@
         <MenuItem Header="Setup _Folder Structure"
                   Command="{Binding SiteExplorer.SetupFolderStructureCommand}" />
         <Separator />
+        <MenuItem Header="_Server Status..."
+                  Click="OnServerStatusClick" />
+        <Separator />
         <MenuItem Header="_Options..."
                   Command="{Binding ShowOptionsCommand}" />
       </MenuItem>

@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        x:Class="Maestro.Next.Views.ServerStatusWindow"
+        x:DataType="vm:ServerStatusViewModel"
+        Title="Server Status"
+        Width="480" Height="420"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+
+  <ScrollViewer Margin="16">
+    <StackPanel Spacing="12">
+
+      <TextBlock Text="Server Information" FontWeight="Bold" FontSize="14" />
+
+      <Grid ColumnDefinitions="120,*" RowDefinitions="Auto,Auto,Auto,Auto" Margin="0,0,0,8">
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Version:" FontWeight="SemiBold" />
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ServerVersion}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Provider:" FontWeight="SemiBold" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ProviderName}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Session:" FontWeight="SemiBold" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SessionId}"
+                   FontFamily="Consolas,Monospace" FontSize="11" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Status:" FontWeight="SemiBold" />
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding SiteStatus}"
+                   TextWrapping="Wrap" />
+      </Grid>
+
+      <TextBlock Text="Users" FontWeight="Bold" FontSize="13"
+                 IsVisible="{Binding IsLoaded}" />
+      <ItemsControl ItemsSource="{Binding Users}"
+                    IsVisible="{Binding IsLoaded}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="x:String">
+            <TextBlock Text="{Binding}" FontSize="12" Margin="8,1" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <TextBlock Text="Groups" FontWeight="Bold" FontSize="13"
+                 IsVisible="{Binding IsLoaded}" />
+      <ItemsControl ItemsSource="{Binding Groups}"
+                    IsVisible="{Binding IsLoaded}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="x:String">
+            <TextBlock Text="{Binding}" FontSize="12" Margin="8,1" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <Button Content="Close" Click="OnCloseClick"
+              HorizontalAlignment="Right" Width="90" Margin="0,8,0,0" />
+    </StackPanel>
+  </ScrollViewer>
+</Window>

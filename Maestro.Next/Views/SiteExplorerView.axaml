@@ -90,7 +90,8 @@
         <TreeDataTemplate ItemsSource="{Binding Children}"
                           x:DataType="vm:ResourceTreeNode">
           <StackPanel Orientation="Horizontal" Spacing="6"
-                      ToolTip.Tip="{Binding ResourceId}">
+                      ToolTip.Tip="{Binding ResourceId}"
+                      Opacity="{Binding Opacity}">
             <TextBlock Text="{Binding Icon}" FontSize="14" VerticalAlignment="Center" />
             <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
             <Border IsVisible="{Binding !IsFolder}"

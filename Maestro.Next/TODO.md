@@ -1,8 +1,8 @@
 # Maestro.Next — Tâches restantes pour compléter la migration Avalonia
 
-> **Mis à jour le** : 2025-07-15 (Phase 13)
+> **Mis à jour le** : 2025-07-15 (Phase 15)
 > **Branche** : `upgrade-to-NET10`
-> **État actuel** : 79 fichiers source (68 app + 11 tests), 6 031 lignes, 67 tests, 24 commits, build ✅
+> **État actuel** : 85 fichiers source (73 app + 12 tests), 6 394 lignes, 74 tests, 27 commits, build ✅
 
 ---
 
@@ -46,16 +46,16 @@
 - [✓] A.5.1 — Dialog affichant ResourceId, type, références, header, XML preview
 - [ ] A.5.2 — Édition des permissions (header resource) — basse priorité
 
-### [ ] A.6 — Find & Replace dans le XML
+### [✓] A.6 — Find & Replace dans le XML
 
-- [ ] A.6.1 — Dialog Find/Replace avec regex
-- [ ] A.6.2 — Opérer sur le XML brut d'une ou plusieurs ressources
+- [✓] A.6.1 — `FindReplaceViewModel` avec regex, case-sensitive, count + replace all
+- [✓] A.6.2 — Intégré dans XmlEditorView (bouton "Find/Replace")
 
-### [ ] A.7 — Commandes additionnelles du Site Explorer
+### [~] A.7 — Commandes additionnelles du Site Explorer
 
-- [ ] A.7.1 — `CompileFullDependencyList` — afficher l'arbre de dépendances complet
+- [✓] A.7.1 — `CompileFullDependencyList` — dialog listant toutes les ressources référençantes
 - [✓] A.7.2 — `SaveResourceContentToDisk` — "Save to Disk..." avec file picker
-- [ ] A.7.3 — `SetupFolderStructure` — créer la structure standard Library://
+- [✓] A.7.3 — `SetupFolderStructure` — crée Data/, Layers/, Maps/, Layouts/, Symbols/, Templates/
 - [✓] A.7.4 — `ShowSpatialContexts` — dialog affichant CS, WKT, extent
 - [✓] A.7.5 — `PurgeFeatureSourceCache` — re-set XML pour forcer refresh
 - [ ] A.7.6 — `TestResourceCompatibility` — tester la compatibilité avec une autre version
@@ -190,7 +190,7 @@
 
 ## Phase E — Tests & Qualité
 
-### [~] E.1 — Tests unitaires (67 tests — 100% pass ✅)
+### [~] E.1 — Tests unitaires (74 tests — 100% pass ✅)
 
 - [✓] E.1.1 — DocumentManagerViewModel (5 tests)
 - [✓] E.1.2 — NewResourceViewModel (6 tests)
@@ -264,7 +264,7 @@
 ### [ ] G.3 — UX polish
 
 - [ ] G.3.1 — Icônes SVG pour les types de ressources (remplacer les emoji)
-- [ ] G.3.2 — Splash screen au démarrage
+- [✓] G.3.2 — Splash screen au démarrage (SplashWindow, 1.2s, borderless)
 - [✓] G.3.3 — Recent connections (historique persisté dans settings.json, max 10)
 - [✓] G.3.4 — Dirty indicator ● dans le titre (doc actif + global)
 - [✓] G.3.5 — Confirmation "Discard & Close" avant fermeture si documents non sauvegardés
@@ -296,6 +296,6 @@
 | 🟢 Basse | F.3 Packaging natif | 2 jours | Distribution | À faire |
 | 🟢 Basse | G.1-G.3 i18n/A11y/Polish | 3-5 jours | Polish | À faire |
 
-**Effort restant estimé : ~12-16 jours-développeur** pour la parité fonctionnelle complète.
+**Effort restant estimé : ~10-14 jours-développeur** pour la parité fonctionnelle complète.
 
-**MVP atteint à ~85%** — prochaines étapes : B.3 color picker/theme wizard, C.1 create package, B.1 FeatureSource extensions.
+**MVP atteint à ~90%** — prochaines étapes : B.3 color picker/theme wizard, C.1 create package, B.1 FeatureSource extensions.

@@ -13,6 +13,12 @@
               Classes="accent" />
       <Button Content="✓ Validate"
               Command="{Binding ValidateCommand}" />
+      <Button Content="＋ Scale Range"
+              Command="{Binding AddScaleRangeCommand}"
+              ToolTip.Tip="Add a new scale range" />
+      <Button Content="－ Scale Range"
+              Command="{Binding RemoveScaleRangeCommand}"
+              ToolTip.Tip="Remove selected scale range" />
       <TextBlock Text="{Binding LayerType}"
                  FontWeight="SemiBold"
                  VerticalAlignment="Center"

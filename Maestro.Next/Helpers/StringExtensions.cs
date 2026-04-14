@@ -3,7 +3,7 @@
 
 namespace Maestro.Next;
 
-internal static class StringExtensions
+public static class StringExtensions
 {
     public static string Truncate(this string value, int maxLength)
     {

@@ -48,6 +48,8 @@
                   IsEnabled="{Binding Documents.HasOpenDocuments}" />
       </MenuItem>
       <MenuItem Header="_Tools">
+        <MenuItem Header="_Create Package..."
+                  Click="OnCreatePackageClick" />
         <MenuItem Header="Load _Package..."
                   Click="OnLoadPackageClick" />
         <MenuItem Header="Setup _Folder Structure"

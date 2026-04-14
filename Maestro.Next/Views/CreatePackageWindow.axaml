@@ -1,0 +1,68 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Maestro.Next.ViewModels"
+        x:Class="Maestro.Next.Views.CreatePackageWindow"
+        x:DataType="vm:CreatePackageViewModel"
+        Title="Create Package"
+        Width="560" Height="440"
+        WindowStartupLocation="CenterOwner"
+        CanResize="True"
+        ShowInTaskbar="False">
+
+  <Grid RowDefinitions="Auto,*,Auto,Auto,Auto" Margin="16">
+
+    <!-- Folder selector -->
+    <Grid Grid.Row="0" ColumnDefinitions="80,*,Auto" Margin="0,0,0,8">
+      <TextBlock Grid.Column="0" Text="Folder:" VerticalAlignment="Center" />
+      <TextBox Grid.Column="1" Text="{Binding FolderResourceId}" />
+      <Button Grid.Column="2" Content="Load"
+              Command="{Binding LoadResourcesCommand}"
+              Margin="8,0,0,0" />
+    </Grid>
+
+    <!-- Resource list -->
+    <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" CornerRadius="3">
+      <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Resources}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="vm:PackageResourceItem">
+              <CheckBox IsChecked="{Binding IsSelected}"
+                        Content="{Binding ResourceId}"
+                        FontFamily="Consolas,Monospace" FontSize="11"
+                        Margin="4,1" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+
+    <!-- Output path -->
+    <Grid Grid.Row="2" ColumnDefinitions="80,*,Auto" Margin="0,8,0,4">
+      <TextBlock Grid.Column="0" Text="Output:" VerticalAlignment="Center" />
+      <TextBox Grid.Column="1" Text="{Binding OutputFilePath}"
+               IsReadOnly="True" />
+      <Button Grid.Column="2" Content="Browse..."
+              Click="OnBrowseOutputClick"
+              Margin="8,0,0,0" />
+    </Grid>
+
+    <!-- Progress -->
+    <StackPanel Grid.Row="3" Spacing="4" Margin="0,4">
+      <ProgressBar Minimum="0" Maximum="100"
+                   Value="{Binding Progress}"
+                   IsVisible="{Binding IsCreating}"
+                   Height="10" />
+      <TextBlock Text="{Binding StatusMessage}"
+                 Foreground="Gray" FontSize="11" />
+    </StackPanel>
+
+    <!-- Buttons -->
+    <StackPanel Grid.Row="4" Orientation="Horizontal"
+                HorizontalAlignment="Right" Spacing="8" Margin="0,8,0,0">
+      <Button Content="Close" Click="OnCloseClick" Width="90" />
+      <Button Content="Create Package"
+              Command="{Binding CreatePackageCommand}"
+              Classes="accent" Width="130" />
+    </StackPanel>
+  </Grid>
+</Window>

@@ -140,6 +140,50 @@ public partial class LayerDefinitionEditorViewModel : DocumentViewModel
         }
         finally { IsBusy = false; BusyMessage = null; }
     }
+
+    // ── Scale range management ──────────────────────────────────
+    [ObservableProperty] private ScaleRangeSummaryViewModel? _selectedScaleRange;
+
+    [RelayCommand]
+    private void AddScaleRange()
+    {
+        if (_layerDef?.SubLayer is not IVectorLayerDefinition vld) return;
+
+        try
+        {
+            // Get the schema version of this layer definition
+            var verStr = _layerDef.ResourceVersion.ToString();
+            var ver = new Version(verStr);
+
+            var tmpLayer = OSGeo.MapGuide.ObjectModels.ObjectFactory.CreateDefaultLayer(
+                OSGeo.MapGuide.ObjectModels.LayerDefinition.LayerType.Vector, ver);
+
+            if (tmpLayer.SubLayer is IVectorLayerDefinition tmpVld)
+            {
+                var newRange = tmpVld.VectorScaleRange.First();
+                vld.AddVectorScaleRange(newRange);
+                ScaleRanges.Add(new ScaleRangeSummaryViewModel(newRange, () => IsDirty = true));
+                IsDirty = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            Program.Services!.GetRequiredService<INotificationService>()
+                   .Error($"Failed to add scale range: {ex.Message}");
+        }
+    }
+
+    [RelayCommand]
+    private void RemoveScaleRange()
+    {
+        if (_layerDef?.SubLayer is not IVectorLayerDefinition vld) return;
+        if (SelectedScaleRange is null) return;
+
+        vld.RemoveVectorScaleRange(SelectedScaleRange.UnderlyingRange);
+        ScaleRanges.Remove(SelectedScaleRange);
+        SelectedScaleRange = null;
+        IsDirty = true;
+    }
 }
 
 /// <summary>Summary row for a vector scale range with expandable style rules</summary>
@@ -150,6 +194,7 @@ public partial class ScaleRangeSummaryViewModel : ViewModelBase
     public ScaleRangeSummaryViewModel(IVectorScaleRange sr, Action? onChanged = null)
     {
         _sr = sr;
+        UnderlyingRange = sr;
         MinScale = sr.MinScale.HasValue
             ? $"1:{sr.MinScale.Value:N0}"
             : "0 (always)";
@@ -187,6 +232,7 @@ public partial class ScaleRangeSummaryViewModel : ViewModelBase
     public string MinScale { get; }
     public string MaxScale { get; }
     public string Summary => $"{MinScale} → {MaxScale}  ({Rules.Count} rule(s))";
+    public IVectorScaleRange UnderlyingRange { get; }
     public ObservableCollection<StyleRuleViewModel> Rules { get; } = new();
 
     [ObservableProperty] private bool _isExpanded;

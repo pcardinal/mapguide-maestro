@@ -78,6 +78,13 @@ public partial class MainWindow : Window
             await mainVm.SiteExplorer.RefreshCommand.ExecuteAsync(null);
     }
 
+    private async void OnCreatePackageClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var vm = new CreatePackageViewModel();
+        var dialog = new CreatePackageWindow { DataContext = vm };
+        await dialog.ShowDialog(this);
+    }
+
     private async void OnWindowClosing(object? sender, WindowClosingEventArgs e)
     {
         if (DataContext is not MainWindowViewModel mainVm) return;

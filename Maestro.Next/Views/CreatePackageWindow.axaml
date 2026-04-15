@@ -37,7 +37,7 @@
     </Border>
 
     <!-- Output path -->
-    <Grid Grid.Row="2" ColumnDefinitions="80,*,Auto" Margin="0,8,0,4">
+    <Grid Grid.Row="2" ColumnDefinitions="80,*,Auto" Margin="0,18,0,4">
       <TextBlock Grid.Column="0" Text="Output:" VerticalAlignment="Center" />
       <TextBox Grid.Column="1" Text="{Binding OutputFilePath}"
                IsReadOnly="True" />

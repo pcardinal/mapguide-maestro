@@ -1,7 +1,21 @@
 <Solution>
-  <Project Path="Maestro.Next.Tests/Maestro.Next.Tests.csproj" />
-  <Project Path="Maestro.Next/Maestro.Next.csproj" />
-  <Project Path="OSGeo.FDO.Expressions/OSGeo.FDO.Expressions.csproj" />
-  <Project Path="OSGeo.MapGuide.MaestroAPI/OSGeo.MapGuide.MaestroAPI.csproj" />
-  <Project Path="OSGeo.MapGuide.ObjectModels/OSGeo.MapGuide.ObjectModels.csproj" />
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="Maestro.Next.Tests/Maestro.Next.Tests.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="Maestro.Next/Maestro.Next.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="OSGeo.FDO.Expressions/OSGeo.FDO.Expressions.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="OSGeo.MapGuide.MaestroAPI/OSGeo.MapGuide.MaestroAPI.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="OSGeo.MapGuide.ObjectModels/OSGeo.MapGuide.ObjectModels.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
 </Solution>
